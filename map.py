@@ -25,7 +25,7 @@ class Gameover:
     def __init__(self):
         self.image = load_image('gameover.png')
     def draw(self):
-        self.image.draw(1688,120)
+        self.image.draw(300,120)
 
 
 class Mario:
@@ -427,11 +427,14 @@ def handle_events():
             elif event.key == SDLK_a:
                 monster = True
             
-            elif event.key == SDLK_b:
+            elif event.key == SDLK_z:
                 mario.life=1
 
-            elif event.key == SDLK_c:
+            elif event.key == SDLK_x:
                 mario.life=2
+
+            elif event.key == SDLK_c:
+                mario.life=0
 
 
 
@@ -568,7 +571,28 @@ while running:
     stage1.draw()
 
 
+    if mario.life==0:
+        for a in range(1,5):
+         
+            mario.y+=5
+            clear_canvas()
+            stage1.draw()
+            mario.draw()
+
+            update_canvas()
+        delay(2)
+        
+        clear_canvas()
+        gameover.draw()
+        update_canvas()
+        delay(2)
+        mario.y-=20
+        mario.life=1
+
+
     mario.draw()
+ 
+
     if monster ==True:
         gumba.draw()
         koopas.draw()
@@ -576,10 +600,6 @@ while running:
         print("dd")
 
 
-    # if mario.life==0:
-    #     clear_canvas()
-    #     gameover.draw
-    #     update_canvas()
  
 
         
