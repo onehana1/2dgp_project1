@@ -76,7 +76,7 @@ class Mario:
         
         if mario.life==0:
             self.image.clip_draw(20*1,0,self.w,self.h,self.x,self.y)
-            delay(0.02)
+            # delay(0.02)
             # 게임 오버 추가
 
  
@@ -117,7 +117,7 @@ class Mario:
                 if (mario.life==1):
                     self.image.clip_draw(20*0,0,self.w,self.h,self.x,self.y)
                 if (mario.life==2):
-                    self.image3.clip_draw(24*1,0,self.w,38,self.x,self.y+10)
+                    self.image3.clip_draw(24*1,0,self.w,38,self.x,self.y+10,38,76)    # 19, 38 -> 38 76
 
             if mario.move ==True:
                 if self.t==1:
