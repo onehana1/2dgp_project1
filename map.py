@@ -57,6 +57,10 @@ class Mario:
         self.h= 20
         self.g= 20 #garo
         self.t=0
+        scale_x = 38
+        scale_y = 76
+
+
 
         self.time=0
 
@@ -70,6 +74,8 @@ class Mario:
 
 
     def draw(self):
+        scale_x = 38
+        scale_y = 76
 
         # global dir
         # self.x += dir * 0.1
@@ -86,13 +92,13 @@ class Mario:
                 if (mario.life==1):
                     self.image.clip_draw(20*6,0,self.w,self.h,self.x,self.y)
                 if (mario.life==2):
-                    self.image3.clip_draw(24*6,0,self.w,38,self.x,self.y+10)
+                    self.image3.clip_draw(24*6,0,self.w,38,self.x,self.y+10,scale_x,scale_y)
 
             if mario.dir ==False:
                 if (mario.life==1):
                     self.image2.clip_draw(0,0,19,20,self.x,self.y)
                 if (mario.life==2):
-                    self.image4.clip_draw(0,0,19,38,self.x,self.y+10)
+                    self.image4.clip_draw(0,0,19,38,self.x,self.y+10,scale_x,scale_y)
 
         elif mario.drop_state==True:
 
@@ -100,14 +106,14 @@ class Mario:
                 if (mario.life==1):
                     self.image.clip_draw(20*6,0,self.w,self.h,self.x,self.y)
                 if (mario.life==2):
-                    self.image3.clip_draw(20*6,0,self.w,38,self.x,self.y+10)
+                    self.image3.clip_draw(20*6,0,self.w,38,self.x,self.y+10,scale_x,scale_y)
                     
 
             if mario.dir ==False:
                 if (mario.life==1):
                     self.image2.clip_draw(0,0,19,20,self.x,self.y) 
                 if (mario.life==2):
-                    self.image4.clip_draw(0,0,19,38,self.x,self.y+10)     
+                    self.image4.clip_draw(0,0,19,38,self.x,self.y+10,scale_x,scale_y)     
 
 
 
@@ -117,7 +123,7 @@ class Mario:
                 if (mario.life==1):
                     self.image.clip_draw(20*0,0,self.w,self.h,self.x,self.y)
                 if (mario.life==2):
-                    self.image3.clip_draw(24*1,0,self.w,38,self.x,self.y+10,38,76)    # 19, 38 -> 38 76
+                    self.image3.clip_draw(24*1,0,self.w,38,self.x,self.y+10,scale_x,scale_y)    # 19, 38 -> 38 76
 
             if mario.move ==True:
                 if self.t==1:
@@ -127,22 +133,22 @@ class Mario:
                     if (mario.life==1):
                         self.image.clip_draw(20*3,0,self.w,self.h,self.x,self.y)
                     if (mario.life==2):
-                        self.image3.clip_draw(24*3,0,self.w,38,self.x,self.y+10)
+                        self.image3.clip_draw(24*3,0,self.w,38,self.x,self.y+10,scale_x,scale_y)
                 elif self.t<=5:
                     if (mario.life==1):
                         self.image.clip_draw(19*4,0,self.w,self.h,self.x,self.y)
                     if (mario.life==2):
-                        self.image3.clip_draw(24*4,0,self.w,38,self.x,self.y+10)
+                        self.image3.clip_draw(24*4,0,self.w,38,self.x,self.y+10,scale_x,scale_y)
                 elif self.t<=7:
                     if (mario.life==1):
                         self.image.clip_draw(19*5,0,self.w,self.h,self.x,self.y)
                     if (mario.life==2):
-                        self.image3.clip_draw(24*5,0,self.w,38,self.x,self.y+10)
+                        self.image3.clip_draw(24*5,0,self.w,38,self.x,self.y+10,scale_x,scale_y)
                 elif self.t<=9:
                     if (mario.life==1):
                         self.image.clip_draw(19*4,0,self.w,self.h,self.x,self.y)
                     if (mario.life==2):
-                        self.image3.clip_draw(24*4,0,self.w,38,self.x,self.y+10)
+                        self.image3.clip_draw(24*4,0,self.w,38,self.x,self.y+10,scale_x,scale_y)
 
                 
                 if self.t>=9:
@@ -158,7 +164,7 @@ class Mario:
                 if (mario.life==1):
                     self.image2.clip_draw(20*6,0,20,20,self.x,self.y) 
                 if (mario.life==2):
-                    self.image4.clip_draw(24*5,0,20,38,self.x,self.y+10)  
+                    self.image4.clip_draw(24*5,0,20,38,self.x,self.y+10,scale_x,scale_y)  
 
             if mario.move ==True:
                 if self.t==1:
@@ -168,22 +174,22 @@ class Mario:
                     if (mario.life==1):
                         self.image2.clip_draw(19*3,0,19,self.h,self.x,self.y)
                     if (mario.life==2):
-                        self.image4.clip_draw(26*3,0,19,38,self.x,self.y+10)
+                        self.image4.clip_draw(26*3,0,19,38,self.x,self.y+10,scale_x,scale_y)
                 elif self.t<=5:
                     if (mario.life==1):
                         self.image2.clip_draw(21*2,0,19,self.h,self.x,self.y)
                     if (mario.life==2):
-                        self.image4.clip_draw(27*2,0,19,38,self.x,self.y+10)
+                        self.image4.clip_draw(27*2,0,19,38,self.x,self.y+10,scale_x,scale_y)
                 elif self.t<=7:
                     if (mario.life==1):
                         self.image2.clip_draw(19*1,0,self.w,self.h,self.x,self.y)
                     if (mario.life==2):
-                        self.image4.clip_draw(28*1,0,self.w,38,self.x,self.y+10)
+                        self.image4.clip_draw(28*1,0,self.w,38,self.x,self.y+10,scale_x,scale_y)
                 elif self.t<=9:
                     if (mario.life==1):
                         self.image2.clip_draw(21*2,0,19,self.h,self.x,self.y)
                     if (mario.life==2):
-                        self.image4.clip_draw(27*2,0,19,38,self.x,self.y+10)
+                        self.image4.clip_draw(27*2,0,19,38,self.x,self.y+10,scale_x,scale_y)
 
                 
                 if self.t>=9:
