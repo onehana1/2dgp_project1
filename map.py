@@ -17,9 +17,9 @@ class Stage1: # 3376x240
     def __init__(self):
         self.image = load_image('stage1.png')
     def draw(self):
-        #self.image.clip_draw(0,0,3376,240,500,500)
-        #self.image.draw(1688-mario.x,120,None,None)
-        self.image.draw(1688,120,None,None)
+        #self.image.clip_draw(0,0,3376,240,3376,240,6752,480)
+        self.image.draw(3376-mario.x,240,6752,480)
+        #self.image.draw(1688,120,None,None)
 
         # self.image.draw(1688+mario.x,120+mario.y)
 
@@ -399,7 +399,7 @@ def redkoopas_move():
 def crush():
     if mario.x==gumba.x:
         mario.life=1
-        print("와!")
+        # print("와!")
 
          
    
@@ -468,7 +468,7 @@ def handle_events():
 # initialization code
 #open_canvas(3376,240)
 #open_canvas(1688,240)
-open_canvas(500,240)
+open_canvas(1688,480)
 
 # game_framework.run(start_state)
 
@@ -555,7 +555,7 @@ while running:
         else:
             mario.y -= 0.3
         i+=0.1
-        print(i)
+        #print(i)
 
         if i>10:
             mario.drop_state = False
@@ -608,7 +608,7 @@ while running:
         gumba.draw()
         koopas.draw()
         redkoopas.draw()
-        print("dd")
+        # print("dd")
 
 
  
