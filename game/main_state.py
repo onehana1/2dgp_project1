@@ -9,23 +9,37 @@ import game_world
 from mario import Boy
 from grass import Grass
 from ball import Ball
+from gumba import Gumba
+from koopas import Koopas
+
+
+
 
 
 name = "MainState"
 
 boy = None
 grass = None
+gumba = None
+koopas = None
+
+
 
 def enter():
-    global boy, grass
+    global boy, grass, gumba, koopas
     boy = Boy()
     grass = Grass()
+    gumba = Gumba()
+    koopas = Koopas()
+
 
 
 def exit():
-    global boy, grass
+    global boy, grass, gumba, koopas
     del boy
     del grass
+    del gumba
+    del koopas
 
 def pause():
     pass
@@ -48,12 +62,21 @@ def handle_events():
 
 def update():
     boy.update()
+    gumba.update()
+    koopas.update()
+
+
+
 
 
 def draw():
     clear_canvas()
     grass.draw()
     boy.draw()
+    gumba.draw()
+    koopas.draw()
+    #delay(0.05)
+    
     update_canvas()
 
 
