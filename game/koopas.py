@@ -1,4 +1,20 @@
 from pico2d import *
+import game_world
+
+import game_framework
+
+# monster Run Speed
+PIXEL_PER_METER = (10.0 / 0.3) # 10 pixel 30 cm
+RUN_SPEED_KMPH = 10.0 # Km / Hour
+RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
+RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
+RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
+
+# monster Action Speed
+TIME_PER_ACTION = 3
+ACTION_PER_TIME = 20
+FRAMES_PER_ACTION = 1
+
 
 
 class Koopas:
@@ -28,16 +44,17 @@ class Koopas:
             self.x -= 0.5
 
 
-        self.frame = (self.frame + 1) % 2
+        self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 2
+
 
 
         pass
 
     def draw(self):
         if ((self.dir % 2) == 1):
-            self.image.clip_draw(55 + 31*self.frame, 5, 31, 24, self.x, self.y,60,70)
+            self.image.clip_draw(55 + 31*int(self.frame), 5, 31, 24, self.x, self.y,60,70)
         else:
-            self.image2.clip_draw(85 - 31*self.frame, 5, 31, 24, self.x, self.y,60,70)
+            self.image2.clip_draw(85 - 31*int(self.frame), 5, 31, 24, self.x, self.y,60,70)
 
 
 
