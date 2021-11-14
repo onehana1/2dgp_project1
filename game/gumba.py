@@ -29,6 +29,8 @@ class Gumba:
         self.frame = 0
         self.timer = 0
 
+        self.state = 0
+
 
     def crush_box(self):
         return self.x-20, self.y-18, self.x +20, self.y+18
@@ -41,24 +43,27 @@ class Gumba:
         self.velocity = 0
         self.timer += 1
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 2
+        if self.state == 0:
+            if(self.timer%1000 == 0):
+                self.dir += 1
 
-        if(self.timer%1000 == 0):
-            self.dir += 1
+            if ((self.dir % 2) == 1):
+                self.velocity += RUN_SPEED_PPS
+                self.x += self.velocity * game_framework.frame_time
+            else:
+                self.velocity -= RUN_SPEED_PPS
+                self.x += self.velocity * game_framework.frame_time
+            
 
-        if ((self.dir % 2) == 1):
-            self.velocity += RUN_SPEED_PPS
-            self.x += self.velocity * game_framework.frame_time
-        else:
-            self.velocity -= RUN_SPEED_PPS
-            self.x += self.velocity * game_framework.frame_time
-        
-        if(self.x>1600):
-            self.x=0
 
         pass
 
     def draw(self):
-        self.image.clip_draw( 2 + int(self.frame)*20, 2, 20, 18, self.x, self.y, 40, 36)
+        if self.state==0:
+            self.image.clip_draw( 2 + int(self.frame)*20, 2, 20, 18, self.x, self.y, 40, 36)
+        else:
+            self.image.clip_draw( 2 + 2*20, 2, 20, 18, self.x, self.y, 40, 36)
+
         draw_rectangle(*self.crush_box())
 
 

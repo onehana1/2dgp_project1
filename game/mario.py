@@ -53,6 +53,9 @@ class IdleState:
         boy.timer = 1000
 
     def exit(boy, event):
+        if event == UP_DOWN:
+            boy.jumping =True
+
         pass
 
     def do(boy):
@@ -61,10 +64,29 @@ class IdleState:
             boy.add_event(SLEEP_TIMER)
 
     def draw(boy):
-        if boy.dir == 1:
-            boy.image.clip_draw(202, 103, 30, 35, boy.x, boy.y,60,70)
-        else:
-            boy.image.clip_draw(173, 103, 30, 35, boy.x, boy.y,60,70)
+        if boy.state == 0:
+            if boy.dir == 1:
+                if boy.jumping ==False:
+                    boy.image.clip_draw(202, 171, 30, 18, boy.x, boy.y,60,35)
+                else:
+                    boy.image.clip_draw(352, 103, 30, 35, boy.x, boy.y,60,35)    
+            else:
+                if boy.jumping ==False:
+                    boy.image.clip_draw(173, 171, 30, 18, boy.x, boy.y,60,35)
+                else:
+                    boy.image.clip_draw(22, 103, 30, 35, boy.x, boy.y,60,35)
+
+        if boy.state == 1:
+            if boy.dir == 1:
+                if boy.jumping ==False:
+                    boy.image.clip_draw(202, 103, 30, 35, boy.x, boy.y + 35,60,70)
+                else:
+                    boy.image.clip_draw(352, 103, 30, 35, boy.x, boy.y + 35,60,70)   
+            else:
+                if boy.jumping ==False:
+                    boy.image.clip_draw(173, 103, 30, 35, boy.x, boy.y + 35,60,70)
+                else:
+                    boy.image.clip_draw(22, 103, 30, 35, boy.x, boy.y + 35,60,70)
 
 
 
@@ -76,6 +98,7 @@ class RunState:
             boy.velocity += RUN_SPEED_PPS
         elif event == LEFT_DOWN:
             boy.velocity -= RUN_SPEED_PPS
+
         elif event == RIGHT_UP:
             boy.velocity -= RUN_SPEED_PPS
         elif event == LEFT_UP:
@@ -84,19 +107,44 @@ class RunState:
         boy.dir = clamp(-1, boy.velocity, 1)
 
     def exit(boy, event):
+        if event == UP_DOWN:
+            # boy.jump(boy)
+            boy.jumping =True
+
         pass
 
     def do(boy):
         boy.frame = (boy.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 3
         boy.timer -= 1
-        boy.x += boy.velocity * game_framework.frame_time
+        if boy.stopping==False:
+            boy.x += boy.velocity * game_framework.frame_time
         boy.x = clamp(25, boy.x, 1600 - 25)
 
     def draw(boy):
-        if boy.dir == 1:
-            boy.image.clip_draw(232 + 30*int(boy.frame), 103, 30, 35, boy.x, boy.y,60,70)
-        else:
-            boy.image.clip_draw(143 - 30*int(boy.frame), 103, 30, 35, boy.x, boy.y,60,70)
+
+        if boy.state == 0:
+            if boy.dir == 1:
+                if boy.jumping ==False:
+                    boy.image.clip_draw(232 + 30*int(boy.frame), 173, 30, 35, boy.x, boy.y,60,35)
+                else:
+                    boy.image.clip_draw(352, 103, 30, 35, boy.x, boy.y,60,35)
+            else:
+                if boy.jumping ==False:
+                    boy.image.clip_draw(143 - 30*int(boy.frame), 173, 30, 35, boy.x, boy.y,60,35)
+                else:
+                    boy.image.clip_draw(22, 103, 30, 35, boy.x, boy.y,60,35)
+
+        if boy.state==1:
+            if boy.dir == 1:
+                if boy.jumping ==False:
+                    boy.image.clip_draw(232 + 30*int(boy.frame), 103, 30, 35, boy.x, boy.y + 35,60,70)
+                else:
+                    boy.image.clip_draw(352, 103, 30, 35, boy.x, boy.y + 35,60,70)
+            else:
+                if boy.jumping ==False:
+                    boy.image.clip_draw(143 - 30*int(boy.frame), 103, 30, 35, boy.x, boy.y + 35,60,70)
+                else:
+                    boy.image.clip_draw(22, 103, 30, 35, boy.x, boy.y + 35,60,70)
 
 
 
@@ -111,9 +159,13 @@ class JumpState:
             boy.velocity -= RUN_SPEED_PPS
         elif event == LEFT_UP:
             boy.velocity += RUN_SPEED_PPS
+
         boy.jump_timer=0
         if event == UP_DOWN:
             boy.jump_timer += JUMP_SPEED_PPS
+            
+        boy.dir = clamp(-1, boy.velocity, 1)
+        
 
 
     def exit(boy, event):
@@ -163,9 +215,18 @@ class FallState:
 
     def draw(boy):
         if boy.dir == 1:
-            boy.image.clip_draw(352, 103, 30, 35, boy.x, boy.y,60,70)
+            if boy.jumping ==False:
+                boy.image.clip_draw(352, 103, 30, 35, boy.x, boy.y,60,70)
+            else:
+                boy.image.clip_draw(352, 103, 30, 35, boy.x, boy.y,60,70)
+
         else:
-            boy.image.clip_draw(22, 103, 30, 35, boy.x, boy.y,60,70)
+            if boy.jumping ==False:
+                boy.image.clip_draw(22, 103, 30, 35, boy.x, boy.y,60,70)
+            else:
+                boy.image.clip_draw(22, 103, 30, 35, boy.x, boy.y,60,70)
+
+
 
 
 
@@ -175,6 +236,10 @@ class SleepState:
         boy.frame = 0
 
     def exit(boy, event):
+        if event == UP_DOWN:
+            #boy.jump()
+            boy.jumping =True
+
         pass
 
     def do(boy):
@@ -188,10 +253,10 @@ class SleepState:
 
 
 next_state_table = {
-    IdleState: {RIGHT_UP: IdleState, LEFT_UP: IdleState, RIGHT_DOWN: RunState, LEFT_DOWN: RunState, SLEEP_TIMER: SleepState, UP_DOWN: JumpState, UP_UP:IdleState},
-    RunState: {RIGHT_UP: IdleState, LEFT_UP: IdleState, LEFT_DOWN: IdleState, RIGHT_DOWN: IdleState, UP_DOWN: JumpState, UP_UP: RunState },
-    JumpState: {RIGHT_UP: JumpState, LEFT_UP: JumpState, LEFT_DOWN: JumpState, RIGHT_DOWN: JumpState, UP_DOWN: IdleState, UP_UP:IdleState},
-    SleepState: {LEFT_DOWN: RunState, RIGHT_DOWN: RunState, LEFT_UP: RunState, RIGHT_UP: RunState, UP_DOWN: JumpState, UP_UP:IdleState}
+    IdleState: {RIGHT_UP: RunState, LEFT_UP: RunState, RIGHT_DOWN: RunState, LEFT_DOWN: RunState, SLEEP_TIMER: SleepState, UP_DOWN: IdleState, UP_UP:IdleState},
+    RunState: {RIGHT_UP: IdleState, LEFT_UP: IdleState, LEFT_DOWN: IdleState, RIGHT_DOWN: IdleState, UP_DOWN: RunState, UP_UP: RunState },
+   # JumpState: {RIGHT_UP: JumpState, LEFT_UP: JumpState, LEFT_DOWN: JumpState, RIGHT_DOWN: JumpState, UP_DOWN: IdleState, UP_UP:IdleState},
+    SleepState: {LEFT_DOWN: RunState, RIGHT_DOWN: RunState, LEFT_UP: RunState, RIGHT_UP: RunState, UP_DOWN: IdleState, UP_UP:SleepState}
 }
 
 
@@ -209,13 +274,31 @@ class Boy:
         self.event_que = []
         self.cur_state = IdleState
         self.cur_state.enter(self, None)
-        self.fall = 0
+        self.fall = 1
+
+        self.jumping = False
+        self.stopping = False
+
+        self.state = 0
+
 
         self.g = 0
 
     def crush_box(self):
-        return self.x-15, self.y-35, self.x + 15, self.y+35
+        if self.state==0:
+            return self.x-15, self.y-18, self.x + 15, self.y+18
 
+        if self.state==1:
+            return self.x-15, self.y, self.x + 15, self.y+70
+
+    # def jump(self):
+    #     if(self.fall == 0 and self.jumping==False and self.stopping==False):
+    #         self.jumping=True
+
+
+        print("점프")
+        pass
+        
 
 
     def add_event(self, event):
@@ -223,8 +306,10 @@ class Boy:
 
     def update(self):
         self.cur_state.do(self)
+
         if(self.fall==1):
             self.y -= 1
+
         if(self.y > 500):
             self.y =10
         if len(self.event_que) > 0:
@@ -232,6 +317,10 @@ class Boy:
             self.cur_state.exit(self, event)
             self.cur_state = next_state_table[self.cur_state][event]
             self.cur_state.enter(self, event)
+
+        if(self.fall == 0 and self.jumping == True):
+            self.y += 65
+            self.jumping=False
 
     def draw(self):
         self.cur_state.draw(self)
