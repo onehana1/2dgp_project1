@@ -1,6 +1,7 @@
 from pico2d import *
 import game_world
 import game_framework
+import random
 
 # monster Run Speed
 PIXEL_PER_METER = (10.0 / 0.3) # 10 pixel 30 cm
@@ -19,7 +20,7 @@ FRAMES_PER_ACTION = 1
 class Gumba:
 
     def __init__(self):
-        self.x, self.y = 1600 // 2, 80
+        self.x, self.y = random.randint(0,800), 80
         self.image = load_image('gumba.png')
 
 

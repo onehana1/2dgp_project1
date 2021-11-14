@@ -49,11 +49,12 @@ flower = None
 
 
 
-
-
-gumba = None
+# gumba = None
 koopas = None
 redkoopas = None
+
+
+gumbas = []
 
 
 def collide(a,b):
@@ -68,6 +69,7 @@ def collide(a,b):
 
 
 
+
 def collide_floor(a,b):
     left_a, bottom_a, right_a, top_a = a.crush_box()
     left_b, bottom_b, right_b, top_b = b.crush_box()
@@ -77,11 +79,11 @@ def collide_floor(a,b):
     elif top_a < bottom_b: return False
     elif bottom_a > top_b: return False
 
-    elif bottom_a == top_b: return True
+    elif bottom_a <= top_b: return True
 
 
 
-def collide_box(a,b):
+def collide_head(a,b):
     left_a, bottom_a, right_a, top_a = a.crush_box()
     left_b, bottom_b, right_b, top_b = b.crush_box()
 
@@ -92,18 +94,22 @@ def collide_box(a,b):
     elif bottom_a > top_b: return False
 
     elif top_a == bottom_b: return True #머리 박기
-    elif left_a == right_b: return 2
-    elif right_a == left_b: return 2
+
 
 
 
 
 
 def enter():
-    global boy, grass,sky, gumba, koopas, redkoopas
+    global boy, grass,sky, koopas, redkoopas
     global stage1_ground1
     global box, block
     global mushroom, flower
+
+    global gumbas
+    gumbas = [Gumba() for i in range(2)]
+    game_world.add_objects(gumbas, 1)
+
 
 
     boy = Boy()
@@ -138,7 +144,7 @@ def enter():
 
 
     game_world.add_object(boy, 1)
-    game_world.add_object(gumba, 1)
+    # game_world.add_object(gumba, 1)
     # game_world.add_object(koopas, 1)
     # game_world.add_object(redkoopas, 1)
 
@@ -174,21 +180,40 @@ def update():
     for game_object in game_world.all_objects():
         game_object.update()
 
-  
+    if boy.inv==True:
+        boy.inv_timer += 1
+        if (boy.inv_timer % 500 == 0):
+            boy.inv = False
     
-    if collide(boy, gumba):
-        # print("c_gumba!!")
-        # game_world.remove_object(gumba)
-        gumba.state== 1
+    for gumba in gumbas:  
+
+        if collide_floor(boy, gumba): #밟 처치
+            boy.state = 0
+            if boy.state == 0:
+                boy.y += 35
+                gumbas.remove(gumba)
+                game_world.remove_object(gumba)
+
+        elif collide(boy, gumba):  #충돌
+            if(boy.inv==False):
+                boy.state = 0
+                if boy.state == 0:
+                    boy.x += -boy.dir*35
+                    boy.y += 35
+                    boy.inv = True
+
+
+
 
     if collide(boy, mushroom):
         if mushroom.state >= 1:
-            print("변신!!")
+            # print("변신!!")
             game_world.remove_object(mushroom)
             boy.state = 1
 
-        pass
+        
 
+    # 땅에 붙어있자..
     if collide_floor(boy, stage1_ground1):
         # print("땅에 있음")
         boy.fall = 0
@@ -197,8 +222,8 @@ def update():
         # print("땅에 있음")
         mushroom.fall = 0
 
-    if collide_box(boy, box):
-        print("박스 open")
+    if collide_head(boy, box):
+        # print("박스 open")
         box.state = 1
 
         mushroom.state += 1 
@@ -228,8 +253,8 @@ def update():
     
 
 
-    if collide_box(boy, block):
-        print("block 부심")
+    if collide_head(boy, block):
+        # print("block 부심")
         # block.state = 1
         # box.remove(box)
         game_world.remove_object(block)
@@ -244,8 +269,8 @@ def update():
 
 
         
-    if collide_floor(boy, stage1_ground1)!=1 and collide_floor(boy, box)!=1 :
-        # print("fall!!")
+    if not collide_floor(boy, stage1_ground1) and not collide_floor(boy, box):
+        print("fall!!")
         boy.fall = 1
 
     if collide_floor(mushroom, stage1_ground1)!=1 and collide_floor(mushroom, box)!=1 :
