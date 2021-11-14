@@ -29,7 +29,7 @@ RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
 RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 
 # mario Jump speed
-JUMP_SPEED_KMPH = 20.0 # Km / Hour
+JUMP_SPEED_KMPH = 2000.0 # Km / Hour
 JUMP_SPEED_MPM = (JUMP_SPEED_KMPH * 1000.0 / 60.0)
 JUMP_SPEED_MPS = (JUMP_SPEED_MPM / 60.0)
 JUMP_SPEED_PPS = (JUMP_SPEED_MPS * PIXEL_PER_METER)
@@ -64,6 +64,10 @@ class IdleState:
         if event == UP_DOWN:
             boy.jump_v += JUMP_SPEED_PPS
             boy.jumping = True
+
+        if event == UP_UP:
+            boy.jump_v -= JUMP_SPEED_PPS
+
 
 
         pass
@@ -120,8 +124,11 @@ class RunState:
 
     def exit(boy, event):
         if event == UP_DOWN:
-            # boy.jump(boy)
+            boy.jump_v += JUMP_SPEED_PPS
             boy.jumping =True
+
+        if event == UP_UP:
+            boy.jump_v -= JUMP_SPEED_PPS
 
         pass
 
@@ -130,7 +137,8 @@ class RunState:
         boy.timer -= 1
         if boy.stopping==False:
             boy.x += boy.velocity * game_framework.frame_time
-        boy.x = clamp(25, boy.x, 1600 - 25)
+
+        # boy.x = clamp(25, boy.x, 1600 - 25)
 
     def draw(boy):
 
@@ -277,6 +285,8 @@ class Boy:
     def __init__(self):
         self.x, self.y = 1600 // 2, 100
         self.image = load_image('mario_sheet.png')
+        self.image2 = load_image('mario_sheet_80.png')
+
 
 
         self.dir = 1
@@ -286,6 +296,9 @@ class Boy:
         self.event_que = []
         self.cur_state = IdleState
         self.cur_state.enter(self, None)
+
+
+        self.cam = 0
 
 
         self.fall = 1
@@ -299,6 +312,17 @@ class Boy:
 
         self.inv = False #무적상태
         self.inv_timer = 0 #무적상태 time
+
+
+    def camera(self):
+        self.x = clamp(125, self.x, 1600 - 25)
+
+        if self.x < 700:
+            self.cam = 0
+            
+        
+        if self.x > 800:
+            self.cam +=  self.velocity * game_framework.frame_time
 
 
 
@@ -319,10 +343,15 @@ class Boy:
         
 
     def jump(self):
-        if(self.fall == 0 and self.jumping == True):
-            self.y += self.jump_v * game_framework.frame_time
+        if(self.fall == 1 and self.jumping == True):
             self.jumping = False
-        pass
+
+        if(self.fall == 0 and self.jumping == True):
+            #self.y += 100
+            self.y += self.jump_v * game_framework.frame_time
+
+            self.jumping = False
+
 
     def drop(self):
         if(self.fall == 1 and self.jumping ==False):
@@ -342,6 +371,7 @@ class Boy:
     def update(self):
         self.cur_state.do(self)
 
+        self.camera()
         self.drop()
         self.jump()
 

@@ -79,7 +79,7 @@ def collide_floor(a,b):
     elif top_a < bottom_b: return False
     elif bottom_a > top_b: return False
 
-    elif bottom_a <= top_b: return True
+    elif bottom_a <= top_b: return True #발로 밟기
 
 
 
@@ -93,7 +93,21 @@ def collide_head(a,b):
     elif top_a < bottom_b: return False
     elif bottom_a > top_b: return False
 
-    elif top_a == bottom_b: return True #머리 박기
+    elif top_a >= bottom_b: return True #머리 박기
+
+def collide_monster(a,b):
+    left_a, bottom_a, right_a, top_a = a.crush_box()
+    left_b, bottom_b, right_b, top_b = b.crush_box()
+
+    
+    if left_a > right_b: return False
+    if right_a < left_b: return False
+    if top_a < bottom_b: return False
+    if bottom_a > top_b: return False
+    
+    if top_a >= bottom_b: return False
+
+    return True
 
 
 
@@ -188,19 +202,24 @@ def update():
     for gumba in gumbas:  
 
         if collide_floor(boy, gumba): #밟 처치
-            boy.state = 0
-            if boy.state == 0:
-                boy.y += 35
-                gumbas.remove(gumba)
-                game_world.remove_object(gumba)
-
-        elif collide(boy, gumba):  #충돌
+            boy.y += 35
+            gumba.state = 1
+            # gumbas.remove(gumba)
+            # game_world.remove_object(gumba)
+            print("1")
+        elif collide_monster(boy, gumba):  #충돌
             if(boy.inv==False):
                 boy.state = 0
                 if boy.state == 0:
-                    boy.x += -boy.dir*35
+                    boy.x += - boy.dir*35
                     boy.y += 35
                     boy.inv = True
+                    print("2")
+
+
+                
+
+
 
 
 
@@ -222,9 +241,14 @@ def update():
         # print("땅에 있음")
         mushroom.fall = 0
 
+
     if collide_head(boy, box):
         # print("박스 open")
         box.state = 1
+        if boy.state==0:
+            boy.y = box.y -37
+        if boy.state==1:
+            boy.y = box.y - 90
 
         mushroom.state += 1 
         
@@ -261,16 +285,16 @@ def update():
         pass
 
 
-    if not collide(boy, box):
-        #print("돌아와")
-        # game_world.remove_object(gumba)
-        boy.stopping = False
-        pass
+    # if not collide(boy, box):
+    #     #print("돌아와")
+    #     # game_world.remove_object(gumba)
+    #     boy.stopping = False
+    #     pass
 
 
         
     if not collide_floor(boy, stage1_ground1) and not collide_floor(boy, box):
-        print("fall!!")
+        # print("fall!!")
         boy.fall = 1
 
     if collide_floor(mushroom, stage1_ground1)!=1 and collide_floor(mushroom, box)!=1 :

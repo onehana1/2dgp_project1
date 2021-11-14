@@ -54,7 +54,10 @@ class Gumba:
             else:
                 self.velocity -= RUN_SPEED_PPS
                 self.x += self.velocity * game_framework.frame_time
-            
+        if self.state == 1:
+            self.velocity += RUN_SPEED_PPS
+            self.y -= self.velocity * game_framework.frame_time
+            pass
 
 
         pass
@@ -64,6 +67,11 @@ class Gumba:
             self.image.clip_draw( 2 + int(self.frame)*20, 2, 20, 18, self.x, self.y, 40, 36)
         else:
             self.image.clip_draw( 2 + 2*20, 2, 20, 18, self.x, self.y, 40, 36)
+
+        if self.state==1:
+            self.image.clip_composite_draw( 44, 2, 20, 18, 3.141592/2,'', self.x, self.y, 40, 36)
+
+
 
         draw_rectangle(*self.crush_box())
 
