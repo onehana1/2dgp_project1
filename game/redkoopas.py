@@ -1,10 +1,11 @@
 from pico2d import *
 import game_world
+import random
 
 class redKoopas:
 
     def __init__(self):
-        self.x, self.y = 1600 // 2, 90
+        self.x, self.y = 400, 90
         self.image = load_image('redKoopas_r.png')
         self.image2 = load_image('redKoopas_l.png')
 
@@ -12,6 +13,10 @@ class redKoopas:
         self.velocity = 0
         self.timer = 0
         self.frame = 0
+
+
+    def crush_box(self):
+        return self.x-25, self.y-30, self.x +25, self.y+30
 
     def do(self):
         pass
@@ -39,5 +44,6 @@ class redKoopas:
         else:
             self.image2.clip_draw(85 - 31*self.frame, 5, 31, 24, self.x, self.y,60,70)
 
+        draw_rectangle(*self.crush_box())
 
 

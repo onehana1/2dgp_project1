@@ -3,7 +3,8 @@ import game_world
 import game_framework
 import random
 
-\
+
+
 
 # monster Run Speed
 PIXEL_PER_METER = (10.0 / 0.3) # 10 pixel 30 cm
@@ -23,7 +24,7 @@ class Gumba:
     
 
     def __init__(self):
-        self.x, self.y = random.randint(0,800), 80
+        self.x, self.y = random.randint(100,1300), 80
         self.image = load_image('gumba.png')
         global cam
 

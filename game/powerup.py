@@ -81,6 +81,7 @@ class Flower:
         self.frame = 0
 
         self.state = 0
+        self.fall = 1
 
 
     def crush_box(self):
@@ -91,6 +92,9 @@ class Flower:
     
     def update(self):
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 3
+
+        if(self.fall==1 and self.state >=1):
+            self.y -= 1
 
         pass
 
@@ -129,7 +133,7 @@ class Coin:
         pass
 
     def draw(self): 
-        if self.state == 1 and self.timer !=0:
+        if self.state == 1 and self.timer >=0:
             self.image.clip_draw(1, 32, 12, 16, self.x, self.y,24,32)
             
 

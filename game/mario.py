@@ -1,13 +1,16 @@
+from math import trunc
 from pico2d import *
 import game_world
 import game_framework
+
+from fire import Fire
 
 
 
 
 
 # mario Event
-RIGHT_DOWN, LEFT_DOWN, RIGHT_UP, LEFT_UP, SLEEP_TIMER,UP_DOWN,UP_UP ,SPACE_DOWN,SPACE_UP = range(9)
+RIGHT_DOWN, LEFT_DOWN, RIGHT_UP, LEFT_UP, SLEEP_TIMER,UP_DOWN,UP_UP ,SPACE_DOWN,SPACE_UP,z_DOWN,z_UP = range(11)
 
 key_event_table = {
     (SDL_KEYDOWN, SDLK_RIGHT): RIGHT_DOWN,
@@ -18,6 +21,8 @@ key_event_table = {
     (SDL_KEYUP, SDLK_UP): UP_UP,
     (SDL_KEYDOWN, SDLK_SPACE): SPACE_DOWN,
     (SDL_KEYUP, SDLK_SPACE): SPACE_UP,
+    (SDL_KEYDOWN, SDLK_z): z_DOWN,
+    (SDL_KEYUP, SDLK_z): z_UP
 
 
 }
@@ -61,6 +66,12 @@ class IdleState:
             boy.velocity -= RUN_SPEED_PPS
         elif event == LEFT_UP:
             boy.velocity += RUN_SPEED_PPS
+
+        elif event == z_DOWN:
+            boy.attect = True
+        elif event == z_UP:
+            boy.attect = False
+
         boy.timer = 1000
 
     def exit(boy, event):
@@ -68,8 +79,12 @@ class IdleState:
             boy.jump_v += JUMP_SPEED_PPS
             boy.jumping = True
 
-        # if event == UP_UP:
-        #     boy.jump_v -= JUMP_SPEED_PPS
+        if event == UP_UP:
+            boy.jump_v -= JUMP_SPEED_PPS
+
+        if event == z_DOWN:
+            boy.fire_ball()
+
 
 
 
@@ -80,6 +95,8 @@ class IdleState:
         if boy.timer == 0:
             #boy.add_event(SLEEP_TIMER)
             pass
+        
+
 
 
     def draw(boy):
@@ -110,12 +127,18 @@ class IdleState:
         if boy.state == 2:
             if boy.dir == 1:
                 if boy.fall == 0:
-                    boy.image.clip_draw(202, 32,  25, 37, boy.draw_x, boy.y + 35,50,70)
+                        if boy.attect==True:
+                            boy.image.clip_draw(310, 33, 21, 35, boy.draw_x, boy.y+ 35,42,70)
+                        else:
+                            boy.image.clip_draw(202, 32,  25, 37, boy.draw_x, boy.y + 35,50,70)
                 else:
                     boy.image.clip_draw(358, 32, 25, 37, boy.draw_x, boy.y + 35,50,70)
             else:
                 if boy.fall == 0:
-                    boy.image.clip_draw(173, 32,  25, 37, boy.draw_x, boy.y + 35,50,70)
+                    if boy.attect==True:
+                        boy.image.clip_draw(74, 33, 23, 35, boy.draw_x, boy.y+ 35,46,70)
+                    else: 
+                        boy.image.clip_draw(173, 32,  25, 37, boy.draw_x, boy.y + 35,50,70)
                 else:
                     boy.image.clip_draw(24, 32, 25, 37, boy.draw_x, boy.y + 35,50,70)
 
@@ -148,6 +171,9 @@ class RunState:
 
         if event == UP_UP:
             boy.jump_v -= JUMP_SPEED_PPS
+
+        if event == z_DOWN:
+            boy.fire_ball()
 
         pass
 
@@ -214,7 +240,7 @@ class DieState:
         boy.y -= boy.velocity * game_framework.frame_time
 
     def draw(boy):
-        boy.image.clip_draw(386, 155, 19, 21, boy.draw_x, boy.y, 38, 42)
+        boy.image.clip_draw(386, 155, 19, 21, boy.draw_x, boy.y+100, 38, 42)
 
 
 
@@ -324,9 +350,9 @@ class SleepState:
 
 
 next_state_table = {
-    IdleState: {RIGHT_UP: RunState, LEFT_UP: RunState, RIGHT_DOWN: RunState, LEFT_DOWN: RunState, UP_DOWN: IdleState, UP_UP:IdleState},
-    RunState: {RIGHT_UP: IdleState, LEFT_UP: IdleState, LEFT_DOWN: IdleState, RIGHT_DOWN: IdleState, UP_DOWN: RunState, UP_UP: RunState },
-    DieState: {RIGHT_UP: DieState, LEFT_UP: DieState, RIGHT_DOWN: DieState, LEFT_DOWN: DieState, UP_DOWN: IdleState, UP_UP:DieState}
+    IdleState: {RIGHT_UP: RunState, LEFT_UP: RunState, RIGHT_DOWN: RunState, LEFT_DOWN: RunState, UP_DOWN: IdleState, UP_UP:IdleState,z_DOWN:IdleState,z_UP:IdleState},
+    RunState: {RIGHT_UP: IdleState, LEFT_UP: IdleState, LEFT_DOWN: IdleState, RIGHT_DOWN: IdleState, UP_DOWN: RunState, UP_UP: RunState,z_DOWN:RunState,z_UP:RunState },
+    DieState: {RIGHT_UP: DieState, LEFT_UP: DieState, RIGHT_DOWN: DieState, LEFT_DOWN: DieState, UP_DOWN: IdleState, UP_UP:DieState,z_DOWN:DieState,z_UP:DieState}
 
 }
    # JumpState: {RIGHT_UP: JumpState, LEFT_UP: JumpState, LEFT_DOWN: JumpState, RIGHT_DOWN: JumpState, UP_DOWN: IdleState, UP_UP:IdleState},
@@ -356,6 +382,7 @@ class Boy:
         self.cur_state = IdleState
         self.cur_state.enter(self, None)
 
+        self.attect = False
 
         self.cam = 800
 
@@ -387,6 +414,9 @@ class Boy:
         # if self.x > 800:
         #     self.cam +=  self.velocity * game_framework.frame_time
 
+    def fire_ball(self):
+        fire = Fire(self.x, self.y+40, self.dir*3)
+        game_world.add_object(fire, 1)
 
 
 
@@ -450,10 +480,8 @@ class Boy:
             self.cur_state = DieState
 
 
-        if(self.y > 500):
-            self.y =100
         if(self.y < 0):
-            self.y =100
+            self.state=4
                         
 
         if len(self.event_que) > 0:
@@ -478,4 +506,5 @@ class Boy:
         if (event.type, event.key) in key_event_table:
             key_event = key_event_table[(event.type, event.key)]
             self.add_event(key_event)
+        
 

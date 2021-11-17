@@ -1,5 +1,6 @@
 from pico2d import *
 import game_world
+import random
 
 import game_framework
 
@@ -20,7 +21,7 @@ FRAMES_PER_ACTION = 1
 class Koopas:
 
     def __init__(self):
-        self.x, self.y = 1600 // 2, 90
+        self.x, self.y = 700, 90
         self.image = load_image('Koopas_r.png')
         self.image2 = load_image('Koopas_l.png')
 
@@ -28,6 +29,10 @@ class Koopas:
         self.velocity = 0
         self.timer = 0
         self.frame = 0
+
+
+    def crush_box(self):
+        return self.x-25, self.y-30, self.x +25, self.y+30
 
     def do(self):
         pass
@@ -57,4 +62,5 @@ class Koopas:
             self.image2.clip_draw(85 - 31*int(self.frame), 5, 31, 24, self.x, self.y,60,70)
 
 
+        draw_rectangle(*self.crush_box())
 
