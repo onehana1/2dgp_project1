@@ -3,6 +3,8 @@ import game_world
 import game_framework
 import random
 
+\
+
 # monster Run Speed
 PIXEL_PER_METER = (10.0 / 0.3) # 10 pixel 30 cm
 RUN_SPEED_KMPH = 10.0 # Km / Hour
@@ -18,11 +20,12 @@ FRAMES_PER_ACTION = 1
 
 
 class Gumba:
+    
 
     def __init__(self):
         self.x, self.y = random.randint(0,800), 80
         self.image = load_image('gumba.png')
-
+        global cam
 
         self.dir = 1
         self.velocity = 0
@@ -31,6 +34,7 @@ class Gumba:
         self.timer = 0
 
         self.state = 0
+      
 
 
     def crush_box(self):
@@ -65,6 +69,7 @@ class Gumba:
     def draw(self):
         if self.state==0:
             self.image.clip_draw( 2 + int(self.frame)*20, 2, 20, 18, self.x, self.y, 40, 36)
+    
         else:
             self.image.clip_draw( 2 + 2*20, 2, 20, 18, self.x, self.y, 40, 36)
 

@@ -6,6 +6,8 @@ from pico2d import *
 import game_framework
 import game_world
 
+
+
 from mario import Boy
 from grass import Grass
 from sky import Sky
@@ -16,9 +18,6 @@ from box import Box
 from block import Block
 from powerup import Mushroom
 from powerup import Flower
-
-
-
 
 
 
@@ -33,6 +32,8 @@ from redkoopas import redKoopas
 
 
 name = "MainState"
+
+
 
 boy = None
 grass = None
@@ -49,7 +50,7 @@ flower = None
 
 
 
-# gumba = None
+gumba = None
 koopas = None
 redkoopas = None
 
@@ -120,17 +121,21 @@ def enter():
     global box, block
     global mushroom, flower
 
+    global gumba
     global gumbas
     gumbas = [Gumba() for i in range(2)]
     game_world.add_objects(gumbas, 1)
-
-
 
     boy = Boy()
     grass = Grass()
     sky = Sky()
 
     stage1_ground1 = S1_Ground1()
+
+
+    global boxs 
+    boxs = [Box() for i in range(2)]
+    game_world.add_objects(boxs, 1)
 
     box = Box()
     block = Block()
@@ -145,10 +150,10 @@ def enter():
     redkoopas = redKoopas()
 
     game_world.add_object(sky, 0)
-    game_world.add_object(grass, 0)
+    # game_world.add_object(grass, 0)
     game_world.add_object(stage1_ground1, 0)
 
-    game_world.add_object(box, 1)
+    # game_world.add_object(box, 1)
     game_world.add_object(block, 1)
 
     game_world.add_object(mushroom, 1)
@@ -177,6 +182,33 @@ def pause():
 def resume():
     pass
 
+def cam():
+    # if boy.x < 700:
+    #     boy.cam = 0
+                
+    # if boy.x > 800:
+    boy.cam =  boy.velocity * game_framework.frame_time 
+
+
+    # box.x -= boy.cam 
+    block.x -= boy.cam 
+    stage1_ground1.x -= boy.cam 
+    mushroom.x -= boy.cam 
+    flower.x -= boy.cam 
+
+
+    for gumba in gumbas:  
+        gumba.x -= boy.cam
+
+    for box in boxs:  
+        box.x -= boy.cam
+
+
+    
+    
+    
+
+
 
 def handle_events():
     events = get_events()
@@ -189,7 +221,10 @@ def handle_events():
             boy.handle_event(event)
 
 
+
 def update():
+
+    cam()
 
     for game_object in game_world.all_objects():
         game_object.update()
@@ -215,11 +250,6 @@ def update():
                     boy.y += 35
                     boy.inv = True
                     print("2")
-
-
-                
-
-
 
 
 
