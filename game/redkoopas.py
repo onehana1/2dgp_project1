@@ -5,7 +5,7 @@ import random
 class redKoopas:
 
     def __init__(self):
-        self.x, self.y = 400, 90
+        self.x, self.y = 50, 90
         self.image = load_image('redKoopas_r.png')
         self.image2 = load_image('redKoopas_l.png')
 

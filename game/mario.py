@@ -241,6 +241,9 @@ class DieState:
 
     def draw(boy):
         boy.image.clip_draw(386, 155, 19, 21, boy.draw_x, boy.y+100, 38, 42)
+        boy.image3.clip_draw(0,0,512,301,800,300,1600,600)
+
+        
 
 
 
@@ -364,6 +367,8 @@ class Boy:
         self.x, self.y = 1600 // 2, 100
         self.image = load_image('mario_sheet.png')
         self.image2 = load_image('mario_sheet_80.png')
+        self.image3 = load_image('gameover.png')
+
 
         self.font = load_font('ENCR10B.TTF', 30)
 

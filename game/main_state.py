@@ -18,6 +18,8 @@ from fire import Fire
 
 from grass import Grass
 from sky import Sky
+from back import Back
+
 
 from stage1_ground1 import S1_Ground1
 from stage1_ground2 import S1_Ground2
@@ -59,6 +61,8 @@ fire = None
 
 grass = None
 sky = None
+sky = None
+
 
 stage1_ground1 = None
 stage1_ground2 = None
@@ -339,7 +343,9 @@ def update():
 
         if collide(boy, gumba):  #충돌
             if(boy.inv==False):
-                if(boy.state>=1):boy.state -= 1
+                if(boy.state==2):boy.state = 1
+                elif(boy.state==1):boy.state = 0
+               
                 if boy.state == 0:
                     boy.x += - boy.dir*35
                     boy.y += 35
@@ -401,7 +407,7 @@ def update():
             game_world.remove_object(mushroom)
             
             boy.state = 1
-            boy.score += 100
+            # boy.score += 100
 
     # for gumba in gumbas: 
     #     if collide(boy, gumba):
@@ -414,7 +420,7 @@ def update():
             print("변신!!")
             game_world.remove_object(flower)
             boy.state = 2
-            boy.score += 1000
+            # boy.score += 1000
 
 
 
@@ -535,6 +541,9 @@ def update():
     if collide_floor(mushroom, stage1_ground1)!=1 and collide_floor(mushroom, stage1_ground2)!=1 and collide_floor(mushroom, box)!=1 :
         # print("fall!!")
         mushroom.fall = 1
+
+    
+        
         
 
 
@@ -548,6 +557,7 @@ def draw():
         game_object.draw()
 
     #delay(0.5)
+
     
     update_canvas()
 

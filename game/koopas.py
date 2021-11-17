@@ -21,7 +21,7 @@ FRAMES_PER_ACTION = 1
 class Koopas:
 
     def __init__(self):
-        self.x, self.y = 700, 90
+        self.x, self.y = 1200, 90
         self.image = load_image('Koopas_r.png')
         self.image2 = load_image('Koopas_l.png')
 

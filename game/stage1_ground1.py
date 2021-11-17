@@ -23,5 +23,7 @@ class S1_Ground1:
 
     def draw(self):
         self.image.draw(self.x, self.y ,2206,60)
+
+
         draw_rectangle(*self.crush_box())
 

@@ -19,7 +19,7 @@ FRAMES_PER_ACTION = 1
 class Box:
 
     def __init__(self):
-        self.x, self.y = random.randint(400,800), 180
+        self.x, self.y = 500, 180
 
         self.image = load_image('box.png')
         self.image2 = load_image('block.png')
