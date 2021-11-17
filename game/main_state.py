@@ -15,9 +15,17 @@ from sky import Sky
 from stage1_ground1 import S1_Ground1
 
 from box import Box
+from box2 import Box2
+
+
+
 from block import Block
+
+
 from powerup import Mushroom
 from powerup import Flower
+from powerup import Coin
+
 
 
 
@@ -42,10 +50,14 @@ sky = None
 stage1_ground1 = None
 
 box = None
+box2 = None
+
 block = None
 
 mushroom = None
 flower = None
+coin = None
+
 
 
 
@@ -118,8 +130,8 @@ def collide_monster(a,b):
 def enter():
     global boy, grass,sky, koopas, redkoopas
     global stage1_ground1
-    global box, block
-    global mushroom, flower
+    global box, box2, block
+    global mushroom, flower, coin
 
     global gumba
     global gumbas
@@ -134,14 +146,29 @@ def enter():
 
 
     global boxs 
-    boxs = [Box() for i in range(2)]
+    boxs = [Box() for i in range(1)]
     game_world.add_objects(boxs, 1)
 
-    box = Box()
+    global boxs2 
+    boxs2 = [Box2() for i in range(1)]
+    game_world.add_objects(boxs2, 1)
+
+    # box = Box()
+
+
     block = Block()
 
     mushroom = Mushroom()
     flower = Flower()
+    coin = Coin()
+
+
+
+    for box in boxs:  
+        mushroom.x = box.x
+
+    for box2 in boxs2:  
+        flower.x = box2.x
 
 
 
@@ -158,6 +185,8 @@ def enter():
 
     game_world.add_object(mushroom, 1)
     game_world.add_object(flower, 1)
+    game_world.add_object(coin, 1)
+
 
 
 
@@ -192,9 +221,12 @@ def cam():
 
     # box.x -= boy.cam 
     block.x -= boy.cam 
+    
     stage1_ground1.x -= boy.cam 
     mushroom.x -= boy.cam 
     flower.x -= boy.cam 
+    coin.x -= boy.cam 
+
 
 
     for gumba in gumbas:  
@@ -202,6 +234,9 @@ def cam():
 
     for box in boxs:  
         box.x -= boy.cam
+
+    for box2 in boxs2:  
+        box2.x -= boy.cam
 
 
     
@@ -224,10 +259,15 @@ def handle_events():
 
 def update():
 
+    coin.x = block.x
+    coin.y = block.y
+
     cam()
 
     for game_object in game_world.all_objects():
         game_object.update()
+
+            
 
     if boy.inv==True:
         boy.inv_timer += 1
@@ -242,6 +282,9 @@ def update():
             # gumbas.remove(gumba)
             # game_world.remove_object(gumba)
             print("1")
+            boy.score += 500
+
+
         elif collide_monster(boy, gumba):  #충돌
             if(boy.inv==False):
                 boy.state = 0
@@ -249,16 +292,28 @@ def update():
                     boy.x += - boy.dir*35
                     boy.y += 35
                     boy.inv = True
+                    
                     print("2")
 
 
 
 
     if collide(boy, mushroom):
-        if mushroom.state >= 1:
+        if mushroom.state == 1:
             # print("변신!!")
             game_world.remove_object(mushroom)
+            
             boy.state = 1
+            boy.score += 100
+
+    
+    if collide(boy, flower):
+        if flower.state == 1:
+            print("변신!!")
+            game_world.remove_object(flower)
+            boy.state = 2
+            boy.score += 1000
+
 
         
 
@@ -289,13 +344,44 @@ def update():
         # game_world.remove_object(box)
         pass
 
+
+    if collide_head(boy, box2):
+        # print("박스 open")
+        box2.state = 1
+        if boy.state==0:
+            boy.y = box2.y -37
+        if boy.state==1:
+            boy.y = box2.y - 90
+
+        flower.state += 1 
+        
+        if flower.state == 1:
+            flower.y += 36
+        
+        # box.remove(box)
+        # game_world.remove_object(box)
+        pass
+
+
+
+
+    
+
     if collide_floor(boy, box):
         # print("박스 위에 있음")
         boy.fall = 0
 
+    if collide_floor(boy, box2):
+        # print("박스 위에 있음")
+        boy.fall = 0
+    
+
+    
+
     if collide_floor(mushroom, box):
         # print("박스 위에 있음")
         mushroom.fall = 0
+
 
     if collide_floor(boy, block):
         # print("블록 위에 있음")
@@ -303,6 +389,7 @@ def update():
 
     if collide_floor(mushroom, block):
         # print("블록 위에 있음")
+       
         mushroom.fall = 0
     
 
@@ -312,7 +399,12 @@ def update():
         # block.state = 1
         # box.remove(box)
         game_world.remove_object(block)
+        coin.y = block.y + 30
+        coin.state = 1
         pass
+    
+
+
 
 
     # if not collide(boy, box):

@@ -7,7 +7,7 @@ import random
 import game_framework
 
 
-from powerup import Flower
+from powerup import Mushroom
 
 # monster Action Speed
 TIME_PER_ACTION = 3
@@ -16,7 +16,7 @@ FRAMES_PER_ACTION = 1
 
 
 
-class Box:
+class Box2:
 
     def __init__(self):
         self.x, self.y = random.randint(400,800), 180

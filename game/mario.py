@@ -7,7 +7,7 @@ import game_framework
 
 
 # mario Event
-RIGHT_DOWN, LEFT_DOWN, RIGHT_UP, LEFT_UP, SLEEP_TIMER,UP_DOWN,UP_UP = range(7)
+RIGHT_DOWN, LEFT_DOWN, RIGHT_UP, LEFT_UP, SLEEP_TIMER,UP_DOWN,UP_UP ,SPACE_DOWN,SPACE_UP = range(9)
 
 key_event_table = {
     (SDL_KEYDOWN, SDLK_RIGHT): RIGHT_DOWN,
@@ -16,6 +16,9 @@ key_event_table = {
     (SDL_KEYUP, SDLK_LEFT): LEFT_UP,
     (SDL_KEYDOWN, SDLK_UP): UP_DOWN,
     (SDL_KEYUP, SDLK_UP): UP_UP,
+    (SDL_KEYDOWN, SDLK_SPACE): SPACE_DOWN,
+    (SDL_KEYUP, SDLK_SPACE): SPACE_UP,
+
 
 }
 
@@ -65,8 +68,8 @@ class IdleState:
             boy.jump_v += JUMP_SPEED_PPS
             boy.jumping = True
 
-        if event == UP_UP:
-            boy.jump_v -= JUMP_SPEED_PPS
+        # if event == UP_UP:
+        #     boy.jump_v -= JUMP_SPEED_PPS
 
 
 
@@ -77,6 +80,7 @@ class IdleState:
         if boy.timer == 0:
             #boy.add_event(SLEEP_TIMER)
             pass
+
 
     def draw(boy):
         if boy.state == 0:
@@ -102,6 +106,21 @@ class IdleState:
                     boy.image.clip_draw(173, 103, 30, 35, boy.draw_x, boy.y + 35,60,70)
                 else:
                     boy.image.clip_draw(22, 103, 30, 35, boy.draw_x, boy.y + 35,60,70)
+
+        if boy.state == 2:
+            if boy.dir == 1:
+                if boy.fall == 0:
+                    boy.image.clip_draw(202, 32,  25, 37, boy.draw_x, boy.y + 35,50,70)
+                else:
+                    boy.image.clip_draw(358, 32, 25, 37, boy.draw_x, boy.y + 35,50,70)
+            else:
+                if boy.fall == 0:
+                    boy.image.clip_draw(173, 32,  25, 37, boy.draw_x, boy.y + 35,50,70)
+                else:
+                    boy.image.clip_draw(24, 32, 25, 37, boy.draw_x, boy.y + 35,50,70)
+
+        
+        
 
 
 
@@ -162,9 +181,41 @@ class RunState:
                     boy.image.clip_draw(352, 103, 30, 35, boy.draw_x, boy.y + 35,60,70)
             else:
                 if boy.fall == 0:
-                    boy.image.clip_draw(143 - 30*int(boy.frame), 103, 30, 35, boy.draw_x, boy.y + 35,60,70)
+                    boy.image.clip_draw(143 - 30 *int(boy.frame), 103, 30, 35, boy.draw_x, boy.y + 35,60,70)
                 else:
                     boy.image.clip_draw(22, 103, 30, 35, boy.draw_x, boy.y + 35,60,70)
+
+        if boy.state== 2:
+            if boy.dir == 1:
+                if boy.fall == 0:
+                    boy.image.clip_draw(232 + 25*int(boy.frame), 32, 25, 35, boy.draw_x, boy.y + 35,50,70)
+                else:
+                    boy.image.clip_draw(358, 32, 25, 37, boy.draw_x, boy.y + 35,60,70)
+            else:
+                if boy.fall == 0:
+                    boy.image.clip_draw(143 - 25*int(boy.frame), 32, 25, 35, boy.draw_x, boy.y + 35,50,70)
+                else:
+                    boy.image.clip_draw(24, 32, 25, 37, boy.draw_x, boy.y + 35,50,70)
+
+
+class DieState:
+
+    def enter(boy, event):
+        boy.state = 4
+        if event == UP_DOWN:
+            boy.state = 1
+
+    def exit(boy, event):
+        pass
+
+
+    def do(boy):
+        boy.frame = (boy.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 3
+        boy.y -= boy.velocity * game_framework.frame_time
+
+    def draw(boy):
+        boy.image.clip_draw(386, 155, 19, 21, boy.draw_x, boy.y, 38, 42)
+
 
 
 
@@ -275,10 +326,11 @@ class SleepState:
 next_state_table = {
     IdleState: {RIGHT_UP: RunState, LEFT_UP: RunState, RIGHT_DOWN: RunState, LEFT_DOWN: RunState, UP_DOWN: IdleState, UP_UP:IdleState},
     RunState: {RIGHT_UP: IdleState, LEFT_UP: IdleState, LEFT_DOWN: IdleState, RIGHT_DOWN: IdleState, UP_DOWN: RunState, UP_UP: RunState },
+    DieState: {RIGHT_UP: DieState, LEFT_UP: DieState, RIGHT_DOWN: DieState, LEFT_DOWN: DieState, UP_DOWN: IdleState, UP_UP:DieState}
+
+}
    # JumpState: {RIGHT_UP: JumpState, LEFT_UP: JumpState, LEFT_DOWN: JumpState, RIGHT_DOWN: JumpState, UP_DOWN: IdleState, UP_UP:IdleState},
     # SleepState: {LEFT_DOWN: RunState, RIGHT_DOWN: RunState, LEFT_UP: RunState, RIGHT_UP: RunState, UP_DOWN: IdleState, UP_UP:SleepState}
-}
-
 
 class Boy:
 
@@ -287,6 +339,10 @@ class Boy:
         self.image = load_image('mario_sheet.png')
         self.image2 = load_image('mario_sheet_80.png')
 
+        self.font = load_font('ENCR10B.TTF', 30)
+
+        self.score = 0
+        self.coin = 0
 
 
         self.draw_x = 0
@@ -341,6 +397,12 @@ class Boy:
         if self.state==1:
             return self.draw_x-15, self.y, self.draw_x + 15, self.y+70
 
+        if self.state==2:
+            return self.draw_x-15, self.y, self.draw_x + 15, self.y+75
+
+        if self.state==4:
+            return self.draw_x, self.y, self.draw_x , self.y
+
     # def jump(self):
     #     if(self.fall == 0 and self.jumping==False and self.stopping==False):
     #         self.jumping=True
@@ -384,6 +446,10 @@ class Boy:
         self.jump()
 
 
+        if self.state == 4:
+            self.cur_state = DieState
+
+
         if(self.y > 500):
             self.y =100
         if(self.y < 0):
@@ -401,6 +467,12 @@ class Boy:
         self.cur_state.draw(self)
         debug_print('Velocity :' + str(self.velocity) + '  Dir:' + str(self.dir) + '  State:' + str(self.cur_state))
         draw_rectangle(*self.crush_box())
+        self.font.draw(1300, 550, 'Time: %3.0f' % (300 -get_time()), (255, 255, 255))
+        self.font.draw(700, 550, 'Score: %3.0f' % self.score, (0, 255, 0))
+        self.font.draw(100, 550, 'Coin: %3.0f' % self.coin, (255, 255, 0))
+
+
+
 
     def handle_event(self, event):
         if (event.type, event.key) in key_event_table:

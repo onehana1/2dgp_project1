@@ -95,9 +95,42 @@ class Flower:
         pass
 
     def draw(self): 
-        if self.state ==0:
+        if self.state >= 1:
             self.image.clip_draw(2 + 19*int(self.frame), 40, 19, 20, self.x, self.y,38,40)
 
         draw_rectangle(*self.crush_box())
 
 
+class Coin:
+
+    def __init__(self):
+        self.x, self.y = 600, 180
+        self.image = load_image('coin.png')
+
+        self.dir = 1
+        self.velocity = 0
+        self.timer = 1000
+        self.frame = 0
+
+        self.state = 0
+
+
+    def crush_box(self):
+        return self.x-19, self.y-20, self.x +19, self.y+20
+
+    def do(self):
+        pass
+    
+    def update(self):
+        self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 3
+        if self.state==1:
+            self.timer -= 1
+            print("coin:",self.timer)
+        pass
+
+    def draw(self): 
+        if self.state == 1 and self.timer !=0:
+            self.image.clip_draw(1, 32, 12, 16, self.x, self.y,24,32)
+            
+
+        draw_rectangle(*self.crush_box())
