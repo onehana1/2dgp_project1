@@ -54,7 +54,7 @@ def collide_monster(a,b):
 
     return True
 
-def collide_head_monster(a,b):
+def collide_head_mon(a,b):
     left_a, bottom_a, right_a, top_a = a.crush_box()
     left_b, bottom_b, right_b, top_b = b.crush_box()
 
@@ -69,6 +69,7 @@ def collide_head_monster(a,b):
             return False
 
         return True
+
 
 
 
