@@ -427,6 +427,8 @@ class Boy:
 
 
 
+
+
     def crush_box(self):
         if self.state==0:
             return self.draw_x-15, self.y-18, self.draw_x + 15, self.y+18
@@ -510,6 +512,51 @@ class Boy:
         if not collision.collide_floor(self, server.stage1_ground1)and not collision.collide_floor(self, server.stage1_ground2) and not collision.collide_floor(self, server.box):
         # print("fall!!")
             self.fall = 1
+
+
+        for server.koopas in server.koopass:  
+            if collision.collide_floor(server.boy, server.koopas): #밟 처치
+                server.boy.y += 35
+                server.koopas.state = 1
+                server.koopass.remove(server.koopas)
+                game_world.remove_object(server.koopas)
+                print("1")
+                server.boy.score += 500
+
+                
+            elif collision.collide_monster(server.boy, server.koopas):  #충돌
+                if(server.boy.inv==False):
+                    server.boy.state = 0
+                    if server.boy.state == 0:
+                        server.boy.x += - server.boy.dir*35
+                        server.boy.y += 35
+                        server.boy.inv = True
+                        
+                        print("2")
+
+
+        for server.redkoopas in server.redkoopass:  
+
+            if collision.collide_floor(server.boy, server.redkoopas): #밟 처치
+                server.boy.y += 35
+                server.redkoopas.state = 1
+                server.redkoopass.remove(server.redkoopas)
+                game_world.remove_object(server.redkoopas)
+                print("1")
+                server.boy.score += 500
+
+
+            elif collision.collide_monster(server.boy, server.redkoopas):  #충돌
+                if(server.boy.inv==False):
+                    server.boy.state = 0
+                    if server.boy.state == 0:
+                        server.boy.x += - server.boy.dir*35
+                        server.boy.y += 35
+                        server.boy.inv = True
+                        
+                        print("2")
+
+        
 
 
 
