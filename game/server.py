@@ -10,8 +10,7 @@ fire = None
 
 grass = None
 sky = None
-sky = None
-
+fire = None
 
 stage1_ground1 = None
 stage1_ground2 = None
@@ -36,3 +35,7 @@ redkoopas = None
 
 
 gumbas = []
+boxs = []
+boxs2 = []
+koopass = []
+redkoopass = []

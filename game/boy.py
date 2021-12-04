@@ -1,6 +1,11 @@
 from pico2d import *
 from ball import Ball
 
+import collision
+import server
+import game_framework
+import game_world
+
 # Boy Event
 RIGHT_DOWN, LEFT_DOWN, RIGHT_UP, LEFT_UP, SLEEP_TIMER = range(5)
 
@@ -119,6 +124,16 @@ class Boy:
             self.cur_state.exit(self, event)
             self.cur_state = next_state_table[self.cur_state][event]
             self.cur_state.enter(self, event)
+
+
+        if collision.collide_floor(self, server.stage1_ground1):
+            print("땅에 있음")
+            self.fall = 0
+
+        if collision.collide_floor(self, server.stage1_ground2):
+            print("땅에 있음")
+            self.fall = 0
+        
 
     def draw(self):
         self.cur_state.draw(self)

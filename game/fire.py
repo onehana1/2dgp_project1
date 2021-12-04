@@ -2,7 +2,7 @@ from pico2d import *
 import game_world
 import game_framework
 import random
-import main_state
+# import main_state
 
 
 # monster Run Speed

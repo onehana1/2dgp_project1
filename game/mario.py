@@ -6,6 +6,8 @@ import game_framework
 from fire import Fire
 
 
+import server
+import collision
 
 
 
@@ -463,7 +465,7 @@ class Boy:
             # self.g += -Fall_SPEED_PPS
             # self.y += self.g * game_framework.frame_time
             self.y -= Fall_SPEED_PPS * game_framework.frame_time
-            print(Fall_SPEED_PPS * game_framework.frame_time)
+            # print(Fall_SPEED_PPS * game_framework.frame_time)
 
 
 
@@ -475,6 +477,7 @@ class Boy:
 
     def update(self):
         self.cur_state.do(self)
+        
 
         self.camera()
         self.drop()
@@ -494,6 +497,21 @@ class Boy:
             self.cur_state.exit(self, event)
             self.cur_state = next_state_table[self.cur_state][event]
             self.cur_state.enter(self, event)
+
+        if collision.collide_floor(self, server.stage1_ground1):
+            # print("땅에 있음")
+            self.fall = 0
+
+        if collision.collide_floor(self, server.stage1_ground2):
+            # print("땅에 있음")
+            self.fall = 0
+
+
+        if not collision.collide_floor(self, server.stage1_ground1)and not collision.collide_floor(self, server.stage1_ground2) and not collision.collide_floor(self, server.box):
+        # print("fall!!")
+            self.fall = 1
+
+
 
 
     def draw(self):
