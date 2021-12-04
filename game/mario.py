@@ -39,7 +39,7 @@ RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
 RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 
 # mario Jump speed
-JUMP_SPEED_KMPH = 2000.0 # Km / Hour
+JUMP_SPEED_KMPH = 20.0 # Km / Hour
 JUMP_SPEED_MPM = (JUMP_SPEED_KMPH * 1000.0 / 60.0)
 JUMP_SPEED_MPS = (JUMP_SPEED_MPM / 60.0)
 JUMP_SPEED_PPS = (JUMP_SPEED_MPS * PIXEL_PER_METER)
@@ -76,13 +76,17 @@ class IdleState:
 
         boy.timer = 1000
 
+
     def exit(boy, event):
         if event == UP_DOWN:
-            boy.jump_v += JUMP_SPEED_PPS
+
+            # boy.jump_v += JUMP_SPEED_PPS * boy.jump_timer
             boy.jumping = True
 
         if event == UP_UP:
-            boy.jump_v -= JUMP_SPEED_PPS
+            # boy.jump_v += JUMP_SPEED_PPS * boy.jump_timer
+    
+            pass
 
         if event == z_DOWN:
             boy.fire_ball()
@@ -173,6 +177,7 @@ class RunState:
 
         if event == UP_UP:
             boy.jump_v -= JUMP_SPEED_PPS
+            
 
         if event == z_DOWN:
             boy.fire_ball()
@@ -250,87 +255,6 @@ class DieState:
 
 
 
-class JumpState:
-
-    def enter(boy, event):
-        if event == RIGHT_DOWN:
-            boy.velocity += RUN_SPEED_PPS
-        elif event == LEFT_DOWN:
-            boy.velocity -= RUN_SPEED_PPS
-        elif event == RIGHT_UP:
-            boy.velocity -= RUN_SPEED_PPS
-        elif event == LEFT_UP:
-            boy.velocity += RUN_SPEED_PPS
-
-        boy.jump_timer=0
-        if event == UP_DOWN:
-            boy.jump_timer += JUMP_SPEED_PPS
-            
-        boy.dir = clamp(-1, boy.velocity, 1)
-        
-
-
-    def exit(boy, event):
-        pass
-
-    def do(boy):
-        boy.frame = (boy.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 3
-        boy.timer -= 1
-        boy.x += boy.velocity * game_framework.frame_time
-        boy.y += boy.jump_timer * game_framework.frame_time
-        boy.x = clamp(25, boy.x, 1600 - 25)
-        boy.fall = 0
-
-    def draw(boy):
-        if boy.dir == 1:
-            boy.image.clip_draw(352, 103, 30, 35, boy.x, boy.y,60,70)
-        else:
-            boy.image.clip_draw(22, 103, 30, 35, boy.x, boy.y,60,70)
-
-
-class FallState:
-
-    def enter(boy, event):
-        boy.g -= JUMP_SPEED_PPS
-
-        if event == RIGHT_DOWN:
-            boy.velocity += RUN_SPEED_PPS
-        elif event == LEFT_DOWN:
-            boy.velocity -= RUN_SPEED_PPS
-        elif event == RIGHT_UP:
-            boy.velocity -= RUN_SPEED_PPS
-        elif event == LEFT_UP:
-            boy.velocity += RUN_SPEED_PPS
-            
-        boy.g=0
-
-
-    def exit(boy, event):
-        pass
-
-    def do(boy):
-        boy.frame = (boy.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 3
-        boy.timer -= 1
-        boy.x += boy.velocity * game_framework.frame_time
-        boy.y += boy.g * game_framework.frame_time
-        boy.x = clamp(25, boy.x, 1600 - 25)
-
-    def draw(boy):
-        if boy.dir == 1:
-            if boy.jumping ==False:
-                boy.image.clip_draw(352, 103, 30, 35, boy.x, boy.y,60,70)
-            else:
-                boy.image.clip_draw(352, 103, 30, 35, boy.x, boy.y,60,70)
-
-        else:
-            if boy.jumping ==False:
-                boy.image.clip_draw(22, 103, 30, 35, boy.x, boy.y,60,70)
-            else:
-                boy.image.clip_draw(22, 103, 30, 35, boy.x, boy.y,60,70)
-
-
-
-
 
 class SleepState:
 
@@ -384,6 +308,7 @@ class Boy:
         self.dir = 1
         self.velocity = 0
         self.jump_timer = 0
+        self.jump_power = 0
         self.frame = 0
         self.event_que = []
         self.cur_state = IdleState
@@ -398,6 +323,8 @@ class Boy:
         self.g = 0
 
         self.jumping = False
+        self.jumping_mon = False
+
         self.jump_v = 0
         self.stopping = False
 
@@ -442,9 +369,7 @@ class Boy:
         if self.state==4:
             return self.draw_x, self.y, self.draw_x , self.y
 
-    # def jump(self):
-    #     if(self.fall == 0 and self.jumping==False and self.stopping==False):
-    #         self.jumping=True
+
 
 
         print("점프")
@@ -452,22 +377,58 @@ class Boy:
         
 
     def jump(self):
+        self.jump_v = JUMP_SPEED_PPS
+        self.jump_v -= game_framework.frame_time * self.jump_timer * JUMP_SPEED_PPS
+
+        if (self.jumping == True and self.fall == 0):
+            self.jump_timer += 1
+            #self.y += 100
+            self.y += self.jump_v * game_framework.frame_time  
+            print("giborn")
+
+   
+
+        if (self.jump_timer > 150 or self.fall == 1):
+            self.jump_timer = 0
+            self.fall = 1
+
+            
         if(self.fall == 1 and self.jumping == True):
             self.jumping = False
 
-        if(self.fall == 0 and self.jumping == True):
-            #self.y += 100
-            self.y += self.jump_v * game_framework.frame_time
 
-            self.jumping = False
+    def jump_mon(self):
+        self.jump_v = JUMP_SPEED_PPS
+        self.jump_v -= game_framework.frame_time * self.jump_timer * JUMP_SPEED_PPS
+
+        if (self.jumping_mon == True and self.fall == 0):
+            self.jump_timer += 1
+            #self.y += 100
+            self.y += self.jump_v * game_framework.frame_time  
+            
+            print("mon")
+
+        if (self.jump_timer > 75):
+            self.jump_timer = 0
+            self.fall = 1
+
+            
+        if(self.fall == 1 and self.jumping_mon == True):
+            self.jumping_mon = False
+
+
+
+
+
+
 
 
     def drop(self):
         if(self.fall == 1 and self.jumping ==False):
-            # self.g += -Fall_SPEED_PPS
-            # self.y += self.g * game_framework.frame_time
+
             self.y -= Fall_SPEED_PPS * game_framework.frame_time
-            # print(Fall_SPEED_PPS * game_framework.frame_time)
+
+
 
 
 
@@ -484,14 +445,15 @@ class Boy:
         self.camera()
         self.drop()
         self.jump()
+        self.jump_mon()
 
 
         if self.state == 4:
             self.cur_state = DieState
 
 
-        if(self.y < 0):
-            self.state=4
+        # if(self.y < 0):
+        #     self.state=4
                         
 
         if len(self.event_que) > 0:
@@ -509,52 +471,13 @@ class Boy:
             self.fall = 0
 
 
-        if not collision.collide_floor(self, server.stage1_ground1)and not collision.collide_floor(self, server.stage1_ground2) and not collision.collide_floor(self, server.box):
-        # print("fall!!")
-            self.fall = 1
+        # if not collision.collide_floor(self, server.stage1_ground1)and not collision.collide_floor(self, server.stage1_ground2) and not collision.collide_floor(self, server.box):
+        # # print("fall!!")
+        #     self.fall = 1
 
 
-        for server.koopas in server.koopass:  
-            if collision.collide_floor(server.boy, server.koopas): #밟 처치
-                server.boy.y += 35
-                server.koopas.state = 1
-                server.koopass.remove(server.koopas)
-                game_world.remove_object(server.koopas)
-                print("1")
-                server.boy.score += 500
-
-                
-            elif collision.collide_monster(server.boy, server.koopas):  #충돌
-                if(server.boy.inv==False):
-                    server.boy.state = 0
-                    if server.boy.state == 0:
-                        server.boy.x += - server.boy.dir*35
-                        server.boy.y += 35
-                        server.boy.inv = True
-                        
-                        print("2")
 
 
-        for server.redkoopas in server.redkoopass:  
-
-            if collision.collide_floor(server.boy, server.redkoopas): #밟 처치
-                server.boy.y += 35
-                server.redkoopas.state = 1
-                server.redkoopass.remove(server.redkoopas)
-                game_world.remove_object(server.redkoopas)
-                print("1")
-                server.boy.score += 500
-
-
-            elif collision.collide_monster(server.boy, server.redkoopas):  #충돌
-                if(server.boy.inv==False):
-                    server.boy.state = 0
-                    if server.boy.state == 0:
-                        server.boy.x += - server.boy.dir*35
-                        server.boy.y += 35
-                        server.boy.inv = True
-                        
-                        print("2")
 
         
 
@@ -568,6 +491,8 @@ class Boy:
         self.font.draw(1300, 550, 'Time: %3.0f' % (300 -get_time()), (255, 255, 255))
         self.font.draw(700, 550, 'Score: %3.0f' % self.score, (0, 255, 0))
         self.font.draw(100, 550, 'Coin: %3.0f' % self.coin, (255, 255, 0))
+
+
 
 
 

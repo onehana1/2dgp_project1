@@ -1,0 +1,82 @@
+
+class JumpState:
+
+    def enter(boy, event):
+        if event == RIGHT_DOWN:
+            boy.velocity += RUN_SPEED_PPS
+        elif event == LEFT_DOWN:
+            boy.velocity -= RUN_SPEED_PPS
+        elif event == RIGHT_UP:
+            boy.velocity -= RUN_SPEED_PPS
+        elif event == LEFT_UP:
+            boy.velocity += RUN_SPEED_PPS
+
+        boy.jump_timer=0
+        if event == UP_DOWN:
+            boy.jump_timer += JUMP_SPEED_PPS
+            
+        boy.dir = clamp(-1, boy.velocity, 1)
+        
+
+
+    def exit(boy, event):
+        pass
+
+    def do(boy):
+        boy.frame = (boy.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 3
+        boy.timer -= 1
+        boy.x += boy.velocity * game_framework.frame_time
+        boy.y += boy.jump_timer * game_framework.frame_time
+        boy.x = clamp(25, boy.x, 1600 - 25)
+        boy.fall = 0
+
+    def draw(boy):
+        if boy.dir == 1:
+            boy.image.clip_draw(352, 103, 30, 35, boy.x, boy.y,60,70)
+        else:
+            boy.image.clip_draw(22, 103, 30, 35, boy.x, boy.y,60,70)
+
+
+class FallState:
+
+    def enter(boy, event):
+        boy.g -= JUMP_SPEED_PPS
+
+        if event == RIGHT_DOWN:
+            boy.velocity += RUN_SPEED_PPS
+        elif event == LEFT_DOWN:
+            boy.velocity -= RUN_SPEED_PPS
+        elif event == RIGHT_UP:
+            boy.velocity -= RUN_SPEED_PPS
+        elif event == LEFT_UP:
+            boy.velocity += RUN_SPEED_PPS
+            
+        boy.g=0
+
+
+    def exit(boy, event):
+        pass
+
+    def do(boy):
+        boy.frame = (boy.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 3
+        boy.timer -= 1
+        boy.x += boy.velocity * game_framework.frame_time
+        boy.y += boy.g * game_framework.frame_time
+        boy.x = clamp(25, boy.x, 1600 - 25)
+
+    def draw(boy):
+        if boy.dir == 1:
+            if boy.jumping ==False:
+                boy.image.clip_draw(352, 103, 30, 35, boy.x, boy.y,60,70)
+            else:
+                boy.image.clip_draw(352, 103, 30, 35, boy.x, boy.y,60,70)
+
+        else:
+            if boy.jumping ==False:
+                boy.image.clip_draw(22, 103, 30, 35, boy.x, boy.y,60,70)
+            else:
+                boy.image.clip_draw(22, 103, 30, 35, boy.x, boy.y,60,70)
+
+
+
+

@@ -3,6 +3,9 @@ import game_world
 import random
 
 import game_framework
+import server
+import collision
+
 
 # monster Run Speed
 PIXEL_PER_METER = (10.0 / 0.3) # 10 pixel 30 cm
@@ -50,6 +53,29 @@ class Koopas:
 
 
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 2
+
+
+
+        for server.koopas in server.koopass:  
+            if collision.collide_floor(server.boy, server.koopas): #밟 처치
+                server.boy.jumping_mon = True
+                server.koopas.state = 1
+                server.koopass.remove(server.koopas)
+                game_world.remove_object(server.koopas)
+                print("1")
+                server.boy.score += 500
+
+                
+            elif collision.collide_monster(server.boy, server.koopas):  #충돌
+                if(server.boy.inv==False):
+                    server.boy.state = 0
+                    if server.boy.state == 0:
+                        server.boy.x += - server.boy.dir*35
+                        server.boy.y += 35
+                        server.boy.jumping_mon = True
+                        server.boy.inv = True
+                        
+                        print("2")
 
 
 

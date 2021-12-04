@@ -3,6 +3,8 @@ import game_world
 import game_framework
 import random
 
+import server
+import collision
 
 
 
@@ -63,6 +65,34 @@ class Gumba:
             self.velocity += RUN_SPEED_PPS
             self.y -= self.velocity * game_framework.frame_time
             pass
+
+
+        for gumba in server.gumbas:  
+
+            if collision.collide_floor(server.boy, gumba): #밟 처치
+                server.boy.y += 35
+                gumba.state = 1
+                server.boy.jumping_mon = True
+                # gumbas.remove(gumba)
+                # game_world.remove_object(gumba)
+                print("1")
+                server.boy.score += 500
+
+
+            if collision.collide(server.boy, gumba):  #충돌
+                if(server.boy.inv==False):
+                    if(server.boy.state==2):server.boy.state = 1
+                    elif(server.boy.state==1):server.boy.state = 0
+                
+                    if server.boy.state == 0:
+                        server.boy.x += - server.boy.dir * 35
+                        server.boy.y += 35
+                        server.boy.jumping_mon = True
+                        server.boy.inv = True
+                        
+                        print("2")
+
+
 
 
         pass
