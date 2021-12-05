@@ -22,9 +22,9 @@ FRAMES_PER_ACTION = 1
 
 
 class Koopas:
-
-    def __init__(self):
-        self.x, self.y = 1200, 90
+    font = None
+    def __init__(self, count = '1', x = 0, y = 0):
+        self.x, self.y = x,y
         self.image = load_image('Koopas_r.png')
         self.image2 = load_image('Koopas_l.png')
 
@@ -33,6 +33,9 @@ class Koopas:
         self.timer = 0
         self.frame = 0
 
+        self.count = count
+        if Koopas.font is None:
+            Koopas.font = load_font('ENCR10B.TTF', 16)
 
     def crush_box(self):
         return self.x-25, self.y-30, self.x +25, self.y+30
@@ -86,6 +89,9 @@ class Koopas:
             self.image.clip_draw(55 + 31*int(self.frame), 5, 31, 24, self.x, self.y,60,70)
         else:
             self.image2.clip_draw(85 - 31*int(self.frame), 5, 31, 24, self.x, self.y,60,70)
+
+
+        Koopas.font.draw(self.x - 30, self.y + 50, self.count, (255, 255, 0))
 
 
         draw_rectangle(*self.crush_box())

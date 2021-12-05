@@ -45,6 +45,7 @@ class redKoopas:
 
             if collision.collide_floor(server.boy, server.redkoopas): #밟 처치
                 server.boy.y += 35
+                server.boy.jumping_mon = True
                 server.redkoopas.state = 1
                 server.redkoopass.remove(server.redkoopas)
                 game_world.remove_object(server.redkoopas)
@@ -58,6 +59,7 @@ class redKoopas:
                     if server.boy.state == 0:
                         server.boy.x += - server.boy.dir*35
                         server.boy.y += 35
+                        server.boy.jumping_mon = True
                         server.boy.inv = True
                         
                         print("2")

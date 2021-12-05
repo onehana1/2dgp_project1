@@ -23,10 +23,10 @@ FRAMES_PER_ACTION = 1
 
 
 class Gumba:
-    
+    font = None
 
-    def __init__(self):
-        self.x, self.y = random.randint(100,1300), 80
+    def __init__(self, count = '1', x = 0, y = 0):
+        self.x, self.y = x , y
         self.image = load_image('gumba.png')
         global cam
 
@@ -37,7 +37,10 @@ class Gumba:
         self.timer = 0
 
         self.state = 0
-      
+
+        self.count = count
+        if Gumba.font is None:
+            Gumba.font = load_font('ENCR10B.TTF', 16)
 
 
     def crush_box(self):
@@ -73,8 +76,9 @@ class Gumba:
                 server.boy.y += 35
                 gumba.state = 1
                 server.boy.jumping_mon = True
-                # gumbas.remove(gumba)
-                # game_world.remove_object(gumba)
+
+                server.gumbas.remove(gumba)
+                game_world.remove_object(gumba)
                 print("1")
                 server.boy.score += 500
 
@@ -107,7 +111,7 @@ class Gumba:
         if self.state==1:
             self.image.clip_composite_draw( 44, 2, 20, 18, 3.141592/2,'', self.x, self.y, 40, 36)
 
-
+        Gumba.font.draw(self.x - 30, self.y + 50, self.count, (255, 255, 0))
 
         draw_rectangle(*self.crush_box())
 

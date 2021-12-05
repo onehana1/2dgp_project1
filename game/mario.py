@@ -308,6 +308,8 @@ class Boy:
         self.dir = 1
         self.velocity = 0
         self.jump_timer = 0
+        self.jump_timer_m = 0
+
         self.jump_power = 0
         self.frame = 0
         self.event_que = []
@@ -384,7 +386,7 @@ class Boy:
             self.jump_timer += 1
             #self.y += 100
             self.y += self.jump_v * game_framework.frame_time  
-            print("giborn")
+            # print(self.jump_timer)
 
    
 
@@ -396,20 +398,23 @@ class Boy:
         if(self.fall == 1 and self.jumping == True):
             self.jumping = False
 
+        if self.jumping == False:
+            self.fall = True
+
 
     def jump_mon(self):
         self.jump_v = JUMP_SPEED_PPS
         self.jump_v -= game_framework.frame_time * self.jump_timer * JUMP_SPEED_PPS
 
         if (self.jumping_mon == True and self.fall == 0):
-            self.jump_timer += 1
+            self.jump_timer_m += 1
             #self.y += 100
             self.y += self.jump_v * game_framework.frame_time  
             
             print("mon")
 
-        if (self.jump_timer > 75):
-            self.jump_timer = 0
+        if (self.jump_timer_m > 75):
+            self.jump_timer_m = 0
             self.fall = 1
 
             
@@ -444,9 +449,9 @@ class Boy:
 
         self.camera()
         self.drop()
-        self.jump()
+        
         self.jump_mon()
-
+        self.jump()
 
         if self.state == 4:
             self.cur_state = DieState

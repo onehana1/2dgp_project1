@@ -7,6 +7,7 @@ from pico2d import *
 import game_framework
 import game_world
 import server
+import world_build_state
 
 
 from mario import Boy
@@ -52,8 +53,34 @@ name = "MainState"
 
 def enter():
 
-    server.gumbas = [Gumba() for i in range(2)]
+    # server.gumbas = [Gumba('1',100,50) for i in range(2)]
+    # game_world.add_objects(server.gumbas, 1)
+
+    # server.gumbas = [Gumba('1',100,50), Gumba('2',200,150), Gumba('3',300,150)]
+    # game_world.add_objects(server.gumbas, 1)
+
+    with open('gumba_data.json', 'r') as f:
+        monster_data_list = json.load(f)
+
+    for data in monster_data_list:
+        server.df_g = Gumba(data['g_name'], data['g_x'], data['g_y'])
+        server.gumbas.append(server.df_g)
+        
+    print(server.df_g)
     game_world.add_objects(server.gumbas, 1)
+
+    # server.koopass = [Koopas() for i in range(1)]
+    # game_world.add_objects(server.koopass, 1)
+
+    with open('koopa_data.json', 'r') as f:
+        monster_data_list = json.load(f)
+
+    for data in monster_data_list:
+        server.df_k = Koopas(data['k_name'], data['k_x'], data['k_y'])
+        server.koopass.append(server.df_k)
+    
+    game_world.add_objects(server.koopass, 1)
+
 
     server.boy = Boy()
     game_world.add_object(server.boy, 1)
@@ -112,8 +139,7 @@ def enter():
         server.flower.x = server.box2.x
 
 
-    server.koopass = [Koopas() for i in range(1)]
-    game_world.add_objects(server.koopass, 1)
+
 
 
     server.redkoopass = [redKoopas() for i in range(1)]

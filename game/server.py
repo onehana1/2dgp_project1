@@ -26,6 +26,10 @@ flower = None
 coin = None
 
 
+df_g =[]
+df_k =[]
+df_rk =[]
+
 
 
 
