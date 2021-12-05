@@ -6,7 +6,7 @@ boy = None
 fire = None
 
 
-
+background = None
 
 grass = None
 sky = None
@@ -31,6 +31,16 @@ df_k =[]
 df_rk =[]
 
 
+df_b =[]
+df_b2 =[]
+
+
+df_m =[]
+df_f =[]
+df_c =[]
+
+
+
 
 
 gumba = None
@@ -43,3 +53,7 @@ boxs = []
 boxs2 = []
 koopass = []
 redkoopass = []
+
+mushrooms = []
+flowers = []
+coins = []

@@ -3,13 +3,27 @@ import game_world
 import random
 
 
+import game_framework
 import server
 import collision
 
-class redKoopas:
+# monster Run Speed
+PIXEL_PER_METER = (10.0 / 0.3) # 10 pixel 30 cm
+RUN_SPEED_KMPH = 10.0 # Km / Hour
+RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
+RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
+RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 
-    def __init__(self):
-        self.x, self.y = 50, 90
+# monster Action Speed
+TIME_PER_ACTION = 3
+ACTION_PER_TIME = 20
+FRAMES_PER_ACTION = 1
+
+class redKoopas:
+    font = None 
+
+    def __init__(self, count = '1', x = 0, y = 0):
+        self.x, self.y = x,y
         self.image = load_image('redKoopas_r.png')
         self.image2 = load_image('redKoopas_l.png')
 
@@ -17,10 +31,12 @@ class redKoopas:
         self.velocity = 0
         self.timer = 0
         self.frame = 0
-
+        self.count = count
+        if redKoopas.font is None:
+            redKoopas.font = load_font('ENCR10B.TTF', 16)
 
     def crush_box(self):
-        return self.x-25, self.y-30, self.x +25, self.y+30
+        return self.x-25- server.boy.x, self.y-30, self.x +25- server.boy.x, self.y+30
 
     def do(self):
         pass
@@ -37,13 +53,13 @@ class redKoopas:
             self.x -= 0.5
 
 
-        self.frame = (self.frame + 1) % 2
+        self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 2
 
 
         
         for server.redkoopas in server.redkoopass:  
 
-            if collision.collide_floor(server.boy, server.redkoopas): #밟 처치
+            if collision.collide_head_mon(server.boy, server.redkoopas): #밟 처치
                 server.boy.y += 35
                 server.boy.jumping_mon = True
                 server.redkoopas.state = 1
@@ -53,7 +69,7 @@ class redKoopas:
                 server.boy.score += 500
 
 
-            elif collision.collide_monster(server.boy, server.redkoopas):  #충돌
+            if collision.collide(server.boy, server.redkoopas):  #충돌
                 if(server.boy.inv==False):
                     server.boy.state = 0
                     if server.boy.state == 0:
@@ -69,9 +85,11 @@ class redKoopas:
 
     def draw(self):
         if ((self.dir % 2) == 1):
-            self.image.clip_draw(55 + 31*self.frame, 5, 31, 24, self.x, self.y,60,70)
+            self.image.clip_draw(55 + 31*int(self.frame), 5, 31, 24, self.x- server.boy.x, self.y,60,70)
         else:
-            self.image2.clip_draw(85 - 31*self.frame, 5, 31, 24, self.x, self.y,60,70)
+            self.image2.clip_draw(85 - 31*int(self.frame), 5, 31, 24, self.x- server.boy.x, self.y,60,70)
+
+        redKoopas.font.draw(self.x - 30- server.boy.x, self.y + 50, self.count, (255, 255, 0))
 
         draw_rectangle(*self.crush_box())
 

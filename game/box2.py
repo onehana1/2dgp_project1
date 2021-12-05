@@ -2,7 +2,7 @@ from pico2d import *
 import game_world
 import random
 
-
+import server
 
 import game_framework
 
@@ -36,7 +36,7 @@ class Box2:
 
 
     def crush_box(self):
-        return self.x-18, self.y-18, self.x +18, self.y+17
+        return self.x-18- server.boy.x, self.y-18, self.x +18- server.boy.x, self.y+17
 
     def do(self):
         pass
@@ -48,9 +48,9 @@ class Box2:
 
     def draw(self): 
         if self.state ==0:
-            self.image.clip_draw(1 + 18*int(self.frame), 18, 18, 18, self.x, self.y,36,36)
+            self.image.clip_draw(1 + 18*int(self.frame), 18, 18, 18, self.x- server.boy.x, self.y,36,36)
         else:
-            self.image2.clip_draw(2, 78, 18, 18, self.x, self.y,36,36)
+            self.image2.clip_draw(2, 78, 18, 18, self.x- server.boy.x, self.y,36,36)
 
         draw_rectangle(*self.crush_box())
 

@@ -2,7 +2,7 @@ from pico2d import *
 import game_world
 
 import game_framework
-
+import server
 
 # monster Action Speed
 TIME_PER_ACTION = 3
@@ -24,7 +24,7 @@ class Block:
 
 
     def crush_box(self):
-        return self.x-18, self.y-18, self.x +18, self.y+18
+        return self.x-18- server.boy.x, self.y-18, self.x +18- server.boy.x, self.y+18
 
     def do(self):
         pass
@@ -41,7 +41,7 @@ class Block:
         pass
 
     def draw(self): 
-        self.image.clip_draw(2, 96, 18, 18, self.x, self.y,36,36)
+        self.image.clip_draw(2, 96, 18, 18, self.x- server.boy.x, self.y,36,36)
         draw_rectangle(*self.crush_box())
 
 

@@ -39,13 +39,13 @@ RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
 RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 
 # mario Jump speed
-JUMP_SPEED_KMPH = 40.0 # Km / Hour
+JUMP_SPEED_KMPH = 20.0 # Km / Hour
 JUMP_SPEED_MPM = (JUMP_SPEED_KMPH * 1000.0 / 60.0)
 JUMP_SPEED_MPS = (JUMP_SPEED_MPM / 60.0)
 JUMP_SPEED_PPS = (JUMP_SPEED_MPS * PIXEL_PER_METER)
 
 # mario Fall speed
-Fall_SPEED_KMPH = 30.0 # Km / Hour
+Fall_SPEED_KMPH = 20.0 # Km / Hour
 Fall_SPEED_MPM = (Fall_SPEED_KMPH * 1000.0 / 60.0)
 Fall_SPEED_MPS = (Fall_SPEED_MPM / 60.0)
 Fall_SPEED_PPS = (Fall_SPEED_MPS * PIXEL_PER_METER)
@@ -106,49 +106,47 @@ class IdleState:
 
 
     def draw(boy):
-        cx, cy = boy.x - server.background.window_left, boy.y - server.background.window_bottom
-
         if boy.state == 0:
             if boy.dir == 1:
                 if boy.fall == 0:
-                    boy.image.clip_draw(202, 171, 30, 18, cx, cy,60,35)
+                    boy.image.clip_draw(202, 171, 30, 18, boy.draw_x, boy.y,60,35)
                 else:
-                    boy.image.clip_draw(352, 103, 30, 35, cx, cy,60,35)    
+                    boy.image.clip_draw(352, 103, 30, 35, boy.draw_x, boy.y,60,35)    
             else:
                 if boy.fall == 0:
-                    boy.image.clip_draw(173, 171, 30, 18, cx, cy,60,35)
+                    boy.image.clip_draw(173, 171, 30, 18, boy.draw_x, boy.y,60,35)
                 else:
-                    boy.image.clip_draw(22, 103, 30, 35, cx, cy,60,35)
+                    boy.image.clip_draw(22, 103, 30, 35, boy.draw_x, boy.y,60,35)
 
         if boy.state == 1:
             if boy.dir == 1:
                 if boy.fall == 0:
-                    boy.image.clip_draw(202, 103, 30, 35, cx, cy + 35,60,70)
+                    boy.image.clip_draw(202, 103, 30, 35, boy.draw_x, boy.y + 35,60,70)
                 else:
-                    boy.image.clip_draw(352, 103, 30, 35, cx, cy + 35,60,70)   
+                    boy.image.clip_draw(352, 103, 30, 35, boy.draw_x, boy.y + 35,60,70)   
             else:
                 if boy.fall == 0:
-                    boy.image.clip_draw(173, 103, 30, 35, cx, cy + 35,60,70)
+                    boy.image.clip_draw(173, 103, 30, 35, boy.draw_x, boy.y + 35,60,70)
                 else:
-                    boy.image.clip_draw(22, 103, 30, 35, cx, cy + 35,60,70)
+                    boy.image.clip_draw(22, 103, 30, 35, boy.draw_x, boy.y + 35,60,70)
 
         if boy.state == 2:
             if boy.dir == 1:
                 if boy.fall == 0:
                         if boy.attect==True:
-                            boy.image.clip_draw(310, 33, 21, 35, cx, cy+ 35,42,70)
+                            boy.image.clip_draw(310, 33, 21, 35, boy.draw_x, boy.y+ 35,42,70)
                         else:
-                            boy.image.clip_draw(202, 32,  25, 37, cx, cy + 35,50,70)
+                            boy.image.clip_draw(202, 32,  25, 37, boy.draw_x, boy.y + 35,50,70)
                 else:
-                    boy.image.clip_draw(358, 32, 25, 37, cx, cy + 35,50,70)
+                    boy.image.clip_draw(358, 32, 25, 37, boy.draw_x, boy.y + 35,50,70)
             else:
                 if boy.fall == 0:
                     if boy.attect==True:
-                        boy.image.clip_draw(74, 33, 23, 35, cx, cy+ 35,46,70)
+                        boy.image.clip_draw(74, 33, 23, 35, boy.draw_x, boy.y+ 35,46,70)
                     else: 
-                        boy.image.clip_draw(173, 32,  25, 37, cx, cy + 35,50,70)
+                        boy.image.clip_draw(173, 32,  25, 37, boy.draw_x, boy.y + 35,50,70)
                 else:
-                    boy.image.clip_draw(24, 32, 25, 37, cx, cy + 35,50,70)
+                    boy.image.clip_draw(24, 32, 25, 37, boy.draw_x, boy.y + 35,50,70)
 
         
         
@@ -174,12 +172,11 @@ class RunState:
 
     def exit(boy, event):
         if event == UP_DOWN:
-            #boy.jump_v += JUMP_SPEED_PPS
+            boy.jump_v += JUMP_SPEED_PPS
             boy.jumping =True
 
         if event == UP_UP:
-            #boy.jump_v -= JUMP_SPEED_PPS
-            pass
+            boy.jump_v -= JUMP_SPEED_PPS
             
 
         if event == z_DOWN:
@@ -196,46 +193,42 @@ class RunState:
         # boy.x = clamp(25, boy.x, 1600 - 25)
 
     def draw(boy):
-        cx, cy = boy.x - server.background.window_left, boy.y - server.background.window_bottom
-        #print(cx)
-        #print(boy.x)
-
 
         if boy.state == 0:
             if boy.dir == 1:
                 if boy.fall == 0:
-                    boy.image.clip_draw(232 + 30*int(boy.frame), 173, 30, 35, cx, cy,60,35)
+                    boy.image.clip_draw(232 + 30*int(boy.frame), 173, 30, 35, boy.draw_x, boy.y,60,35)
                 else:
-                    boy.image.clip_draw(352, 103, 30, 35, cx, cy,60,35)
+                    boy.image.clip_draw(352, 103, 30, 35, boy.draw_x, boy.y,60,35)
             else:
                 if boy.fall == 0:
-                    boy.image.clip_draw(143 - 30*int(boy.frame), 173, 30, 35, cx, cy,60,35)
+                    boy.image.clip_draw(143 - 30*int(boy.frame), 173, 30, 35, boy.draw_x, boy.y,60,35)
                 else:
-                    boy.image.clip_draw(22, 103, 30, 35, cx, cy,60,35)
+                    boy.image.clip_draw(22, 103, 30, 35, boy.draw_x, boy.y,60,35)
 
         if boy.state==1:
             if boy.dir == 1:
                 if boy.fall == 0:
-                    boy.image.clip_draw(232 + 30*int(boy.frame), 103, 30, 35, cx, cy + 35,60,70)
+                    boy.image.clip_draw(232 + 30*int(boy.frame), 103, 30, 35, boy.draw_x, boy.y + 35,60,70)
                 else:
-                    boy.image.clip_draw(352, 103, 30, 35, cx, cy + 35,60,70)
+                    boy.image.clip_draw(352, 103, 30, 35, boy.draw_x, boy.y + 35,60,70)
             else:
                 if boy.fall == 0:
-                    boy.image.clip_draw(143 - 30 *int(boy.frame), 103, 30, 35, cx, cy + 35,60,70)
+                    boy.image.clip_draw(143 - 30 *int(boy.frame), 103, 30, 35, boy.draw_x, boy.y + 35,60,70)
                 else:
-                    boy.image.clip_draw(22, 103, 30, 35, cx, cy + 35,60,70)
+                    boy.image.clip_draw(22, 103, 30, 35, boy.draw_x, boy.y + 35,60,70)
 
         if boy.state== 2:
             if boy.dir == 1:
                 if boy.fall == 0:
-                    boy.image.clip_draw(232 + 25*int(boy.frame), 32, 25, 35, cx, cy + 35,50,70)
+                    boy.image.clip_draw(232 + 25*int(boy.frame), 32, 25, 35, boy.draw_x, boy.y + 35,50,70)
                 else:
-                    boy.image.clip_draw(358, 32, 25, 37, cx, cy + 35,60,70)
+                    boy.image.clip_draw(358, 32, 25, 37, boy.draw_x, boy.y + 35,60,70)
             else:
                 if boy.fall == 0:
-                    boy.image.clip_draw(143 - 25*int(boy.frame), 32, 25, 35, cx, cy + 35,50,70)
+                    boy.image.clip_draw(143 - 25*int(boy.frame), 32, 25, 35, boy.draw_x, boy.y + 35,50,70)
                 else:
-                    boy.image.clip_draw(24, 32, 25, 37, cx, cy + 35,50,70)
+                    boy.image.clip_draw(24, 32, 25, 37, boy.draw_x, boy.y + 35,50,70)
 
 
 class DieState:
@@ -254,7 +247,7 @@ class DieState:
         boy.y -= boy.velocity * game_framework.frame_time
 
     def draw(boy):
-        boy.image.clip_draw(386, 155, 19, 21, boy.x, boy.y+100, 38, 42)
+        boy.image.clip_draw(386, 155, 19, 21, boy.draw_x, boy.y+100, 38, 42)
         boy.image3.clip_draw(0,0,512,301,800,300,1600,600)
 
         
@@ -297,7 +290,7 @@ next_state_table = {
 class Boy:
 
     def __init__(self):
-        self.x, self.y = 200, 100
+        self.x, self.y = 1600 // 2, 100
         self.image = load_image('mario_sheet.png')
         self.image2 = load_image('mario_sheet_80.png')
         self.image3 = load_image('gameover.png')
@@ -309,7 +302,7 @@ class Boy:
         self.coin = 0
 
 
-        
+        self.draw_x = 0
 
 
         self.dir = 1
@@ -346,8 +339,8 @@ class Boy:
     # def camera(self):
     
 
-    #     self.x = self.x
-    #     self.x= clamp(600,  self.x, 900)
+    #     self.draw_x = self.x
+    #     self.draw_x= clamp(600,  self.x, 900)
 
 
     #     # if self.x < 700:
@@ -366,19 +359,17 @@ class Boy:
 
 
     def crush_box(self):
-        cx, cy = self.x - server.background.window_left, self.y - server.background.window_bottom
-        
         if self.state==0:
-            return cx-15, cy-18, cx + 15, cy+18
+            return self.draw_x-15, self.y-18, self.draw_x + 15, self.y+18
 
         if self.state==1:
-            return cx-15, cy, cx + 15, cy+70
+            return self.draw_x-15, self.y, self.draw_x + 15, self.y+70
 
         if self.state==2:
-            return cx-15, cy, cx + 15, cy+75
+            return self.draw_x-15, self.y, self.draw_x + 15, self.y+75
 
         if self.state==4:
-            return cx, cy, cx , cy
+            return self.draw_x, self.y, self.draw_x , self.y
 
 
 
@@ -393,21 +384,18 @@ class Boy:
 
 
         if (self.jumping == True and self.fall == 0):
-            self.jump_timer += 1 * game_framework.frame_time
+            self.jump_timer += 1
             #self.y += 100
-            self.y += self.jump_v * game_framework.frame_time
-            # print("jumpv",self.jump_v)
-            # print(self.jump_timer)
+            self.y += self.jump_v * game_framework.frame_time  
+            print("jumpv",self.jump_v)
+            print(self.jump_timer)
             
 
 
    
 
-        if (self.jump_timer > 0.7 or self.fall == 1):
+        if (self.jump_timer > 100 or self.fall == 1):
             self.jump_timer = 0
-            self.jump_timer_m = 0
-            self.jump_v = 0
-
             self.fall = 1
 
 
@@ -420,23 +408,19 @@ class Boy:
 
 
     def jump_mon(self):
-
+        self.jump_v = JUMP_SPEED_PPS
+        self.jump_v -= game_framework.frame_time * self.jump_timer * JUMP_SPEED_PPS
 
         if (self.jumping_mon == True and self.fall == 0):
-            self.jump_v = JUMP_SPEED_PPS
-            self.jump_v -= game_framework.frame_time * self.jump_timer * JUMP_SPEED_PPS
             self.jump_timer_m += 1
             self.jumping = False
             #self.y += 100
             self.y += self.jump_v * game_framework.frame_time  
-            # print("mon")
+            print("mon")
 
 
         if (self.jump_timer_m > 75):
             self.jump_timer_m = 0
-            self.jump_timer = 0
-            self.jump_v = 0
-
             self.fall = 1
 
             
@@ -481,9 +465,6 @@ class Boy:
 
         # if(self.y < 0):
         #     self.state=4
-        
-        self.x = clamp(50, self.x, server.background.w - 50)
-        # self.y = clamp(-50, self.y, server.background.h - 50)
                         
 
         if len(self.event_que) > 0:
@@ -500,10 +481,6 @@ class Boy:
             # print("땅에 있음")
             self.fall = 0
 
-        for box in server.boxs:  
-            if collision.collide_floor(self, box):
-                server.boy.fall = 0
-                print("박스 밟음")
 
         # if not collision.collide_floor(self, server.stage1_ground1)and not collision.collide_floor(self, server.stage1_ground2) and not collision.collide_floor(self, server.box):
         # # print("fall!!")

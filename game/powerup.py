@@ -2,6 +2,8 @@ from pico2d import *
 import game_world
 
 import game_framework
+import collision
+import server
 
 
 # item Run Speed
@@ -16,13 +18,14 @@ TIME_PER_ACTION = 3
 ACTION_PER_TIME = 4
 FRAMES_PER_ACTION = 1
 
-box = None
 
 
 class Mushroom:
+    font = None
+    
 
-    def __init__(self):
-        self.x, self.y = 1600 // 2, 180
+    def __init__(self, count = '1', x = 0, y = 0):
+        self.x, self.y = x, y
         self.image = load_image('powerup.png')
 
         self.dir = 1
@@ -33,10 +36,13 @@ class Mushroom:
         self.state = 0
         self.fall = 1
 
+        self.count = count
+        if Mushroom.font is None:
+            Mushroom.font = load_font('ENCR10B.TTF', 16)
 
 
     def crush_box(self):
-        return self.x-21, self.y-19, self.x +21, self.y+19
+        return self.x-21- server.boy.x, self.y-19, self.x +21- server.boy.x, self.y+19
 
     def do(self):
         pass
@@ -55,24 +61,70 @@ class Mushroom:
                 self.velocity -= RUN_SPEED_PPS
                 self.x += self.velocity * game_framework.frame_time
 
-        
-        if(self.fall==1 and self.state >=1):
-            self.y -= 1
+            self.fall = 1
+       
 
-            pass
+        for mushroom in server.mushrooms:   
+
+            for box in server.boxs: 
+                if collision.collide_floor(mushroom, box):
+                    mushroom.fall = 0
+
+            if collision.collide_floor(mushroom, server.stage1_ground1):
+                    mushroom.fall = 0
+            
+            if(mushroom.fall== 1 and mushroom.state >=1):
+                    mushroom.y -= 1
+
+            if mushroom.state == 0:
+                if collision.collide_head(server.boy, mushroom):
+                    mushroom.state += 1 
+                    if mushroom.state == 1:
+                        mushroom.y += 36
+                        
+                    if mushroom.state >= 10:
+                        print("버섯 나와라")
+                        server.mushrooms.remove(mushroom)
+                        game_world.remove_object(mushroom)
+
+                        if(server.boy.state == 0):
+                            server.boy.state = 1
+
+            else: 
+                if collision.collide(server.boy, mushroom):
+                    mushroom.state += 1 
+                    if mushroom.state == 1:
+                        mushroom.y += 36
+                        
+                    if mushroom.state >= 1:
+                        print("변신!!")
+                        server.mushrooms.remove(mushroom)
+                        game_world.remove_object(mushroom)
+
+                        if(server.boy.state == 0):
+                            server.boy.state = 1
+
+
+
+
+                
+                
+                    
+
 
     def draw(self): 
         if self.state >=1:
-            self.image.clip_draw(21, 60, 21, 19, self.x, self.y,42,38)
+            self.image.clip_draw(21, 60, 21, 19, self.x- server.boy.x, self.y,42,38)
 
 
         draw_rectangle(*self.crush_box())
 
 
 class Flower:
+    font = None
 
-    def __init__(self):
-        self.x, self.y = 600, 180
+    def __init__(self, count = '1', x = 0, y = 0):
+        self.x, self.y = x, y
         self.image = load_image('powerup.png')
 
         self.dir = 1
@@ -83,9 +135,12 @@ class Flower:
         self.state = 0
         self.fall = 1
 
+        self.count = count
+        if Flower.font is None:
+            Flower.font = load_font('ENCR10B.TTF', 16)
 
     def crush_box(self):
-        return self.x-19, self.y-20, self.x +19, self.y+20
+        return self.x-19- server.boy.x, self.y-20, self.x +19- server.boy.x, self.y+20
 
     def do(self):
         pass
@@ -96,19 +151,33 @@ class Flower:
         if(self.fall==1 and self.state >=1):
             self.y -= 1
 
+        for flower in server.flowers:      
+            if collision.collide(server.boy, flower):
+                if server.flower.state == 1:
+                    print("변신!!")
+                    game_world.remove_object(flower)
+                    server.boy.state = 2
+                    # boy.score += 1000
+
+
+
+
+
+
+
         pass
 
     def draw(self): 
         if self.state >= 1:
-            self.image.clip_draw(2 + 19*int(self.frame), 40, 19, 20, self.x, self.y,38,40)
+            self.image.clip_draw(2 + 19*int(self.frame), 40, 19, 20, self.x- server.boy.x, self.y,38,40)
 
         draw_rectangle(*self.crush_box())
 
 
 class Coin:
-
-    def __init__(self):
-        self.x, self.y = 600, 180
+    font = None
+    def __init__(self, count = '1', x = 0, y = 0):
+        self.x, self.y = x, y
         self.image = load_image('coin.png')
 
         self.dir = 1
@@ -118,9 +187,13 @@ class Coin:
 
         self.state = 0
 
+        self.count = count
+        if Coin.font is None:
+            Coin.font = load_font('ENCR10B.TTF', 16)
+
 
     def crush_box(self):
-        return self.x-19, self.y-20, self.x +19, self.y+20
+        return self.x-19- server.boy.x, self.y-20, self.x +19- server.boy.x, self.y+20
 
     def do(self):
         pass
@@ -134,7 +207,7 @@ class Coin:
 
     def draw(self): 
         if self.state == 1 and self.timer >=0:
-            self.image.clip_draw(1, 32, 12, 16, self.x, self.y,24,32)
+            self.image.clip_draw(1, 32, 12, 16, self.x- server.boy.x, self.y,24,32)
             
 
         draw_rectangle(*self.crush_box())

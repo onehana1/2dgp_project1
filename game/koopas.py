@@ -38,7 +38,7 @@ class Koopas:
             Koopas.font = load_font('ENCR10B.TTF', 16)
 
     def crush_box(self):
-        return self.x-25, self.y-30, self.x +25, self.y+30
+        return self.x-25 - server.boy.x, self.y-30, self.x +25 - server.boy.x, self.y+30
 
     def do(self):
         pass
@@ -60,25 +60,27 @@ class Koopas:
 
 
         for server.koopas in server.koopass:  
-            if collision.collide_floor(server.boy, server.koopas): #밟 처치
+            if collision.collide_head_mon(server.boy, server.koopas): #밟 처치
+                server.boy.y += 35
                 server.boy.jumping_mon = True
                 server.koopas.state = 1
                 server.koopass.remove(server.koopas)
                 game_world.remove_object(server.koopas)
-                print("1")
+                # print("koopas cut")
                 server.boy.score += 500
 
                 
-            elif collision.collide_monster(server.boy, server.koopas):  #충돌
+            if collision.collide(server.boy, server.koopas):  #충돌
                 if(server.boy.inv==False):
                     server.boy.state = 0
                     if server.boy.state == 0:
+                        
                         server.boy.x += - server.boy.dir*35
                         server.boy.y += 35
                         server.boy.jumping_mon = True
                         server.boy.inv = True
                         
-                        print("2")
+                # print("collide koopas ")
 
 
 
@@ -86,12 +88,12 @@ class Koopas:
 
     def draw(self):
         if ((self.dir % 2) == 1):
-            self.image.clip_draw(55 + 31*int(self.frame), 5, 31, 24, self.x, self.y,60,70)
+            self.image.clip_draw(55 + 31*int(self.frame), 5, 31, 24, self.x - server.boy.x, self.y,60,70)
         else:
-            self.image2.clip_draw(85 - 31*int(self.frame), 5, 31, 24, self.x, self.y,60,70)
+            self.image2.clip_draw(85 - 31*int(self.frame), 5, 31, 24, self.x - server.boy.x, self.y,60,70)
 
 
-        Koopas.font.draw(self.x - 30, self.y + 50, self.count, (255, 255, 0))
+        Koopas.font.draw(self.x - 30  - server.boy.x, self.y + 50, self.count, (255, 255, 0))
 
 
         draw_rectangle(*self.crush_box())

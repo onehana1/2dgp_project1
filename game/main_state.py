@@ -42,7 +42,7 @@ from redkoopas import redKoopas
 
 
 
-
+from background import FixedBackground as Background
 
 
 name = "MainState"
@@ -59,6 +59,7 @@ def enter():
     # server.gumbas = [Gumba('1',100,50), Gumba('2',200,150), Gumba('3',300,150)]
     # game_world.add_objects(server.gumbas, 1)
 
+######################굼바###########################
     with open('gumba_data.json', 'r') as f:
         monster_data_list = json.load(f)
 
@@ -66,12 +67,9 @@ def enter():
         server.df_g = Gumba(data['g_name'], data['g_x'], data['g_y'])
         server.gumbas.append(server.df_g)
         
-    print(server.df_g)
     game_world.add_objects(server.gumbas, 1)
 
-    # server.koopass = [Koopas() for i in range(1)]
-    # game_world.add_objects(server.koopass, 1)
-
+######################거북###########################
     with open('koopa_data.json', 'r') as f:
         monster_data_list = json.load(f)
 
@@ -81,13 +79,65 @@ def enter():
     
     game_world.add_objects(server.koopass, 1)
 
+######################빨거북###########################
+    with open('redkoopa_data.json', 'r') as f:
+        monster_data_list = json.load(f)
+        
+    for data in monster_data_list:
+        server.df_k = redKoopas(data['k_name'], data['k_x'], data['k_y'])
+        server.redkoopass.append(server.df_k)
+
+    game_world.add_objects(server.redkoopass, 1)
+
+#######################박스##########################
+    with open('box_data.json', 'r') as f:
+        monster_data_list = json.load(f)
+        
+    for data in monster_data_list:
+        server.df_b = Box(data['k_name'], data['k_x'], data['k_y'])
+        server.boxs.append(server.df_b)
+
+    game_world.add_objects(server.boxs, 1)
+
+#######################템##########################
+    with open('box_data.json', 'r') as f:
+        monster_data_list = json.load(f)
+        
+    for data in monster_data_list:
+        server.df_m = Mushroom(data['k_name'], data['k_x'], data['k_y'])
+        server.mushrooms.append(server.df_m)
+
+    game_world.add_objects(server.mushrooms, 1)
+
+    # server.mushrooms = Mushroom('1',100,50)
+    # game_world.add_object(server.mushroom, 1)
+#######################템##########################
+    with open('box_data.json', 'r') as f:
+        monster_data_list = json.load(f)
+        
+    for data in monster_data_list:
+        server.df_f = Mushroom(data['k_name'], data['k_x'], data['k_y'])
+        server.flowers.append(server.df_f)
+
+    # game_world.add_objects(server.flower, 1)
+
+        
+    #server.flower = Flower('1',100,50)
+    #game_world.add_object(server.flower, 1)
+
+    server.coin = Coin('1',100,50)
+    game_world.add_object(server.coin, 1)
+
 
     server.boy = Boy()
     game_world.add_object(server.boy, 1)
 
  
-    server.sky = Sky()
-    game_world.add_object(server.sky, 0)
+    # server.sky = Sky()
+    # game_world.add_object(server.sky, 0)
+
+    server.background = Background()
+    game_world.add_object(server.background, 0)
 
 
 
@@ -108,9 +158,6 @@ def enter():
 
 
 
-    server.boxs = [Box() for i in range(1)]
-    game_world.add_objects(server.boxs, 1)
-
 
     server.boxs2 = [Box2() for i in range(1)]
     game_world.add_objects(server.boxs2, 1)
@@ -120,30 +167,18 @@ def enter():
     game_world.add_object(server.block, 1)
 
 
-    server.mushroom = Mushroom()
-    game_world.add_object(server.mushroom, 1)
-
-    server.flower = Flower()
-    game_world.add_object(server.flower, 1)
-
-    server.coin = Coin()
-    game_world.add_object(server.coin, 1)
-
-
-
-
-    for server.box in server.boxs:  
-        server.mushroom.x = server.box.x
-
-    for server.box2 in server.boxs2:  
-        server.flower.x = server.box2.x
 
 
 
 
 
-    server.redkoopass = [redKoopas() for i in range(1)]
-    game_world.add_objects(server.redkoopass, 1)
+    # for server.box in server.boxs:  
+    #     server.mushroom.x = server.box.x
+
+    # for server.box2 in server.boxs2:  
+    #     server.flower.x = server.box2.x
+
+
 
 
 
@@ -161,44 +196,11 @@ def pause():
 def resume():
     pass
 
-def cam():
-    # if boy.x < 700:
-    #     boy.cam = 0
-                
-    # if boy.x > 800:
-    server.boy.cam =  server.boy.velocity * game_framework.frame_time 
-
-
-    # box.x -= boy.cam 
-    server.block.x -= server.boy.cam 
-    
-    server.stage1_ground1.x -= server.boy.cam 
-    server.stage1_ground2.x -= server.boy.cam 
-
-    server.mushroom.x -= server.boy.cam 
-    server.flower.x -= server.boy.cam 
-    server.coin.x -= server.boy.cam 
-    for koopas in server.koopass: 
-        koopas.x -= server.boy.cam 
-    for redkoopas in server.redkoopass: 
-        redkoopas.x -= server.boy.cam 
 
 
 
 
 
-    for gumba in server.gumbas:  
-        gumba.x -= server.boy.cam
-
-    for box in server.boxs:  
-        box.x -= server.boy.cam
-
-    for box2 in server.boxs2:  
-        box2.x -= server.boy.cam
-
-
-    
-    
     
 
 
@@ -217,10 +219,10 @@ def handle_events():
 
 def update():
 
-    server.coin.x = server.block.x
-    server.coin.y = server.block.y
+    # server.coin.x = server.block.x
+    # server.coin.y = server.block.y
 
-    cam()
+  
 
     for game_object in game_world.all_objects():
         game_object.update()

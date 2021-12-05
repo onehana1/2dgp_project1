@@ -44,7 +44,7 @@ class Gumba:
 
 
     def crush_box(self):
-        return self.x-20, self.y-18, self.x +20, self.y+18
+        return self.x - 20 - server.boy.x, self.y-18, self.x + 20 - server.boy.x, self.y+18
 
     def do(self):
         pass
@@ -72,7 +72,7 @@ class Gumba:
 
         for gumba in server.gumbas:  
 
-            if collision.collide_floor(server.boy, gumba): #밟 처치
+            if collision.collide_head_mon(server.boy, gumba): #밟 처치
                 server.boy.y += 35
                 gumba.state = 1
                 server.boy.jumping_mon = True
@@ -103,15 +103,15 @@ class Gumba:
 
     def draw(self):
         if self.state==0:
-            self.image.clip_draw( 2 + int(self.frame)*20, 2, 20, 18, self.x, self.y, 40, 36)
+            self.image.clip_draw( 2 + int(self.frame)*20, 2, 20, 18, self.x - server.boy.x, self.y, 40, 36)
     
         else:
-            self.image.clip_draw( 2 + 2*20, 2, 20, 18, self.x, self.y, 40, 36)
+            self.image.clip_draw( 2 + 2*20  , 2, 20, 18, self.x - server.boy.x, self.y, 40, 36)
 
         if self.state==1:
-            self.image.clip_composite_draw( 44, 2, 20, 18, 3.141592/2,'', self.x, self.y, 40, 36)
+            self.image.clip_composite_draw( 44, 2, 20, 18, 3.141592/2,'', self.x- server.boy.x, self.y, 40, 36)
 
-        Gumba.font.draw(self.x - 30, self.y + 50, self.count, (255, 255, 0))
+        Gumba.font.draw(self.x - 30 - server.boy.x, self.y + 50, self.count, (255, 255, 0))
 
         draw_rectangle(*self.crush_box())
 
