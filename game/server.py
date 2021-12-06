@@ -14,6 +14,9 @@ fire = None
 
 stage1_ground1 = None
 stage1_ground2 = None
+stage1_ground3 = None
+stage1_ground4 = None
+
 
 
 box = None

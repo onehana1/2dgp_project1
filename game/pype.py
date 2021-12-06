@@ -52,12 +52,6 @@ class Pype:
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 3
 
 
-        for pype in server.pypes:  
-       
-            if collision.collide_side(server.boy, pype):
-                print("파이프 사이드")
-                
-
 
     def draw(self): 
 

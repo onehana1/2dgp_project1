@@ -59,18 +59,18 @@ class Koopas:
 
 
 
-        for server.koopas in server.koopass:  
-            if collision.collide_head_mon(server.boy, server.koopas)and server.boy.inv_timer > 2: #밟 처치
+        for koopas in server.koopass:  
+            if collision.collide_head_mon(server.boy, koopas): #밟 처치
                 server.boy.y += 35
                 server.boy.jumping_mon = True
-                server.koopas.state = 1
-                server.koopass.remove(server.koopas)
-                game_world.remove_object(server.koopas)
+                koopas.state = 1
+                server.koopass.remove(koopas)
+                game_world.remove_object(koopas)
                 # print("koopas cut")
                 server.boy.score += 500
 
                 
-            if collision.collide(server.boy, server.koopas):  #충돌
+            if collision.collide(server.boy, koopas):  #충돌
                 if(server.boy.inv==False):
                     server.boy.state = 0
                     if server.boy.state == 0:
@@ -81,6 +81,12 @@ class Koopas:
                         server.boy.inv = True
                         
                 # print("collide koopas ")
+
+            for pype in server.pypes:  
+                if collision.collide_side(koopas, pype):
+                    # print("굼바 & 파이프 사이드")
+                    koopas.dir += 1
+                    koopas.timer = 0
 
 
 

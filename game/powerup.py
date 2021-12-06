@@ -75,6 +75,11 @@ class Mushroom:
 
             if collision.collide_floor(mushroom, server.stage1_ground2):
                     mushroom.fall = 0
+
+            if collision.collide_floor(mushroom, server.stage1_ground3):
+                    mushroom.fall = 0            
+            if collision.collide_floor(mushroom, server.stage1_ground4):
+                    mushroom.fall = 0
             
             if(mushroom.fall== 1 and mushroom.state >=1):
                     mushroom.y -= 1
@@ -136,7 +141,7 @@ class Flower:
         self.frame = 0
 
         self.state = 0
-        self.fall = 1
+        self.fall = 0
 
         self.count = count
         if Flower.font is None:
@@ -151,16 +156,42 @@ class Flower:
     def update(self):
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 3
 
-        if(self.fall==1 and self.state >=1):
-            self.y -= 1
+        
 
-        for flower in server.flowers:      
-            if collision.collide(server.boy, flower):
-                if server.flower.state == 1:
-                    print("변신!!")
-                    game_world.remove_object(flower)
-                    server.boy.state = 2
-                    # boy.score += 1000
+
+                    
+        for flower in server.flowers:   
+
+            if flower.state == 0:
+                if collision.collide_head(server.boy, flower):
+                    flower.state += 1 
+                    if flower.state == 1:
+                        flower.y += 36
+                        
+                    if flower.state >= 10:
+                        print("꽃 나와라")
+                        server.flowers.remove(flower)
+                        game_world.remove_object(flower)
+
+                        if(server.boy.state == 0):
+                            server.boy.state = 1
+
+            else: 
+                if collision.collide(server.boy, flower):
+                    flower.state += 1 
+                    if flower.state == 1:
+                        flower.y += 36
+                        
+                    if flower.state >= 1:
+                        print("꽃 변신!!")
+                        server.flowers.remove(flower)
+                        game_world.remove_object(flower)
+
+                        if(server.boy.state == 0):
+                            server.boy.state = 2
+
+
+
 
 
 

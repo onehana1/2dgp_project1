@@ -381,7 +381,7 @@ class Boy:
             return cx-15, cy, cx + 15, cy+70
 
         if self.state==2:
-            return cx-15, cy, cx + 15, cy+75
+            return cx-15, cy, cx + 15, cy+70
 
         if self.state==4:
             return cx, cy, cx , cy
@@ -479,7 +479,7 @@ class Boy:
 
         if self.inv ==True:
             self.inv_timer += 1 * game_framework.frame_time
-            print(self.inv_timer)
+            # print(self.inv_timer)
 
         if self.inv_timer >=3:
             self.inv = False
@@ -516,6 +516,14 @@ class Boy:
             # print("땅에 있음")
             self.fall = 0
 
+        if collision.collide_floor(self, server.stage1_ground3):
+            # print("땅에 있음")
+            self.fall = 0
+
+        if collision.collide_floor(self, server.stage1_ground4):
+            # print("땅에 있음")
+            self.fall = 0
+
         for box in server.boxs:  
             if collision.collide_floor(self, box):
                 server.boy.fall = 0
@@ -533,7 +541,7 @@ class Boy:
                 self.x -= self.velocity * game_framework.frame_time
 
 
-        print(self.x)
+        # print(self.x)
         for pype in server.pypes:  
             if collision.collide_floor(self, pype):
                 print("파이프 밟")

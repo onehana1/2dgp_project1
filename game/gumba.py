@@ -55,7 +55,7 @@ class Gumba:
         self.timer += 1
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 2
         if self.state == 0:
-            if(self.timer%500 == 0):
+            if(self.timer% 300 == 0):
                 self.dir += 1
 
             if ((self.dir % 2) == 1):
@@ -72,7 +72,7 @@ class Gumba:
 
         for gumba in server.gumbas:  
 
-            if collision.collide_head_mon(server.boy, gumba) and server.boy.inv_timer > 2: #밟 처치
+            if collision.collide_floor(server.boy, gumba): #밟 처치
                 server.boy.y += 35
                 gumba.state = 1
                 server.boy.jumping_mon = True
@@ -83,18 +83,27 @@ class Gumba:
                 server.boy.score += 500
 
 
-            if collision.collide(server.boy, gumba):  #충돌
+            if collision.collide_side(server.boy, gumba):  #충돌
                 if(server.boy.inv==False):
-                    if(server.boy.state==2):server.boy.state = 1
-                    elif(server.boy.state==1):server.boy.state = 0
-                
-                    if server.boy.state == 0:
+        
+                    if server.boy.state == 2 or server.boy.state ==1 or server.boy.state == 0:
                         server.boy.x +=  -server.boy.dir * 35
                         server.boy.y += 35
                         server.boy.jumping_mon = True
                         server.boy.inv = True
                         
                         print("2")
+
+                if(server.boy.state==2):server.boy.state = 1
+                elif(server.boy.state==1):server.boy.state = 0
+
+
+            for pype in server.pypes:  
+                if collision.collide_side(gumba, pype) and gumba.timer !=0:
+                    # print("굼바 & 파이프 사이드")
+                    gumba.dir += 1
+                    gumba.timer = 0
+                    
 
 
 

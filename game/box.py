@@ -51,44 +51,25 @@ class Box:
     def update(self):
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 3
 
-        # for box in server.boxs:  
-           
-
-        #     if collision.collide_head(server.boy, box):
-        #         # print("박스 open")
-        #         box.state = 1
-        #         if server.boy.state==0:
-        #             server.boy.y = box.y -37
-        
-        #         if server.boy.state==1:
-        #             server.boy.y = box.y - 90
-
 
         for box in server.boxs:  
 
             if collision.collide_head(server.boy, box):
                 print("박스 open")
                 box.state = 1
-                if server.boy.state==0:
-                    server.boy.fall = 1
-        
-                if server.boy.state==1:
-                    server.boy.fall = 1
-                    
+                server.boy.fall = 1
 
 
+        for box2 in server.boxs2:  
+
+            if collision.collide_head(server.boy, box2):
+                print("박스2 open")
+                box2.state = 1
+                server.boy.fall = 1
 
 
+               
                 
-
-
-
-
-            
-
-                
-
-                    
 
 
         pass

@@ -4,13 +4,13 @@ import server
 
 
 
-class S1_Ground2:
+class S1_Ground3:
     def __init__(self, x, y):
-        self.image = load_image('stage1_ground2.png')
+        self.image = load_image('stage1_ground3.png')
         self.x= x
         self.y= y
 
-        self.width = 238
+        self.width = 1021
         self.height = 60
 
     def update(self):        

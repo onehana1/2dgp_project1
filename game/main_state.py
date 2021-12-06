@@ -23,6 +23,8 @@ from pype import Pype
 
 from stage1_ground1 import S1_Ground1
 from stage1_ground2 import S1_Ground2
+from stage1_ground3 import S1_Ground3
+
 
 
 from box import Box
@@ -134,15 +136,15 @@ def enter():
 
     # server.mushrooms = Mushroom('1',100,50)
     # game_world.add_object(server.mushroom, 1)
-#######################템f##########################
-    with open('box_data.json', 'r') as f:
+#==========템f==========#
+    with open('box2_data.json', 'r') as f:
         monster_data_list = json.load(f)
         
     for data in monster_data_list:
-        server.df_f = Mushroom(data['k_name'], data['k_x'], data['k_y'])
+        server.df_f = Flower(data['k_name'], data['k_x'], data['k_y'])
         server.flowers.append(server.df_f)
 
-    # game_world.add_objects(server.flower, 1)
+    game_world.add_objects(server.flowers, 1)
 
         
     #server.flower = Flower('1',100,50)
@@ -171,8 +173,17 @@ def enter():
 
  
 
-    server.stage1_ground2 = S1_Ground2()
+    server.stage1_ground2 = S1_Ground2(2406,0)
     game_world.add_object(server.stage1_ground2, 1)
+
+
+    server.stage1_ground3 = S1_Ground3(2800,0)
+    game_world.add_object(server.stage1_ground3, 1)
+
+    
+    server.stage1_ground4 = S1_Ground3(5042,0)
+    game_world.add_object(server.stage1_ground4, 1)
+
 
 
 
