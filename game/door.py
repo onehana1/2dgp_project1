@@ -46,6 +46,7 @@ class Door:
 
         if collision.collide(server.boy, self):
             print("도착~")
+            server.stage = 1
 
 
 

@@ -54,11 +54,9 @@ class Box2:
             if collision.collide_head(server.boy, box2):
                 print("박스 open")
                 box2.state = 1
-                if server.boy.state==0:
-                    server.boy.fall = 1
+                server.boy.fall = 1
         
-                if server.boy.state==1:
-                    server.boy.fall = 1
+
 
         pass
 

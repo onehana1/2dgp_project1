@@ -106,9 +106,9 @@ class IdleState:
 
 
     def draw(boy):
-        cx, cy = boy.x - server.background.window_left, boy.y - server.background.window_bottom
+        cx, cy = boy.x - server.background2.window_left, boy.y - server.background2.window_bottom
 
-        if server.mario_state == 0:
+        if boy.state == 0:
             if boy.dir == 1:
                 if boy.fall == 0:
                     boy.image.clip_draw(202, 171, 30, 18, cx, cy,60,35)
@@ -120,7 +120,7 @@ class IdleState:
                 else:
                     boy.image.clip_draw(22, 103, 30, 35, cx, cy,60,35)
 
-        if server.mario_state == 1:
+        if boy.state == 1:
             if boy.dir == 1:
                 if boy.fall == 0:
                     boy.image.clip_draw(202, 103, 30, 35, cx, cy + 35,60,70)
@@ -132,7 +132,7 @@ class IdleState:
                 else:
                     boy.image.clip_draw(22, 103, 30, 35, cx, cy + 35,60,70)
 
-        if server.mario_state == 2:
+        if boy.state == 2:
             if boy.dir == 1:
                 if boy.fall == 0:
                         if boy.attect==True:
@@ -200,12 +200,12 @@ class RunState:
         # boy.x = clamp(25, boy.x, 1600 - 25)
 
     def draw(boy):
-        cx, cy = boy.x - server.background.window_left, boy.y - server.background.window_bottom
+        cx, cy = boy.x - server.background2.window_left, boy.y - server.background2.window_bottom
         #print(cx)
         #print(boy.x)
 
 
-        if server.mario_state == 0:
+        if boy.state == 0:
             if boy.dir == 1:
                 if boy.fall == 0:
                     boy.image.clip_draw(232 + 30*int(boy.frame), 173, 30, 35, cx, cy,60,35)
@@ -217,7 +217,7 @@ class RunState:
                 else:
                     boy.image.clip_draw(22, 103, 30, 35, cx, cy,60,35)
 
-        if server.mario_state==1:
+        if boy.state==1:
             if boy.dir == 1:
                 if boy.fall == 0:
                     boy.image.clip_draw(232 + 30*int(boy.frame), 103, 30, 35, cx, cy + 35,60,70)
@@ -229,7 +229,7 @@ class RunState:
                 else:
                     boy.image.clip_draw(22, 103, 30, 35, cx, cy + 35,60,70)
 
-        if server.mario_state== 2:
+        if boy.state== 2:
             if boy.dir == 1:
                 if boy.fall == 0:
                     boy.image.clip_draw(232 + 25*int(boy.frame), 32, 25, 35, cx, cy + 35,50,70)
@@ -245,9 +245,9 @@ class RunState:
 class DieState:
 
     def enter(boy, event):
-        # server.mario_state = 4
+        boy.state = 4
         if event == UP_DOWN:
-            server.mario_state = 1
+            boy.state = 1
 
     def exit(boy, event):
         pass
@@ -307,7 +307,7 @@ class Boy:
         self.image3 = load_image('gameover.png')
 
 
-        self.font = load_font('supermariobros.ttf', 30)
+        self.font = load_font('ENCR10B.TTF', 30)
 
         self.score = 0
         self.coin = 0
@@ -372,18 +372,18 @@ class Boy:
 
 
     def crush_box(self):
-        cx, cy = self.x - server.background.window_left, self.y - server.background.window_bottom
+        cx, cy = self.x - server.background2.window_left, self.y - server.background2.window_bottom
         
-        if server.mario_state==0:
+        if self.state==0:
             return cx-15, cy-18, cx + 15, cy+18
 
-        if server.mario_state==1:
+        if self.state==1:
             return cx-15, cy, cx + 15, cy+70
 
-        if server.mario_state==2:
+        if self.state==2:
             return cx-15, cy, cx + 15, cy+70
 
-        if server.mario_state==4:
+        if self.state==4:
             return cx, cy, cx , cy
 
 
@@ -491,15 +491,15 @@ class Boy:
         self.jump_mon()
         self.jump()
 
-        # if server.mario_state == 4:
-        #     self.cur_state = DieState
+        if self.state == 4:
+            self.cur_state = DieState
 
 
         # if(self.y < 0):
         #     self.state=4
         
-        self.x = clamp(50, self.x, server.background.w - 50)
-        # self.y = clamp(-50, self.y, server.background.h - 50)
+        self.x = clamp(50, self.x, server.background2.w - 50)
+        # self.y = clamp(-50, self.y, server.background2.h - 50)
                         
 
         if len(self.event_que) > 0:
@@ -585,11 +585,11 @@ class Boy:
         debug_print('Velocity :' + str(self.velocity) + '  Dir:' + str(self.dir) + '  State:' + str(self.cur_state))
         draw_rectangle(*self.crush_box())
         self.font.draw(1300, 550, 'Time: %3.0f' % (300 -get_time()), (255, 255, 255))
-        self.font.draw(700, 550, 'Score: %3.0f' % server.score, (0, 0, 0))
-        self.font.draw(100, 550, 'Coin: %3.0f' % server.coin, (255, 255, 0))
+        self.font.draw(700, 550, 'Score: %3.0f' % self.score, (0, 255, 0))
+        self.font.draw(100, 550, 'Coin: %3.0f' % self.coin, (255, 255, 0))
 
 
-        cx, cy = self.x - server.background.window_left, self.y - server.background.window_bottom
+        cx, cy = self.x - server.background2.window_left, self.y - server.background2.window_bottom
         self.font.draw(cx - 40, cy + 40, '(%d, %d)' % (self.x, self.y), (255, 255, 0))
         
 

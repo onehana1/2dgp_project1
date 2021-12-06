@@ -11,24 +11,32 @@ import server
 
 
 import main_state
+import main_stage_2
+import world_build_state
 
 
 
 
-name = "WorldBuildState"
 
-menu = None
+name = "next_stage"
+
+next = None
+font = None
 
 def enter():
-    global menu
-    menu = load_image('start_menu.png')
+    global next
+    global font
+
+    next = load_image('next.png')
+    font = load_font('supermariobros.ttf', 60)
     hide_cursor()
     hide_lattice()
-    server.stage = 0
 
 def exit():
-    global menu
-    del menu
+    global next
+    del next
+    global font
+    del font
 
 def pause():
     pass
@@ -54,14 +62,11 @@ def handle_events():
         if event.type == SDL_QUIT:
             game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
-                game_framework.quit()
+                game_framework.change_state(world_build_state)
         elif event.type == SDL_KEYDOWN and event.key == SDLK_n:
-            game_framework.change_state(main_state)
+            game_framework.change_state(main_stage_2)
 
 
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_l:
-            load_saved_world()
-            game_framework.change_state(main_state)
 
 def update():
     pass
@@ -70,7 +75,10 @@ def update():
 
 def draw():
     clear_canvas()
-    menu.draw(get_canvas_width()//2, get_canvas_height()//2)
+    next.draw(get_canvas_width()//2, get_canvas_height()//2)
+    font.draw(get_canvas_width()//2 - 250, get_canvas_height()//2 - 100, 'Coin : %3.0f' % server.coin, (255, 255, 0))
+    font.draw(get_canvas_width()//2 - 250, get_canvas_height()//2 - 200, 'Score : %3.0f' % server.score, (255, 255, 255))
+
     update_canvas()
 
 

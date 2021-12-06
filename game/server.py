@@ -1,12 +1,17 @@
 # 서버 만들고
 # 충돌처리 py만들기
 
+stage = 0
+
+mario_state = 0
 
 boy = None
 fire = None
 
 
 background = None
+background2 = None
+
 
 grass = None
 sky = None
@@ -28,7 +33,13 @@ pype = None
 
 mushroom = None
 flower = None
-coin = None
+
+
+coin = 0
+score = 0
+life = 0
+
+
 
 
 df_g =[]

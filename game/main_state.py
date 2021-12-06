@@ -8,6 +8,8 @@ import game_framework
 import game_world
 import server
 import world_build_state
+import next_stage
+
 
 
 from mario import Boy
@@ -163,8 +165,8 @@ def enter():
     #server.flower = Flower('1',100,50)
     #game_world.add_object(server.flower, 1)
 
-    server.coin = Coin('1',100,50)
-    game_world.add_object(server.coin, 1)
+    # server.coin = Coin('1',100,50)
+    # game_world.add_object(server.coin, 1)
 
 
     server.boy = Boy()
@@ -178,7 +180,7 @@ def enter():
     game_world.add_object(server.background, 0)
 
 
-    server.door = Door(5950,36)  # 5950
+    server.door = Door(1000,36)  # 5950
     game_world.add_object(server.door, 1)
 
 
@@ -199,23 +201,6 @@ def enter():
     
     server.stage1_ground4 = S1_Ground3(5042,0)
     game_world.add_object(server.stage1_ground4, 1)
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -255,14 +240,11 @@ def handle_events():
 
 
 def update():
-
-    # server.coin.x = server.block.x
-    # server.coin.y = server.block.y
-
-  
-
     for game_object in game_world.all_objects():
         game_object.update()
+
+    if server.stage == 1:
+        game_framework.change_state(next_stage)
 
 
 

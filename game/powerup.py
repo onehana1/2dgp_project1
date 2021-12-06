@@ -95,8 +95,8 @@ class Mushroom:
                         server.mushrooms.remove(mushroom)
                         game_world.remove_object(mushroom)
 
-                        if(server.boy.state == 0):
-                            server.boy.state = 1
+                        if(server.mario_state == 0):
+                            server.mario_state = 1
 
             else: 
                 if collision.collide(server.boy, mushroom):
@@ -109,8 +109,8 @@ class Mushroom:
                         server.mushrooms.remove(mushroom)
                         game_world.remove_object(mushroom)
 
-                        if(server.boy.state == 0):
-                            server.boy.state = 1
+                        if(server.mario_state == 0):
+                            server.mario_state = 1
 
 
 
@@ -173,8 +173,8 @@ class Flower:
                         server.flowers.remove(flower)
                         game_world.remove_object(flower)
 
-                        if(server.boy.state == 0):
-                            server.boy.state = 1
+                        if(server.mario_state == 0):
+                            server.mario_state = 1
 
             else: 
                 if collision.collide(server.boy, flower):
@@ -187,8 +187,8 @@ class Flower:
                         server.flowers.remove(flower)
                         game_world.remove_object(flower)
 
-                        if(server.boy.state == 0):
-                            server.boy.state = 2
+                        if(server.mario_state == 0):
+                            server.mario_state = 2
 
 
 
