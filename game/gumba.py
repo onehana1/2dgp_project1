@@ -34,7 +34,7 @@ class Gumba:
         self.velocity = 0
         self.jump_timer = 0
         self.frame = 0
-        self.timer = 0
+        self.timer = 5
 
         self.state = 0
 
@@ -51,21 +51,31 @@ class Gumba:
     
     def update(self):
 
+        
         self.velocity = 0
-        self.timer += 1
+        self.timer -=  game_framework.frame_time
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 2
-        if self.state == 0:
-            if(self.timer% 300 == 0):
-                self.dir += 1
 
-            if ((self.dir % 2) == 1):
-                self.velocity += RUN_SPEED_PPS
+        if self.state == 0:
+            if self.timer <= 0 and self.dir == 0:
+                self.dir = 1
+                self.timer = 5.0
+
+            elif self.timer <= 0 and self.dir == 1:
+                self.dir = 0
+                self.timer = 5.0
+
+
+            if self.dir== 1:
+                self.velocity = RUN_SPEED_PPS
                 self.x += self.velocity * game_framework.frame_time
+                
             else:
-                self.velocity -= RUN_SPEED_PPS
-                self.x += self.velocity * game_framework.frame_time
+                self.velocity = RUN_SPEED_PPS
+                self.x -= self.velocity * game_framework.frame_time
+
         if self.state == 1:
-            self.velocity += RUN_SPEED_PPS
+            self.velocity = RUN_SPEED_PPS
             self.y -= self.velocity * game_framework.frame_time
             pass
 
@@ -99,10 +109,14 @@ class Gumba:
 
 
             for pype in server.pypes:  
-                if collision.collide_side(gumba, pype) and gumba.timer !=0:
-                    # print("굼바 & 파이프 사이드")
-                    gumba.dir += 1
-                    gumba.timer = 0
+                if collision.collide_side(gumba, pype) and gumba.timer!=5:
+                    print("p&g")
+                    if gumba.dir == 1:
+                        gumba.dir = 0
+                    else:
+                        gumba.dir = 1
+
+                    gumba.timer = 5
                     
 
 

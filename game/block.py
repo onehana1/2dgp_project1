@@ -3,6 +3,7 @@ import game_world
 
 import game_framework
 import server
+import collision
 
 # monster Action Speed
 TIME_PER_ACTION = 3
@@ -12,15 +13,18 @@ FRAMES_PER_ACTION = 1
 
 
 class Block:
-
-    def __init__(self):
-        self.x, self.y = 400, 180
+    font = None
+    def __init__(self, count = '1', x = 0, y = 0):
+        self.x, self.y = x, y
         self.image = load_image('block.png')
         self.dir = 1
         self.velocity = 0
         self.timer = 0
         self.frame = 0
         self.state = 0
+        self.count = count
+        if Block.font is None:
+            Block.font = load_font('ENCR10B.TTF', 16)
 
 
     def crush_box(self):
@@ -37,6 +41,18 @@ class Block:
 
 
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 3
+
+        for block in server.blocks:  
+
+            if collision.collide_head(server.boy, block):
+                print("블록 깨기")
+                block.state = 1
+                server.boy.fall = 1
+
+                server.boy.coin += 1
+
+                server.blocks.remove(block)
+                game_world.remove_object(block)
 
         pass
 

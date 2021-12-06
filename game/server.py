@@ -38,6 +38,8 @@ df_rk =[]
 
 df_b =[]
 df_b2 =[]
+df_block =[]
+
 
 
 df_m =[]
@@ -55,10 +57,15 @@ gumba = None
 koopas = None
 redkoopas = None
 
+door = None
+
+
 
 gumbas = []
 boxs = []
 boxs2 = []
+blocks = []
+
 koopass = []
 redkoopass = []
 

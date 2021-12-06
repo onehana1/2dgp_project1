@@ -30,7 +30,7 @@ class Koopas:
 
         self.dir = 1
         self.velocity = 0
-        self.timer = 0
+        self.timer = 5
         self.frame = 0
 
         self.count = count
@@ -41,56 +41,74 @@ class Koopas:
         return self.x-25 - server.boy.x, self.y-30, self.x +25 - server.boy.x, self.y+30
 
     def do(self):
+
         pass
     
     def update(self):
-        self.timer += 1
-
-        if(self.timer%1000 == 0):
-            self.dir += 1
-
-        if ((self.dir % 2) == 1):
-            self.x += 0.5
-        else:
-            self.x -= 0.5
-
-
+        
+        self.velocity = 0
+        self.timer -=  game_framework.frame_time
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 2
+
+  
+        if self.timer <= 0 and self.dir == 0:
+            self.dir = 1
+            self.timer = 5.0
+        elif self.timer <= 0 and self.dir == 1:
+            self.dir = 0
+            self.timer = 5.0
+
+
+        if self.dir== 1:
+            self.velocity = RUN_SPEED_PPS
+            self.x += self.velocity * game_framework.frame_time
+            
+        else:
+            self.velocity = RUN_SPEED_PPS
+            self.x -= self.velocity * game_framework.frame_time
+
 
 
 
         for koopas in server.koopass:  
-            if collision.collide_head_mon(server.boy, koopas): #밟 처치
+
+            if collision.collide_floor(server.boy, koopas): #밟 처치
                 server.boy.y += 35
-                server.boy.jumping_mon = True
                 koopas.state = 1
+                server.boy.jumping_mon = True
+
                 server.koopass.remove(koopas)
                 game_world.remove_object(koopas)
-                # print("koopas cut")
+                print("1")
                 server.boy.score += 500
 
-                
-            if collision.collide(server.boy, koopas):  #충돌
+
+            if collision.collide_side(server.boy, koopas):  #충돌
                 if(server.boy.inv==False):
-                    server.boy.state = 0
-                    if server.boy.state == 0:
-                        
-                        server.boy.x += - server.boy.dir*35
+        
+                    if server.boy.state == 2 or server.boy.state ==1 or server.boy.state == 0:
+                        server.boy.x +=  -server.boy.dir * 35
                         server.boy.y += 35
                         server.boy.jumping_mon = True
                         server.boy.inv = True
                         
-                # print("collide koopas ")
+                        print("2")
+
+                if(server.boy.state==2):server.boy.state = 1
+                elif(server.boy.state==1):server.boy.state = 0
+
 
             for pype in server.pypes:  
-                if collision.collide_side(koopas, pype):
-                    # print("굼바 & 파이프 사이드")
-                    koopas.dir += 1
-                    koopas.timer = 0
+                if collision.collide_side(koopas, pype) and koopas.timer!=5:
+                    if koopas.dir == 1:
+                        koopas.dir = 0
+                    else:
+                        koopas.dir = 1
+                    koopas.timer = 5
+                    
 
 
 
-        pass
 
     def draw(self):
         if ((self.dir % 2) == 1):

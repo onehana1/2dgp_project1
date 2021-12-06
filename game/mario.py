@@ -541,6 +541,15 @@ class Boy:
                 self.x -= self.velocity * game_framework.frame_time
 
 
+        for block in server.blocks:  
+            if collision.collide_floor(self, block):
+                server.boy.fall = 0
+                print("박스2 밟음")
+            elif collision.collide_side(self, block):
+                print("박스2 사이드")
+                self.x -= self.velocity * game_framework.frame_time
+
+
         # print(self.x)
         for pype in server.pypes:  
             if collision.collide_floor(self, pype):
@@ -578,6 +587,10 @@ class Boy:
         self.font.draw(1300, 550, 'Time: %3.0f' % (300 -get_time()), (255, 255, 255))
         self.font.draw(700, 550, 'Score: %3.0f' % self.score, (0, 255, 0))
         self.font.draw(100, 550, 'Coin: %3.0f' % self.coin, (255, 255, 0))
+
+
+        cx, cy = self.x - server.background.window_left, self.y - server.background.window_bottom
+        self.font.draw(cx - 40, cy + 40, '(%d, %d)' % (self.x, self.y), (255, 255, 0))
         
 
 

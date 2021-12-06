@@ -9,7 +9,7 @@ import collision
 
 # monster Run Speed
 PIXEL_PER_METER = (10.0 / 0.3) # 10 pixel 30 cm
-RUN_SPEED_KMPH = 10.0 # Km / Hour
+RUN_SPEED_KMPH = 15.0 # Km / Hour
 RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
 RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
 RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
@@ -29,7 +29,7 @@ class redKoopas:
 
         self.dir = 1
         self.velocity = 0
-        self.timer = 0
+        self.timer = 5
         self.frame = 0
         self.count = count
         if redKoopas.font is None:
@@ -42,46 +42,67 @@ class redKoopas:
         pass
     
     def update(self):
-        self.timer += 1
 
-        if(self.timer%1000 == 0):
-            self.dir += 1
-
-        if ((self.dir % 2) == 1):
-            self.x += 0.5
-        else:
-            self.x -= 0.5
-
-
+        self.velocity = 0
+        self.timer -=  game_framework.frame_time
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 2
 
+  
+        if self.timer <= 0 and self.dir == 0:
+            self.dir = 1
+            self.timer = 5.0
+        elif self.timer <= 0 and self.dir == 1:
+            self.dir = 0
+            self.timer = 5.0
 
-        
-        for server.redkoopas in server.redkoopass:  
 
-            if collision.collide_head_mon(server.boy, server.redkoopas): #밟 처치
+        if self.dir== 1:
+            self.velocity = RUN_SPEED_PPS
+            self.x += self.velocity * game_framework.frame_time
+            
+        else:
+            self.velocity = RUN_SPEED_PPS
+            self.x -= self.velocity * game_framework.frame_time
+
+
+
+
+        for redkoopas in server.redkoopass:  
+
+            if collision.collide_floor(server.boy, redkoopas): #밟 처치
                 server.boy.y += 35
+                redkoopas.state = 1
                 server.boy.jumping_mon = True
-                server.redkoopas.state = 1
-                server.redkoopass.remove(server.redkoopas)
-                game_world.remove_object(server.redkoopas)
+
+                server.redkoopass.remove(redkoopas)
+                game_world.remove_object(redkoopas)
                 print("1")
                 server.boy.score += 500
 
 
-            if collision.collide(server.boy, server.redkoopas):  #충돌
+            if collision.collide_side(server.boy, redkoopas):  #충돌
                 if(server.boy.inv==False):
-                    server.boy.state = 0
-                    if server.boy.state == 0:
-                        server.boy.x += - server.boy.dir*35
+        
+                    if server.boy.state == 2 or server.boy.state ==1 or server.boy.state == 0:
+                        server.boy.x +=  -server.boy.dir * 35
                         server.boy.y += 35
                         server.boy.jumping_mon = True
                         server.boy.inv = True
                         
                         print("2")
 
+                if(server.boy.state==2):server.boy.state = 1
+                elif(server.boy.state==1):server.boy.state = 0
 
-        pass
+
+            for pype in server.pypes:  
+                if collision.collide_side(redkoopas, pype) and redkoopas.timer!=5:
+                    if redkoopas.dir == 1:
+                        redkoopas.dir = 0
+                    else:
+                        redkoopas.dir = 1
+                    redkoopas.timer = 5
+
 
     def draw(self):
         if ((self.dir % 2) == 1):
