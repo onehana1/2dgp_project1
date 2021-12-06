@@ -339,6 +339,8 @@ class Boy:
 
         self.state = 0
 
+        self.go = 1
+
         self.inv = False #무적상태
         self.inv_timer = 0 #무적상태 time
 
@@ -467,7 +469,17 @@ class Boy:
 
     def update(self):
         self.cur_state.do(self)
-        
+
+
+
+
+        if self.inv ==True:
+            self.inv_timer += 1 * game_framework.frame_time
+            print(self.inv_timer)
+
+        if self.inv_timer >=3:
+            self.inv = False
+            self.inv_timer = 0
 
         # self.camera()
         self.drop()
@@ -504,6 +516,20 @@ class Boy:
             if collision.collide_floor(self, box):
                 server.boy.fall = 0
                 print("박스 밟음")
+
+
+        for pype in server.pypes:  
+            if collision.collide_floor(self, pype):
+                print("파이프 밟")
+                self.fall = 0
+            elif collision.collide_side(server.boy, pype):
+                print("사이드")
+                print(self.x)
+                print(pype.x)
+
+                
+        
+                
 
         # if not collision.collide_floor(self, server.stage1_ground1)and not collision.collide_floor(self, server.stage1_ground2) and not collision.collide_floor(self, server.box):
         # # print("fall!!")

@@ -60,7 +60,7 @@ class Koopas:
 
 
         for server.koopas in server.koopass:  
-            if collision.collide_head_mon(server.boy, server.koopas): #밟 처치
+            if collision.collide_head_mon(server.boy, server.koopas)and server.boy.inv_timer > 2: #밟 처치
                 server.boy.y += 35
                 server.boy.jumping_mon = True
                 server.koopas.state = 1

@@ -17,6 +17,9 @@ from grass import Grass
 from sky import Sky
 from back import Back
 
+from pype import Pype
+
+
 
 from stage1_ground1 import S1_Ground1
 from stage1_ground2 import S1_Ground2
@@ -79,7 +82,7 @@ def enter():
     
     game_world.add_objects(server.koopass, 1)
 
-######################빨거북###########################
+#==========빨거북==========#
     with open('redkoopa_data.json', 'r') as f:
         monster_data_list = json.load(f)
         
@@ -89,7 +92,17 @@ def enter():
 
     game_world.add_objects(server.redkoopass, 1)
 
-#######################박스##########################
+#==========파이프==========#
+    with open('pype_data.json', 'r') as f:
+        monster_data_list = json.load(f)
+        
+    for data in monster_data_list:
+        server.df_p = Pype(data['g_name'], data['g_x'], data['g_y'])
+        server.pypes.append(server.df_p)
+
+    game_world.add_objects(server.pypes, 1)
+
+#==========박스==========#
     with open('box_data.json', 'r') as f:
         monster_data_list = json.load(f)
         
@@ -99,7 +112,7 @@ def enter():
 
     game_world.add_objects(server.boxs, 1)
 
-#######################템##########################
+#######################템m##########################
     with open('box_data.json', 'r') as f:
         monster_data_list = json.load(f)
         
@@ -111,7 +124,7 @@ def enter():
 
     # server.mushrooms = Mushroom('1',100,50)
     # game_world.add_object(server.mushroom, 1)
-#######################템##########################
+#######################템f##########################
     with open('box_data.json', 'r') as f:
         monster_data_list = json.load(f)
         
@@ -142,14 +155,14 @@ def enter():
 
 
     server.stage1_ground1 = S1_Ground1()
-    game_world.add_object(server.stage1_ground1, 0)
+    game_world.add_object(server.stage1_ground1, 1)
 
 
 
  
 
     server.stage1_ground2 = S1_Ground2()
-    game_world.add_object(server.stage1_ground2, 0)
+    game_world.add_object(server.stage1_ground2, 1)
 
 
 

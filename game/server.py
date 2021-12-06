@@ -21,6 +21,8 @@ box2 = None
 
 block = None
 
+pype = None
+
 mushroom = None
 flower = None
 coin = None
@@ -38,6 +40,9 @@ df_b2 =[]
 df_m =[]
 df_f =[]
 df_c =[]
+
+df_p =[]
+
 
 
 
@@ -57,3 +62,6 @@ redkoopass = []
 mushrooms = []
 flowers = []
 coins = []
+
+pypes = []
+

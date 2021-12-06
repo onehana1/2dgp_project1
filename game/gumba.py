@@ -55,7 +55,7 @@ class Gumba:
         self.timer += 1
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 2
         if self.state == 0:
-            if(self.timer%1000 == 0):
+            if(self.timer%500 == 0):
                 self.dir += 1
 
             if ((self.dir % 2) == 1):
@@ -72,7 +72,7 @@ class Gumba:
 
         for gumba in server.gumbas:  
 
-            if collision.collide_head_mon(server.boy, gumba): #밟 처치
+            if collision.collide_head_mon(server.boy, gumba) and server.boy.inv_timer > 2: #밟 처치
                 server.boy.y += 35
                 gumba.state = 1
                 server.boy.jumping_mon = True
@@ -89,7 +89,7 @@ class Gumba:
                     elif(server.boy.state==1):server.boy.state = 0
                 
                     if server.boy.state == 0:
-                        server.boy.x += - server.boy.dir * 35
+                        server.boy.x +=  -server.boy.dir * 35
                         server.boy.y += 35
                         server.boy.jumping_mon = True
                         server.boy.inv = True
