@@ -55,7 +55,7 @@ class Pype:
         for pype in server.pypes:  
        
             if collision.collide_side(server.boy, pype):
-                print("tkdlem")
+                print("파이프 사이드")
                 
 
 

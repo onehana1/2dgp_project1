@@ -42,7 +42,7 @@ class Mushroom:
 
 
     def crush_box(self):
-        return self.x-21- server.boy.x, self.y-19, self.x +21- server.boy.x, self.y+19
+        return self.x-20- server.boy.x, self.y-19, self.x +20- server.boy.x, self.y+19
 
     def do(self):
         pass
@@ -71,6 +71,9 @@ class Mushroom:
                     mushroom.fall = 0
 
             if collision.collide_floor(mushroom, server.stage1_ground1):
+                    mushroom.fall = 0
+
+            if collision.collide_floor(mushroom, server.stage1_ground2):
                     mushroom.fall = 0
             
             if(mushroom.fall== 1 and mushroom.state >=1):

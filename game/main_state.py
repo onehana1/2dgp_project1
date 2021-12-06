@@ -112,6 +112,16 @@ def enter():
 
     game_world.add_objects(server.boxs, 1)
 
+#==========박스2==========#
+    with open('box2_data.json', 'r') as f:
+        monster_data_list = json.load(f)
+        
+    for data in monster_data_list:
+        server.df_b2 = Box2(data['k_name'], data['k_x'], data['k_y'])
+        server.boxs2.append(server.df_b2)
+
+    game_world.add_objects(server.boxs2, 1)
+
 #######################템m##########################
     with open('box_data.json', 'r') as f:
         monster_data_list = json.load(f)
@@ -169,11 +179,6 @@ def enter():
 
 
 
-
-
-
-    server.boxs2 = [Box2() for i in range(1)]
-    game_world.add_objects(server.boxs2, 1)
 
 
     server.block = Block()

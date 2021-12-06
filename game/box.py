@@ -77,15 +77,6 @@ class Box:
                     
 
 
-            if collision.collide_side(server.boy, box):
-                print("박스 사이드")
-                
-                # if server.boy.state==0:
-                #     server.boy.x = box.x
-        
-                # if server.boy.state==1:
-                #     server.boy.x = box.x
-
 
 
                 

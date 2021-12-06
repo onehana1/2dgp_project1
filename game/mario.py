@@ -160,15 +160,19 @@ class RunState:
 
     def enter(boy, event):
         if event == RIGHT_DOWN:
-            boy.velocity += RUN_SPEED_PPS
+            if boy.go == 1:
+                boy.velocity += RUN_SPEED_PPS
 
         elif event == LEFT_DOWN:
-            boy.velocity -= RUN_SPEED_PPS
+            if boy.go == 1:
+                boy.velocity -= RUN_SPEED_PPS
 
         elif event == RIGHT_UP:
-            boy.velocity -= RUN_SPEED_PPS
+            if boy.go == 1:
+                boy.velocity -= RUN_SPEED_PPS
         elif event == LEFT_UP:
-            boy.velocity += RUN_SPEED_PPS
+            if boy.go == 1:
+                boy.velocity += RUN_SPEED_PPS
 
         boy.dir = clamp(-1, boy.velocity, 1)
 
@@ -516,16 +520,31 @@ class Boy:
             if collision.collide_floor(self, box):
                 server.boy.fall = 0
                 print("박스 밟음")
+            elif collision.collide_side(self, box):
+                print("박스 사이드")
+                self.x -= self.velocity * game_framework.frame_time
+
+        for box2 in server.boxs2:  
+            if collision.collide_floor(self, box2):
+                server.boy.fall = 0
+                print("박스2 밟음")
+            elif collision.collide_side(self, box2):
+                print("박스2 사이드")
+                self.x -= self.velocity * game_framework.frame_time
 
 
+        print(self.x)
         for pype in server.pypes:  
             if collision.collide_floor(self, pype):
                 print("파이프 밟")
                 self.fall = 0
-            elif collision.collide_side(server.boy, pype):
-                print("사이드")
-                print(self.x)
-                print(pype.x)
+            elif collision.collide_side(self, pype):
+                print("파이프 사이드")
+               
+                self.x -= self.velocity * game_framework.frame_time
+
+                # print(self.x)
+                # print(pype.x)
 
                 
         

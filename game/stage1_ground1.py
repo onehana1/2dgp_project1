@@ -23,18 +23,13 @@ class S1_Ground1:
         pass
 
     def crush_box(self):
-        # return (self.x - server.boy.x), self.y, self.width- server.boy.x, self.height
         return self.x-self.width- server.boy.x, self.y-self.height, self.x + self.width- server.boy.x, self.y+self.height
 
 
     def draw(self):
-        # self.image.draw(self.x, self.y ,2206,60)
 
         self.image.clip_draw_to_origin(0, 0 ,self.width, self.height, self.x - server.boy.x, self.y)
-        # self.image.clip_draw_to_origin(self.window_left, self.window_bottom ,self.width, self.height, 0, 0)
-        # self.image.draw(self.x -server.boy.x, self.y ,self.width ,self.height)
-        # self.image.clip_draw_to_origin(self.window_left, self.window_bottom, server.background.canvas_width, server.background.canvas_height, 0, 0)
-        pass
+       
 
 
         draw_rectangle(*self.crush_box())
