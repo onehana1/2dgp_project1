@@ -32,6 +32,8 @@ stage2_ground1 = None
 
 box = None
 box2 = None
+box3 = None
+
 
 block = None
 
@@ -57,6 +59,8 @@ df_rk =[]
 
 df_b =[]
 df_b2 =[]
+df_b3 =[]
+
 df_block =[]
 
 
@@ -64,6 +68,8 @@ df_block =[]
 df_m =[]
 df_f =[]
 df_c =[]
+df_s =[]
+
 
 df_p =[]
 
@@ -83,6 +89,8 @@ door = None
 gumbas = []
 boxs = []
 boxs2 = []
+boxs3 = []
+
 blocks = []
 
 koopass = []

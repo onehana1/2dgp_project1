@@ -94,18 +94,28 @@ class Gumba:
 
 
             if collision.collide_side(server.boy, gumba):  #충돌
-                if(server.boy.inv==False):
-        
-                    if server.mario_state == 2 or server.mario_state ==1 or server.mario_state == 0:
-                        server.boy.x +=  -server.boy.dir * 35
-                        server.boy.y += 35
-                        server.boy.jumping_mon = True
-                        server.boy.inv = True
-                        
-                        print("2")
 
-                if(server.mario_state==2):server.mario_state = 1
-                elif(server.mario_state==1):server.mario_state = 0
+                if server.mario_star == 1:
+                    server.gumbas.remove(gumba)
+                    game_world.remove_object(gumba)
+                    print("1")
+                    server.score += 500
+
+                if server.mario_star == 0:
+                    if(server.boy.inv==False):
+            
+                        if server.mario_state == 2 or server.mario_state ==1 or server.mario_state == 0:
+                            server.boy.x +=  -server.boy.dir * 35
+                            server.boy.y += 35
+                            server.boy.jumping_mon = True
+                            server.boy.inv = True
+                            
+                            print("2")
+
+                    if(server.mario_state==2):server.mario_state = 1
+                    elif(server.mario_state==1):server.mario_state = 0
+
+
 
 
             for pype in server.pypes:  

@@ -249,42 +249,79 @@ class RunState:
         #print(cx)
         #print(boy.x)
 
+        if server.mario_star == 0:
+            if server.mario_state == 0:
+                if boy.dir == 1:
+                    if boy.fall == 0:
+                        boy.image.clip_draw(232 + 30*int(boy.frame), 173, 30, 35, cx, cy,60,35)
+                    else:
+                        boy.image.clip_draw(352, 103, 30, 35, cx, cy,60,35)
+                else:
+                    if boy.fall == 0:
+                        boy.image.clip_draw(143 - 30*int(boy.frame), 173, 30, 35, cx, cy,60,35)
+                    else:
+                        boy.image.clip_draw(22, 103, 30, 35, cx, cy,60,35)
 
-        if server.mario_state == 0:
-            if boy.dir == 1:
-                if boy.fall == 0:
-                    boy.image.clip_draw(232 + 30*int(boy.frame), 173, 30, 35, cx, cy,60,35)
+            if server.mario_state==1:
+                if boy.dir == 1:
+                    if boy.fall == 0:
+                        boy.image.clip_draw(232 + 30*int(boy.frame), 103, 30, 35, cx, cy + 35,60,70)
+                    else:
+                        boy.image.clip_draw(352, 103, 30, 35, cx, cy + 35,60,70)
                 else:
-                    boy.image.clip_draw(352, 103, 30, 35, cx, cy,60,35)
-            else:
-                if boy.fall == 0:
-                    boy.image.clip_draw(143 - 30*int(boy.frame), 173, 30, 35, cx, cy,60,35)
-                else:
-                    boy.image.clip_draw(22, 103, 30, 35, cx, cy,60,35)
+                    if boy.fall == 0:
+                        boy.image.clip_draw(143 - 30 *int(boy.frame), 103, 30, 35, cx, cy + 35,60,70)
+                    else:
+                        boy.image.clip_draw(22, 103, 30, 35, cx, cy + 35,60,70)
 
-        if server.mario_state==1:
-            if boy.dir == 1:
-                if boy.fall == 0:
-                    boy.image.clip_draw(232 + 30*int(boy.frame), 103, 30, 35, cx, cy + 35,60,70)
+            if server.mario_state== 2:
+                if boy.dir == 1:
+                    if boy.fall == 0:
+                        boy.image.clip_draw(232 + 25*int(boy.frame), 32, 25, 35, cx, cy + 35,50,70)
+                    else:
+                        boy.image.clip_draw(358, 32, 25, 37, cx, cy + 35,60,70)
                 else:
-                    boy.image.clip_draw(352, 103, 30, 35, cx, cy + 35,60,70)
-            else:
-                if boy.fall == 0:
-                    boy.image.clip_draw(143 - 30 *int(boy.frame), 103, 30, 35, cx, cy + 35,60,70)
-                else:
-                    boy.image.clip_draw(22, 103, 30, 35, cx, cy + 35,60,70)
+                    if boy.fall == 0:
+                        boy.image.clip_draw(143 - 25*int(boy.frame), 32, 25, 35, cx, cy + 35,50,70)
+                    else:
+                        boy.image.clip_draw(24, 32, 25, 37, cx, cy + 35,50,70)
 
-        if server.mario_state== 2:
-            if boy.dir == 1:
-                if boy.fall == 0:
-                    boy.image.clip_draw(232 + 25*int(boy.frame), 32, 25, 35, cx, cy + 35,50,70)
+        if server.mario_star == 1:
+            if server.mario_state == 0:
+                if boy.dir == 1:
+                    if boy.fall == 0:
+                        boy.image_star.clip_draw(232 + 30*int(boy.frame), 173, 30, 35, cx, cy,60,35)
+                    else:
+                        boy.image_star.clip_draw(352, 103, 30, 35, cx, cy,60,35)
                 else:
-                    boy.image.clip_draw(358, 32, 25, 37, cx, cy + 35,60,70)
-            else:
-                if boy.fall == 0:
-                    boy.image.clip_draw(143 - 25*int(boy.frame), 32, 25, 35, cx, cy + 35,50,70)
+                    if boy.fall == 0:
+                        boy.image_star.clip_draw(143 - 30*int(boy.frame), 173, 30, 35, cx, cy,60,35)
+                    else:
+                        boy.image_star.clip_draw(22, 103, 30, 35, cx, cy,60,35)
+
+            if server.mario_state==1:
+                if boy.dir == 1:
+                    if boy.fall == 0:
+                        boy.image_star.clip_draw(232 + 30*int(boy.frame), 103, 30, 35, cx, cy + 35,60,70)
+                    else:
+                        boy.image_star.clip_draw(352, 103, 30, 35, cx, cy + 35,60,70)
                 else:
-                    boy.image.clip_draw(24, 32, 25, 37, cx, cy + 35,50,70)
+                    if boy.fall == 0:
+                        boy.image_star.clip_draw(143 - 30 *int(boy.frame), 103, 30, 35, cx, cy + 35,60,70)
+                    else:
+                        boy.image_star.clip_draw(22, 103, 30, 35, cx, cy + 35,60,70)
+
+            if server.mario_state== 2:
+                if boy.dir == 1:
+                    if boy.fall == 0:
+                        boy.image_star.clip_draw(232 + 25*int(boy.frame), 32, 25, 35, cx, cy + 35,50,70)
+                    else:
+                        boy.image_star.clip_draw(358, 32, 25, 37, cx, cy + 35,60,70)
+                else:
+                    if boy.fall == 0:
+                        boy.image_star.clip_draw(143 - 25*int(boy.frame), 32, 25, 35, cx, cy + 35,50,70)
+                    else:
+                        boy.image_star.clip_draw(24, 32, 25, 37, cx, cy + 35,50,70)
 
 
 class DieState:
@@ -360,7 +397,8 @@ class Boy:
         self.score = 0
         self.coin = 0
 
-
+        self.star = False
+        self.star_timer = 5
         
         self.stage = 0
 
@@ -523,7 +561,12 @@ class Boy:
         self.cur_state.do(self)
 
 
+        if server.mario_star ==True:
+            self.star_timer -= game_framework.frame_time
 
+        if self.star_timer <=0:
+            server.mario_star = False
+            self.star_timer = 5
 
         if self.inv ==True:
             self.inv_timer += 1 * game_framework.frame_time
@@ -585,6 +628,14 @@ class Boy:
                 server.boy.fall = 0
                 print("박스2 밟음")
             elif collision.collide_side(self, box2):
+                print("박스2 사이드")
+                self.x -= self.velocity * game_framework.frame_time
+
+        for box3 in server.boxs3:  
+            if collision.collide_floor(self, box3):
+                server.boy.fall = 0
+                print("박스2 밟음")
+            elif collision.collide_side(self, box3):
                 print("박스2 사이드")
                 self.x -= self.velocity * game_framework.frame_time
 

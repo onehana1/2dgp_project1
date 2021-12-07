@@ -33,6 +33,8 @@ from door import Door
 
 from box import Box
 from box2 import Box2
+from box3 import Box3
+
 
 
 from block import Block
@@ -41,6 +43,8 @@ from block import Block
 from powerup import Mushroom
 from powerup import Flower
 from powerup import Coin
+from powerup import Star
+
 
 
 
@@ -128,6 +132,16 @@ def enter():
 
     game_world.add_objects(server.boxs2, 1)
 
+#==========박스3==========#
+    with open('box3_data.json', 'r') as f:
+        monster_data_list = json.load(f)
+        
+    for data in monster_data_list:
+        server.df_b3 = Box3(data['k_name'], data['k_x'], data['k_y'])
+        server.boxs3.append(server.df_b3)
+
+    game_world.add_objects(server.boxs3, 1)
+
 #==========블록==========#
     with open('block_data.json', 'r') as f:
         monster_data_list = json.load(f)
@@ -160,6 +174,16 @@ def enter():
         server.flowers.append(server.df_f)
 
     game_world.add_objects(server.flowers, 1)
+
+#==========템s==========#
+    with open('box3_data.json', 'r') as f:
+        monster_data_list = json.load(f)
+        
+    for data in monster_data_list:
+        server.df_s = Star(data['k_name'], data['k_x'], data['k_y'])
+        server.stars.append(server.df_s)
+
+    game_world.add_objects(server.stars, 1)
 
         
     #server.flower = Flower('1',100,50)

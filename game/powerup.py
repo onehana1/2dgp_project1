@@ -208,6 +208,85 @@ class Flower:
         draw_rectangle(*self.crush_box())
 
 
+class Star:
+    font = None
+
+    def __init__(self, count = '1', x = 0, y = 0):
+        self.x, self.y = x, y
+        self.image = load_image('powerup.png')
+
+        self.dir = 1
+        self.velocity = 0
+        self.timer = 0
+        self.frame = 0
+
+        self.state = 0
+        self.fall = 0
+
+        self.count = count
+        if Star.font is None:
+            Star.font = load_font('ENCR10B.TTF', 16)
+
+    def crush_box(self):
+        return self.x-19- server.boy.x, self.y-20, self.x +19- server.boy.x, self.y+20
+
+    def do(self):
+        pass
+    
+    def update(self):
+        self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 3
+
+        
+
+
+                    
+        for star in server.stars:   
+
+            if star.state == 0:
+                if collision.collide_head(server.boy, star):
+                    star.state += 1 
+                    if star.state == 1:
+                        star.y += 36
+                        
+                    if star.state >= 10:
+                        print("꽃 나와라")
+                        server.stars.remove(star)
+                        game_world.remove_object(star)
+
+                        if(server.mario_state == 0):
+                            server.mario_state = 1
+
+            else: 
+                if collision.collide(server.boy, star):
+                    star.state += 1 
+                    if star.state == 1:
+                        star.y += 36
+                        
+                    if star.state >= 1:
+                        print("꽃 변신!!")
+                        server.stars.remove(star)
+                        game_world.remove_object(star)
+
+                        if(server.mario_star == 0):
+                            server.mario_star = 1
+
+
+
+
+
+
+
+
+
+
+        pass
+
+    def draw(self): 
+        if self.state >= 1:
+            self.image.clip_draw(2 + 19*int(self.frame), 0, 19, 20, self.x- server.boy.x, self.y,38,40)
+
+        draw_rectangle(*self.crush_box())
+
 class Coin:
     font = None
     def __init__(self, count = '1', x = 0, y = 0):
