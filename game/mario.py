@@ -107,48 +107,93 @@ class IdleState:
 
     def draw(boy):
         cx, cy = boy.x - server.background.window_left, boy.y - server.background.window_bottom
+        if server.mario_star == 0:
+            if server.mario_state == 0:
+                if boy.dir == 1:
+                    if boy.fall == 0:
+                        boy.image.clip_draw(202, 171, 30, 18, cx, cy,60,35)
+                    else:
+                        boy.image.clip_draw(352, 103, 30, 35, cx, cy,60,35)    
+                else:
+                    if boy.fall == 0:
+                        boy.image.clip_draw(173, 171, 30, 18, cx, cy,60,35)
+                    else:
+                        boy.image.clip_draw(22, 103, 30, 35, cx, cy,60,35)
 
-        if server.mario_state == 0:
-            if boy.dir == 1:
-                if boy.fall == 0:
-                    boy.image.clip_draw(202, 171, 30, 18, cx, cy,60,35)
+            if server.mario_state == 1:
+                if boy.dir == 1:
+                    if boy.fall == 0:
+                        boy.image.clip_draw(202, 103, 30, 35, cx, cy + 35,60,70)
+                    else:
+                        boy.image.clip_draw(352, 103, 30, 35, cx, cy + 35,60,70)   
                 else:
-                    boy.image.clip_draw(352, 103, 30, 35, cx, cy,60,35)    
-            else:
-                if boy.fall == 0:
-                    boy.image.clip_draw(173, 171, 30, 18, cx, cy,60,35)
-                else:
-                    boy.image.clip_draw(22, 103, 30, 35, cx, cy,60,35)
+                    if boy.fall == 0:
+                        boy.image.clip_draw(173, 103, 30, 35, cx, cy + 35,60,70)
+                    else:
+                        boy.image.clip_draw(22, 103, 30, 35, cx, cy + 35,60,70)
 
-        if server.mario_state == 1:
-            if boy.dir == 1:
-                if boy.fall == 0:
-                    boy.image.clip_draw(202, 103, 30, 35, cx, cy + 35,60,70)
+            if server.mario_state == 2:
+                if boy.dir == 1:
+                    if boy.fall == 0:
+                            if boy.attect==True:
+                                boy.image.clip_draw(310, 33, 21, 35, cx, cy+ 35,42,70)
+                            else:
+                                boy.image.clip_draw(202, 32,  25, 37, cx, cy + 35,50,70)
+                    else:
+                        boy.image.clip_draw(358, 32, 25, 37, cx, cy + 35,50,70)
                 else:
-                    boy.image.clip_draw(352, 103, 30, 35, cx, cy + 35,60,70)   
-            else:
-                if boy.fall == 0:
-                    boy.image.clip_draw(173, 103, 30, 35, cx, cy + 35,60,70)
-                else:
-                    boy.image.clip_draw(22, 103, 30, 35, cx, cy + 35,60,70)
-
-        if server.mario_state == 2:
-            if boy.dir == 1:
-                if boy.fall == 0:
+                    if boy.fall == 0:
                         if boy.attect==True:
-                            boy.image.clip_draw(310, 33, 21, 35, cx, cy+ 35,42,70)
+                            boy.image.clip_draw(74, 33, 23, 35, cx, cy+ 35,46,70)
+                        else: 
+                            boy.image.clip_draw(173, 32,  25, 37, cx, cy + 35,50,70)
+                    else:
+                        boy.image.clip_draw(24, 32, 25, 37, cx, cy + 35,50,70)
+        else:
+            if server.mario_state == 0:
+                    if boy.dir == 1:
+                        if boy.fall == 0:
+                            boy.image_star.clip_draw(202, 171, 30, 18, cx, cy,60,35)
                         else:
-                            boy.image.clip_draw(202, 32,  25, 37, cx, cy + 35,50,70)
+                            boy.image_star.clip_draw(352, 103, 30, 35, cx, cy,60,35)    
+                    else:
+                        if boy.fall == 0:
+                            boy.image_star.clip_draw(173, 171, 30, 18, cx, cy,60,35)
+                        else:
+                            boy.image_star.clip_draw(22, 103, 30, 35, cx, cy,60,35)
+
+            if server.mario_state == 1:
+                if boy.dir == 1:
+                    if boy.fall == 0:
+                        boy.image_star.clip_draw(202, 103, 30, 35, cx, cy + 35,60,70)
+                    else:
+                        boy.image_star.clip_draw(352, 103, 30, 35, cx, cy + 35,60,70)   
                 else:
-                    boy.image.clip_draw(358, 32, 25, 37, cx, cy + 35,50,70)
-            else:
-                if boy.fall == 0:
-                    if boy.attect==True:
-                        boy.image.clip_draw(74, 33, 23, 35, cx, cy+ 35,46,70)
-                    else: 
-                        boy.image.clip_draw(173, 32,  25, 37, cx, cy + 35,50,70)
+                    if boy.fall == 0:
+                        boy.image_star.clip_draw(173, 103, 30, 35, cx, cy + 35,60,70)
+                    else:
+                        boy.image_star.clip_draw(22, 103, 30, 35, cx, cy + 35,60,70)
+
+            if server.mario_state == 2:
+                if boy.dir == 1:
+                    if boy.fall == 0:
+                            if boy.attect==True:
+                                boy.image_star.clip_draw(310, 33, 21, 35, cx, cy+ 35,42,70)
+                            else:
+                                boy.image_star.clip_draw(202, 32,  25, 37, cx, cy + 35,50,70)
+                    else:
+                        boy.image_star.clip_draw(358, 32, 25, 37, cx, cy + 35,50,70)
                 else:
-                    boy.image.clip_draw(24, 32, 25, 37, cx, cy + 35,50,70)
+                    if boy.fall == 0:
+                        if boy.attect==True:
+                            boy.image_star.clip_draw(74, 33, 23, 35, cx, cy+ 35,46,70)
+                        else: 
+                            boy.image_star.clip_draw(173, 32,  25, 37, cx, cy + 35,50,70)
+                    else:
+                        boy.image_star.clip_draw(24, 32, 25, 37, cx, cy + 35,50,70)
+
+
+            
 
         
         
@@ -305,6 +350,9 @@ class Boy:
         self.image = load_image('mario_sheet.png')
         self.image2 = load_image('mario_sheet_80.png')
         self.image3 = load_image('gameover.png')
+
+        self.image_star = load_image('mario_sheet_star.png')
+
 
 
         self.font = load_font('supermariobros.ttf', 30)

@@ -4,9 +4,12 @@
 stage = 0
 
 mario_state = 0
+mario_star = 0
+
 
 boy = None
 fire = None
+boss = None
 
 
 background = None
@@ -22,6 +25,9 @@ stage1_ground2 = None
 stage1_ground3 = None
 stage1_ground4 = None
 
+stage2_ground1 = None
+
+
 
 
 box = None
@@ -33,6 +39,8 @@ pype = None
 
 mushroom = None
 flower = None
+star = None
+
 
 
 coin = 0
@@ -83,6 +91,8 @@ redkoopass = []
 mushrooms = []
 flowers = []
 coins = []
+stars = []
+
 
 pypes = []
 

@@ -39,7 +39,7 @@ RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
 RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 
 # mario Jump speed
-JUMP_SPEED_KMPH = 40.0 # Km / Hour
+JUMP_SPEED_KMPH = 30.0 # Km / Hour
 JUMP_SPEED_MPM = (JUMP_SPEED_KMPH * 1000.0 / 60.0)
 JUMP_SPEED_MPS = (JUMP_SPEED_MPM / 60.0)
 JUMP_SPEED_PPS = (JUMP_SPEED_MPS * PIXEL_PER_METER)
@@ -106,9 +106,9 @@ class IdleState:
 
 
     def draw(boy):
-        cx, cy = boy.x - server.background2.window_left, boy.y - server.background2.window_bottom
+        cx, cy = boy.x - 0, boy.y - 0
 
-        if boy.state == 0:
+        if server.mario_state == 0:
             if boy.dir == 1:
                 if boy.fall == 0:
                     boy.image.clip_draw(202, 171, 30, 18, cx, cy,60,35)
@@ -120,7 +120,7 @@ class IdleState:
                 else:
                     boy.image.clip_draw(22, 103, 30, 35, cx, cy,60,35)
 
-        if boy.state == 1:
+        if server.mario_state == 1:
             if boy.dir == 1:
                 if boy.fall == 0:
                     boy.image.clip_draw(202, 103, 30, 35, cx, cy + 35,60,70)
@@ -132,7 +132,7 @@ class IdleState:
                 else:
                     boy.image.clip_draw(22, 103, 30, 35, cx, cy + 35,60,70)
 
-        if boy.state == 2:
+        if server.mario_state == 2:
             if boy.dir == 1:
                 if boy.fall == 0:
                         if boy.attect==True:
@@ -200,12 +200,12 @@ class RunState:
         # boy.x = clamp(25, boy.x, 1600 - 25)
 
     def draw(boy):
-        cx, cy = boy.x - server.background2.window_left, boy.y - server.background2.window_bottom
+        cx, cy = boy.x - 0, boy.y - 0
         #print(cx)
         #print(boy.x)
 
 
-        if boy.state == 0:
+        if server.mario_state == 0:
             if boy.dir == 1:
                 if boy.fall == 0:
                     boy.image.clip_draw(232 + 30*int(boy.frame), 173, 30, 35, cx, cy,60,35)
@@ -217,7 +217,7 @@ class RunState:
                 else:
                     boy.image.clip_draw(22, 103, 30, 35, cx, cy,60,35)
 
-        if boy.state==1:
+        if server.mario_state==1:
             if boy.dir == 1:
                 if boy.fall == 0:
                     boy.image.clip_draw(232 + 30*int(boy.frame), 103, 30, 35, cx, cy + 35,60,70)
@@ -229,7 +229,7 @@ class RunState:
                 else:
                     boy.image.clip_draw(22, 103, 30, 35, cx, cy + 35,60,70)
 
-        if boy.state== 2:
+        if server.mario_state== 2:
             if boy.dir == 1:
                 if boy.fall == 0:
                     boy.image.clip_draw(232 + 25*int(boy.frame), 32, 25, 35, cx, cy + 35,50,70)
@@ -262,6 +262,7 @@ class DieState:
         boy.image3.clip_draw(0,0,512,301,800,300,1600,600)
 
         
+
 
 
 
@@ -372,18 +373,18 @@ class Boy:
 
 
     def crush_box(self):
-        cx, cy = self.x - server.background2.window_left, self.y - server.background2.window_bottom
+        cx, cy = self.x - 0, self.y - 0
         
-        if self.state==0:
+        if server.mario_state==0:
             return cx-15, cy-18, cx + 15, cy+18
 
-        if self.state==1:
+        if server.mario_state==1:
             return cx-15, cy, cx + 15, cy+70
 
-        if self.state==2:
+        if server.mario_state==2:
             return cx-15, cy, cx + 15, cy+70
 
-        if self.state==4:
+        if server.mario_state==4:
             return cx, cy, cx , cy
 
 
@@ -474,7 +475,8 @@ class Boy:
     def update(self):
         self.cur_state.do(self)
 
-
+        if self.y < 50 :
+            self.fall = 0
 
 
         if self.inv ==True:
@@ -491,6 +493,9 @@ class Boy:
         self.jump_mon()
         self.jump()
 
+        if collision.collide_floor(self, server.stage2_ground1):
+            self.fall = 0
+
         if self.state == 4:
             self.cur_state = DieState
 
@@ -498,8 +503,8 @@ class Boy:
         # if(self.y < 0):
         #     self.state=4
         
-        self.x = clamp(50, self.x, server.background2.w - 50)
-        # self.y = clamp(-50, self.y, server.background2.h - 50)
+        self.x = clamp(50, self.x, 1550)
+
                         
 
         if len(self.event_que) > 0:
@@ -508,70 +513,7 @@ class Boy:
             self.cur_state = next_state_table[self.cur_state][event]
             self.cur_state.enter(self, event)
 
-        if collision.collide_floor(self, server.stage1_ground1):
-            # print("땅에 있음")
-            self.fall = 0
-
-        if collision.collide_floor(self, server.stage1_ground2):
-            # print("땅에 있음")
-            self.fall = 0
-
-        if collision.collide_floor(self, server.stage1_ground3):
-            # print("땅에 있음")
-            self.fall = 0
-
-        if collision.collide_floor(self, server.stage1_ground4):
-            # print("땅에 있음")
-            self.fall = 0
-
-        for box in server.boxs:  
-            if collision.collide_floor(self, box):
-                server.boy.fall = 0
-                print("박스 밟음")
-            elif collision.collide_side(self, box):
-                print("박스 사이드")
-                self.x -= self.velocity * game_framework.frame_time
-
-        for box2 in server.boxs2:  
-            if collision.collide_floor(self, box2):
-                server.boy.fall = 0
-                print("박스2 밟음")
-            elif collision.collide_side(self, box2):
-                print("박스2 사이드")
-                self.x -= self.velocity * game_framework.frame_time
-
-
-        for block in server.blocks:  
-            if collision.collide_floor(self, block):
-                server.boy.fall = 0
-                print("박스2 밟음")
-            elif collision.collide_side(self, block):
-                print("박스2 사이드")
-                self.x -= self.velocity * game_framework.frame_time
-
-
-        # print(self.x)
-        for pype in server.pypes:  
-            if collision.collide_floor(self, pype):
-                print("파이프 밟")
-                self.fall = 0
-            elif collision.collide_side(self, pype):
-                print("파이프 사이드")
-               
-                self.x -= self.velocity * game_framework.frame_time
-
-                # print(self.x)
-                # print(pype.x)
-
-                
-        
-                
-
-        # if not collision.collide_floor(self, server.stage1_ground1)and not collision.collide_floor(self, server.stage1_ground2) and not collision.collide_floor(self, server.box):
-        # # print("fall!!")
-        #     self.fall = 1
-
-
+      
 
 
 
@@ -585,11 +527,11 @@ class Boy:
         debug_print('Velocity :' + str(self.velocity) + '  Dir:' + str(self.dir) + '  State:' + str(self.cur_state))
         draw_rectangle(*self.crush_box())
         self.font.draw(1300, 550, 'Time: %3.0f' % (300 -get_time()), (255, 255, 255))
-        self.font.draw(700, 550, 'Score: %3.0f' % self.score, (0, 255, 0))
-        self.font.draw(100, 550, 'Coin: %3.0f' % self.coin, (255, 255, 0))
+        self.font.draw(700, 550, 'Score: %3.0f' % server.score, (0, 255, 0))
+        self.font.draw(100, 550, 'Coin: %3.0f' % server.coin, (255, 255, 0))
 
 
-        cx, cy = self.x - server.background2.window_left, self.y - server.background2.window_bottom
+        cx, cy = self.x - 0, self.y - 0
         self.font.draw(cx - 40, cy + 40, '(%d, %d)' % (self.x, self.y), (255, 255, 0))
         
 

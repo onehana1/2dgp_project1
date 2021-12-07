@@ -210,6 +210,10 @@ def enter():
 
 def exit():
     game_world.clear()
+    print("나간다!!!")
+    
+
+
 
 def pause():
     pass

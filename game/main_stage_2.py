@@ -9,13 +9,14 @@ import game_world
 import server
 import world_build_state
 
-from mario import Boy
+from sky import Sky
 
+from boss import Boss
 
+from mario2 import Boy
 
+from stage2_ground1 import S2_Ground1
 
-
-from background import FixedBackground as Background
 
 
 name = "MainState2"
@@ -28,6 +29,18 @@ def enter():
     server.boy = Boy()
     game_world.add_object(server.boy, 1)
 
+    server.boss = Boss()
+    game_world.add_object(server.boss, 1)
+
+    server.sky = Sky()
+    game_world.add_object(server.sky, 0)
+
+    server.stage2_ground1 = S2_Ground1()
+    game_world.add_object(server.stage2_ground1, 0)
+
+
+
+
  
 
 
@@ -37,6 +50,9 @@ def enter():
 
 def exit():
     game_world.clear()
+    for game_object in game_world.all_objects():
+        game_world.remove_object()
+        pass
 
 def pause():
     pass

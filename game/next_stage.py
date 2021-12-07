@@ -62,7 +62,7 @@ def handle_events():
         if event.type == SDL_QUIT:
             game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
-                game_framework.change_state(world_build_state)
+            game_framework.change_state(world_build_state)
         elif event.type == SDL_KEYDOWN and event.key == SDLK_n:
             game_framework.change_state(main_stage_2)
 

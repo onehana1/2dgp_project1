@@ -110,7 +110,7 @@ class Gumba:
 
             for pype in server.pypes:  
                 if collision.collide_side(gumba, pype) and gumba.timer!=5:
-                    print("p&g")
+                    # print("p&g")
                     if gumba.dir == 1:
                         gumba.dir = 0
                     else:
