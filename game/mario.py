@@ -12,7 +12,7 @@ import collision
 
 
 # mario Event
-RIGHT_DOWN, LEFT_DOWN, RIGHT_UP, LEFT_UP, SLEEP_TIMER,UP_DOWN,UP_UP ,SPACE_DOWN,SPACE_UP,z_DOWN,z_UP = range(11)
+RIGHT_DOWN, LEFT_DOWN, RIGHT_UP, LEFT_UP, SLEEP_TIMER,UP_DOWN,UP_UP ,z_DOWN,z_UP ,down_UP,down_DOWN = range(11)
 
 key_event_table = {
     (SDL_KEYDOWN, SDLK_RIGHT): RIGHT_DOWN,
@@ -21,8 +21,10 @@ key_event_table = {
     (SDL_KEYUP, SDLK_LEFT): LEFT_UP,
     (SDL_KEYDOWN, SDLK_UP): UP_DOWN,
     (SDL_KEYUP, SDLK_UP): UP_UP,
-    (SDL_KEYDOWN, SDLK_SPACE): SPACE_DOWN,
-    (SDL_KEYUP, SDLK_SPACE): SPACE_UP,
+
+    (SDL_KEYDOWN, SDLK_DOWN): down_DOWN,
+    (SDL_KEYUP, SDLK_DOWN): down_UP,
+
     (SDL_KEYDOWN, SDLK_z): z_DOWN,
     (SDL_KEYUP, SDLK_z): z_UP
 
@@ -334,6 +336,41 @@ class RunState:
                         boy.image_star.clip_draw(24, 32, 25, 37, cx, cy + 35,50,70)
 
 
+class CrouchState:
+
+    def enter(boy, event):
+        if event == RIGHT_DOWN:
+            boy.velocity += RUN_SPEED_PPS
+        elif event == LEFT_DOWN:
+            boy.velocity -= RUN_SPEED_PPS
+        elif event == RIGHT_UP:
+            boy.velocity -= RUN_SPEED_PPS
+        elif event == LEFT_UP:
+            boy.velocity += RUN_SPEED_PPS
+
+        elif event == z_DOWN:
+            boy.attact = True
+            boy.fire = True
+        elif event == z_UP:
+            boy.attact = False
+
+        event = down_DOWN
+
+
+
+    def exit(boy, event):
+        pass
+
+
+    def do(boy):
+        boy.frame = (boy.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 3
+        
+
+    def draw(boy):
+        boy.image.clip_draw(386, 155, 19, 21, boy.x, boy.y+100, 38, 42)
+
+        
+
 class DieState:
 
     def enter(boy, event):
@@ -384,9 +421,21 @@ class SleepState:
 
 
 next_state_table = {
-    IdleState: {RIGHT_UP: RunState, LEFT_UP: RunState, RIGHT_DOWN: RunState, LEFT_DOWN: RunState, UP_DOWN: IdleState, UP_UP:IdleState,z_DOWN:IdleState,z_UP:IdleState},
-    RunState: {RIGHT_UP: IdleState, LEFT_UP: IdleState, LEFT_DOWN: IdleState, RIGHT_DOWN: IdleState, UP_DOWN: RunState, UP_UP: RunState,z_DOWN:RunState,z_UP:RunState },
-    DieState: {RIGHT_UP: DieState, LEFT_UP: DieState, RIGHT_DOWN: DieState, LEFT_DOWN: DieState, UP_DOWN: IdleState, UP_UP:DieState,z_DOWN:DieState,z_UP:DieState}
+    IdleState: {RIGHT_UP: RunState, LEFT_UP: RunState, RIGHT_DOWN: RunState, LEFT_DOWN: RunState, 
+    UP_DOWN: IdleState, UP_UP:IdleState,z_DOWN:IdleState,z_UP:IdleState 
+    ,down_DOWN:CrouchState,down_UP:IdleState},
+
+    RunState: {RIGHT_UP: IdleState, LEFT_UP: IdleState, LEFT_DOWN: IdleState, RIGHT_DOWN: IdleState, 
+    UP_DOWN: RunState, UP_UP: RunState,z_DOWN:RunState,z_UP:RunState 
+    ,down_DOWN:CrouchState,down_UP:RunState },
+
+    DieState: {RIGHT_UP: DieState, LEFT_UP: DieState, RIGHT_DOWN: DieState, LEFT_DOWN: DieState,
+     UP_DOWN: DieState, UP_UP:DieState,z_DOWN:DieState,z_UP:DieState 
+     ,down_DOWN:DieState,down_UP:DieState},
+
+    CrouchState: {RIGHT_UP: RunState, LEFT_UP: RunState, RIGHT_DOWN: RunState, LEFT_DOWN: RunState, 
+    UP_DOWN: IdleState, UP_UP:IdleState,z_DOWN:IdleState,z_UP:IdleState
+    ,down_DOWN:IdleState,down_UP:IdleState }
 
 }
    # JumpState: {RIGHT_UP: JumpState, LEFT_UP: JumpState, LEFT_DOWN: JumpState, RIGHT_DOWN: JumpState, UP_DOWN: IdleState, UP_UP:IdleState},
@@ -395,7 +444,7 @@ next_state_table = {
 class Boy:
 
     def __init__(self):
-        self.x, self.y = 200, 100
+        self.x, self.y = 200, 150
         self.image = load_image('mario_sheet.png')
         self.image2 = load_image('mario_sheet_80.png')
         self.image3 = load_image('gameover.png')
