@@ -769,13 +769,12 @@ class Boy:
         self.event_que.insert(0, event)
 
     def update(self):
-        self.time += game_framework.frame_time * 50
+        self.time += game_framework.frame_time * 30
 
         if server.time - self.time <= 0:
             self.cur_state = DieState
-
-
-            
+            server.time = 0
+            self.time = 0
 
 
         if server.coin >= 100:
