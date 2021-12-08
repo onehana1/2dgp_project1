@@ -68,7 +68,77 @@ name = "MainState"
 
 
 def enter():
-    game_world.clear()
+    for koopas in server.koopass:  
+        server.koopass.remove(koopas)
+        game_world.remove_object(koopas)
+
+    for a in server.redkoopass:  
+        server.redkoopass.remove(a)
+        game_world.remove_object(a)
+
+    for a in server.gumbas:  
+        server.gumbas.remove(a)
+        game_world.remove_object(a)
+
+    for a in server.boxs:  
+        server.boxs.remove(a)
+        game_world.remove_object(a)
+
+    for a in server.boxs2:  
+        server.boxs2.remove(a)
+        game_world.remove_object(a)
+
+    for a in server.boxs3:  
+        server.boxs3.remove(a)
+        game_world.remove_object(a)
+
+
+    for a in server.blocks:  
+        server.blocks.remove(a)
+        game_world.remove_object(a)
+
+    for a in server.mushrooms:  
+        server.mushrooms.remove(a)
+        game_world.remove_object(a)
+
+    for a in server.flowers:  
+        server.flowers.remove(a)
+        game_world.remove_object(a)
+
+    for a in server.coins:  
+        server.coins.remove(a)
+        game_world.remove_object(a)
+
+        
+    for a in server.stars:  
+        server.stars.remove(a)
+        game_world.remove_object(a)
+
+        
+    for a in server.fires:  
+        server.fires.remove(a)
+        game_world.remove_object(a)
+
+                
+    for a in server.pypes:  
+        server.pypes.remove(a)
+        game_world.remove_object(a)
+    
+
+    game_world.remove_object(server.block)
+    game_world.remove_object(server.box)
+    game_world.remove_object(server.box2)
+    game_world.remove_object(server.box3)
+
+    game_world.remove_object(server.pype)
+    game_world.remove_object(server.boy)
+    game_world.remove_object(server.background)
+    game_world.remove_object(server.door)
+    game_world.remove_object(server.stage1_ground1)
+    game_world.remove_object(server.stage1_ground4)
+    game_world.remove_object(server.stage1_ground2)
+    game_world.remove_object(server.stage1_ground3)
+    
     # server.gumbas = [Gumba('1',100,50) for i in range(2)]
     # game_world.add_objects(server.gumbas, 1)
 
@@ -84,6 +154,7 @@ def enter():
         server.gumbas.append(server.df_g)
         
     game_world.add_objects(server.gumbas, 1)
+
     for data in monster_data_list:
         server.df_g = []
 
@@ -257,6 +328,78 @@ def enter():
 
 
 def exit():
+
+    for koopas in server.koopass:  
+        server.koopass.remove(koopas)
+        game_world.remove_object(koopas)
+
+    for a in server.redkoopass:  
+        server.redkoopass.remove(a)
+        game_world.remove_object(a)
+
+    for a in server.gumbas:  
+        server.gumbas.remove(a)
+        game_world.remove_object(a)
+
+    for a in server.boxs:  
+        server.boxs.remove(a)
+        game_world.remove_object(a)
+
+    for a in server.boxs2:  
+        server.boxs2.remove(a)
+        game_world.remove_object(a)
+
+    for a in server.boxs3:  
+        server.boxs3.remove(a)
+        game_world.remove_object(a)
+
+
+    for a in server.blocks:  
+        server.blocks.remove(a)
+        game_world.remove_object(a)
+
+    for a in server.mushrooms:  
+        server.mushrooms.remove(a)
+        game_world.remove_object(a)
+
+    for a in server.flowers:  
+        server.flowers.remove(a)
+        game_world.remove_object(a)
+
+    for a in server.coins:  
+        server.coins.remove(a)
+        game_world.remove_object(a)
+
+        
+    for a in server.stars:  
+        server.stars.remove(a)
+        game_world.remove_object(a)
+
+        
+    for a in server.fires:  
+        server.fires.remove(a)
+        game_world.remove_object(a)
+
+                
+    for a in server.pypes:  
+        server.pypes.remove(a)
+        game_world.remove_object(a)
+    
+
+    game_world.remove_object(server.block)
+    game_world.remove_object(server.box)
+    game_world.remove_object(server.box2)
+    game_world.remove_object(server.box3)
+
+    game_world.remove_object(server.pype)
+    game_world.remove_object(server.boy)
+    game_world.remove_object(server.background)
+    game_world.remove_object(server.door)
+    game_world.remove_object(server.stage1_ground1)
+    game_world.remove_object(server.stage1_ground4)
+    game_world.remove_object(server.stage1_ground2)
+    game_world.remove_object(server.stage1_ground3)
+
     game_world.clear()
     print("나간다!!!")
     
@@ -315,10 +458,6 @@ def draw():
     clear_canvas()
     for game_object in game_world.all_objects():
         game_object.draw()
-
-    #delay(0.5)
-
-    
     update_canvas()
 
 
