@@ -49,7 +49,9 @@ class Block:
                 block.state = 1
                 server.boy.fall = 1
 
-                server.coin += 1
+                server.coin += 50
+
+                
 
                 server.blocks.remove(block)
                 game_world.remove_object(block)

@@ -769,7 +769,18 @@ class Boy:
         self.event_que.insert(0, event)
 
     def update(self):
-        self.time += game_framework.frame_time
+        self.time += game_framework.frame_time * 50
+
+        if server.time - self.time <= 0:
+            self.cur_state = DieState
+
+
+            
+
+
+        if server.coin >= 100:
+            server.coin -=100
+            server.mario_life +=1
 
         self.cur_state.do(self)
 
