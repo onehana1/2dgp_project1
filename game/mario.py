@@ -70,9 +70,10 @@ class IdleState:
             boy.velocity += RUN_SPEED_PPS
 
         elif event == z_DOWN:
-            boy.attect = True
+            boy.attact = True
+            boy.fire = True
         elif event == z_UP:
-            boy.attect = False
+            boy.attact = False
 
         boy.timer = 1000
 
@@ -89,7 +90,12 @@ class IdleState:
             pass
 
         if event == z_DOWN:
+            boy.attact = True
             boy.fire_ball()
+
+        if event == z_UP:
+            boy.attact = False
+
 
 
 
@@ -135,7 +141,7 @@ class IdleState:
             if server.mario_state == 2:
                 if boy.dir == 1:
                     if boy.fall == 0:
-                            if boy.attect==True:
+                            if boy.attact==True:
                                 boy.image.clip_draw(310, 33, 21, 35, cx, cy+ 35,42,70)
                             else:
                                 boy.image.clip_draw(202, 32,  25, 37, cx, cy + 35,50,70)
@@ -143,7 +149,7 @@ class IdleState:
                         boy.image.clip_draw(358, 32, 25, 37, cx, cy + 35,50,70)
                 else:
                     if boy.fall == 0:
-                        if boy.attect==True:
+                        if boy.attact==True:
                             boy.image.clip_draw(74, 33, 23, 35, cx, cy+ 35,46,70)
                         else: 
                             boy.image.clip_draw(173, 32,  25, 37, cx, cy + 35,50,70)
@@ -177,7 +183,7 @@ class IdleState:
             if server.mario_state == 2:
                 if boy.dir == 1:
                     if boy.fall == 0:
-                            if boy.attect==True:
+                            if boy.attact==True:
                                 boy.image_star.clip_draw(310, 33, 21, 35, cx, cy+ 35,42,70)
                             else:
                                 boy.image_star.clip_draw(202, 32,  25, 37, cx, cy + 35,50,70)
@@ -185,7 +191,7 @@ class IdleState:
                         boy.image_star.clip_draw(358, 32, 25, 37, cx, cy + 35,50,70)
                 else:
                     if boy.fall == 0:
-                        if boy.attect==True:
+                        if boy.attact==True:
                             boy.image_star.clip_draw(74, 33, 23, 35, cx, cy+ 35,46,70)
                         else: 
                             boy.image_star.clip_draw(173, 32,  25, 37, cx, cy + 35,50,70)
@@ -232,7 +238,11 @@ class RunState:
             
 
         if event == z_DOWN:
+            boy.attack = True 
             boy.fire_ball()
+
+        if event == z_UP:
+            boy.attack = False
 
         pass
 
@@ -399,6 +409,8 @@ class Boy:
 
         self.star = False
         self.star_timer = 5
+
+
         
         self.stage = 0
 
@@ -413,11 +425,12 @@ class Boy:
         self.cur_state = IdleState
         self.cur_state.enter(self, None)
 
-        self.attect = False
+        self.attact = False
+        self.fire = False
 
         # self.cam = 800
 
-
+    
         self.fall = 1
         self.g = 0
 
@@ -450,8 +463,16 @@ class Boy:
     #     #     self.cam +=  self.velocity * game_framework.frame_time
 
     def fire_ball(self):
-        fire = Fire(self.x, self.y+40, self.dir*3)
-        game_world.add_object(fire, 1)
+        if self.attact == True and server.mario_state == 2:
+            print("어택!")
+            fire = Fire()
+            game_world.add_object(fire, 1)
+
+        # server.df_fire = Fire(self.x, self.y+40, self.dir)
+
+        # server.fires.append(server.df_fire)
+        # game_world.add_objects(server.fires, 1)
+
 
 
 

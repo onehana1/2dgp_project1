@@ -73,6 +73,11 @@ df_s =[]
 
 df_p =[]
 
+df_fire =[]
+
+
+
+
 
 
 
@@ -100,6 +105,7 @@ mushrooms = []
 flowers = []
 coins = []
 stars = []
+fires = []
 
 
 pypes = []

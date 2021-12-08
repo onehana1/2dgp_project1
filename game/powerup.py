@@ -30,10 +30,11 @@ class Mushroom:
 
         self.dir = 1
         self.velocity = 0
-        self.timer = 0
+
         self.frame = 0
 
         self.state = 0
+        self.timer = 3
         self.fall = 1
 
         self.count = count
@@ -50,17 +51,17 @@ class Mushroom:
     def update(self):
         self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 3
 
-        if self.state >= 1:
-            if(self.timer%1000 == 0):
-                self.dir += 1
+        self.timer -=  game_framework.frame_time
 
-            if ((self.dir % 2) == 1):
-                self.velocity += RUN_SPEED_PPS
+        if self.state >= 1:
+            self.velocity = RUN_SPEED_PPS
+
+            if self.dir == 1:
                 self.x += self.velocity * game_framework.frame_time
             else:
-                self.velocity -= RUN_SPEED_PPS
-                self.x += self.velocity * game_framework.frame_time
-
+                self.x -= self.velocity * game_framework.frame_time
+             
+            
             self.fall = 1
        
 
@@ -80,6 +81,18 @@ class Mushroom:
                     mushroom.fall = 0            
             if collision.collide_floor(mushroom, server.stage1_ground4):
                     mushroom.fall = 0
+            
+            for pype in server.pypes:  
+                if collision.collide_floor(mushroom, pype):
+                    mushroom.fall = 0
+                if collision.collide_side(mushroom, pype) and mushroom.timer!=5:
+                    if mushroom.dir == 1:
+                        mushroom.dir = 0
+                    else:
+                        mushroom.dir = 1
+
+                    self.timer = 5
+
             
             if(mushroom.fall== 1 and mushroom.state >=1):
                     mushroom.y -= 1

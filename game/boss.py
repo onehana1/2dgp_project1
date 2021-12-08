@@ -44,6 +44,9 @@ class Boss:
         self.image = load_image('boss_l.png')
         self.image2 = load_image('boss_r.png')
 
+        self.image3 = load_image('boss_l_r.png')
+        self.image4 = load_image('boss_r_r.png')
+
 
         self.w = 41
         self.h = 36
@@ -60,7 +63,7 @@ class Boss:
 
         self.fall = 1
 
-        self.inv = 0
+        self.inv = False
         self.inv_timer = 2
 
 
@@ -69,11 +72,14 @@ class Boss:
         self.life = 5
 
 
+        self.life_test = 0
+
+
         self.build_behavior_tree()
 
 
     def wander(self):
-        print("wander")
+
 
         self.speed = RUN_SPEED_PPS
         self.timer -= game_framework.frame_time
@@ -82,7 +88,7 @@ class Boss:
         if self.jump_timer <= 0 :
             self.jumping = 1
             self.jump_timer = 5.0
-            print("점핑~")
+
   
         if self.timer <= 0 and self.dir == 0:
             self.dir = 1
@@ -98,7 +104,7 @@ class Boss:
             return BehaviorTree.RUNNING
 
     def find_player(self):
-        print("find_player")
+
         self.jump_timer -= game_framework.frame_time
         distance = (server.boy.x - self.x)**2 + (server.boy.y - self.y)**2
         if distance < (PIXEL_PER_METER * 20)**2:
@@ -106,7 +112,7 @@ class Boss:
             if self.jump_timer <= 0 :
                 self.jumping = 1
                 self.jump_timer = 5.0
-                print("f점핑~")
+
 
             if server.boy.x > self.x:
                 self.dir = 1
@@ -122,7 +128,6 @@ class Boss:
     def move_to_player(self):
         self.speed = RUN_SPEED_PPS
         self.jump_v = JUMP_SPEED_PPS
-        print("move_to_player")
         return BehaviorTree.SUCCESS
 
 
@@ -219,36 +224,62 @@ class Boss:
       
         if collision.collide_floor(self, server.stage2_ground1): 
             self.fall = 0
-            print(self.fall)
+            # print(self.fall)
 
 
         if collision.collide_floor(server.boy, self): #밟 처치
-                server.boy.y += 35
-                
-                # server.boy.x -= 35 * server.boy.dir
+            server.boy.y += 70
+            
+            server.boy.x +=  -server.boy.dir * 70
 
-                server.boy.jumping_mon = True
+            server.boy.jumping_mon = True
 
-                if self.inv ==False:
-                    self.life -= 1
+            if self.inv ==False:
+                self.life -= 1
 
-                self.inv = True
+            if (self.inv == True) and server.boy.inv == False:
+                print("??")
+                if (self.inv == True):
+                    self.life_test += 1
+                    print("테스트 라이프",self.life_test)
+
+                    server.boy.inv = True
+                    server.boy.x +=  -server.boy.dir * 70
+                    server.boy.y += 70
+                    if(server.mario_state==2):server.mario_state = 1
+                    elif(server.mario_state==1):server.mario_state = 0
+
+            self.inv = True
+            #print(self.life)
+            
 
 
-                print(self.life)
+            if self.life == 0 :
+                game_world.remove_object(self)
+                print("보스 처치")
 
-                if self.life == 0 :
-                    game_world.remove_object(self)
-                    print("보스 처치")
+                server.score += 5000
 
-                    server.score += 500
+          
+        # #화날때 밟으면 아파용
+        # if collision.collide_floor(server.boy, self):
+        #     if (self.inv == True):
+        #         self.life_test += 1
+        #         print("테스트 라이프",self.life_test)
+
+        #         server.boy.inv = True
+        #         server.boy.x +=  -server.boy.dir * 70
+        #         server.boy.y += 35
+        #         if(server.mario_state==2):server.mario_state = 1
+        #         elif(server.mario_state==1):server.mario_state = 0
+
 
 
         if collision.collide_side(server.boy, self):  #충돌
                 if(server.boy.inv==False):
         
                     if server.mario_state == 2 or server.mario_state ==1 or server.mario_state == 0:
-                        server.boy.x +=  -server.boy.dir * 35
+                        server.boy.x +=  -server.boy.dir * 70
                         server.boy.y += 35
                         server.boy.jumping_mon = True
                         server.boy.inv = True
@@ -273,15 +304,15 @@ class Boss:
             if self.inv == False:
                 self.image.clip_draw_to_origin(self.w * int(self.frame), 0, self.w, self.h, self.x, self.y, self.w * 2, self.h * 2)
             else:
-                self.image.clip_draw_to_origin(self.w * int(self.frame2), 0, self.w, self.h, self.x, self.y, self.w * 2, self.h * 2)
+                self.image3.clip_draw_to_origin(self.w * int(self.frame), 0, self.w, self.h, self.x, self.y, self.w * 2, self.h * 2)
 
-
+ 
     
         if self.dir==1:
             if self.inv == False:
                 self.image2.clip_draw_to_origin(self.w*int(self.frame), 0, self.w, self.h, self.x, self.y, self.w * 2, self.h * 2)
             else:
-                self.image2.clip_draw_to_origin(self.w*int(self.frame2), 0, self.w, self.h, self.x, self.y, self.w * 2, self.h * 2)
+                self.image4.clip_draw_to_origin(self.w*int(self.frame), 0, self.w, self.h, self.x, self.y, self.w * 2, self.h * 2)
 
 
         if self.state==1:

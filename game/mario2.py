@@ -3,13 +3,13 @@ from pico2d import *
 import game_world
 import game_framework
 
-from fire import Fire
+# from fire import Fire
 
 
 import server
 import collision
 
-
+from fire_2 import Fire
 
 # mario Event
 RIGHT_DOWN, LEFT_DOWN, RIGHT_UP, LEFT_UP, SLEEP_TIMER,UP_DOWN,UP_UP ,SPACE_DOWN,SPACE_UP,z_DOWN,z_UP = range(11)
@@ -70,9 +70,9 @@ class IdleState:
             boy.velocity += RUN_SPEED_PPS
 
         elif event == z_DOWN:
-            boy.attect = True
+            boy.attact = True
         elif event == z_UP:
-            boy.attect = False
+            boy.attact = False
 
         boy.timer = 1000
 
@@ -89,9 +89,11 @@ class IdleState:
             pass
 
         if event == z_DOWN:
+            boy.attact = True
             boy.fire_ball()
 
-
+        if event == z_UP:
+            boy.attact = False
 
 
         pass
@@ -135,7 +137,7 @@ class IdleState:
         if server.mario_state == 2:
             if boy.dir == 1:
                 if boy.fall == 0:
-                        if boy.attect==True:
+                        if boy.attact==True:
                             boy.image.clip_draw(310, 33, 21, 35, cx, cy+ 35,42,70)
                         else:
                             boy.image.clip_draw(202, 32,  25, 37, cx, cy + 35,50,70)
@@ -143,7 +145,7 @@ class IdleState:
                     boy.image.clip_draw(358, 32, 25, 37, cx, cy + 35,50,70)
             else:
                 if boy.fall == 0:
-                    if boy.attect==True:
+                    if boy.attact==True:
                         boy.image.clip_draw(74, 33, 23, 35, cx, cy+ 35,46,70)
                     else: 
                         boy.image.clip_draw(173, 32,  25, 37, cx, cy + 35,50,70)
@@ -187,7 +189,11 @@ class RunState:
             
 
         if event == z_DOWN:
+            boy.attack = True 
             boy.fire_ball()
+
+        if event == z_UP:
+            boy.attack = False
 
         pass
 
@@ -328,7 +334,7 @@ class Boy:
         self.cur_state = IdleState
         self.cur_state.enter(self, None)
 
-        self.attect = False
+        self.attact = False
 
         # self.cam = 800
 
@@ -365,9 +371,10 @@ class Boy:
     #     #     self.cam +=  self.velocity * game_framework.frame_time
 
     def fire_ball(self):
-        fire = Fire(self.x, self.y+40, self.dir*3)
-        game_world.add_object(fire, 1)
-
+        if self.attact == True and server.mario_state == 2:
+            print("어택!")
+            fire = Fire()
+            game_world.add_object(fire, 1)
 
 
 
@@ -429,19 +436,19 @@ class Boy:
     def jump_mon(self):
 
 
-        if (self.jumping_mon == True and self.fall == 0):
+        if (self.jumping_mon == True and self.fall ==0):
             self.jump_v = JUMP_SPEED_PPS
             self.jump_v -= game_framework.frame_time * self.jump_timer * JUMP_SPEED_PPS
             self.jump_timer_m += 1
             self.jumping = False
             #self.y += 100
             self.y += self.jump_v * game_framework.frame_time  
-            # print("mon")
+            print("mon")
 
 
-        if (self.jump_timer_m > 75):
-            self.jump_timer_m = 0
+        if (self.jump_timer > 0.7 or self.fall == 1):
             self.jump_timer = 0
+            self.jump_timer_m = 0
             self.jump_v = 0
 
             self.fall = 1

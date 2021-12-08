@@ -40,7 +40,7 @@ class Fire:
 
 
     def crush_box(self):
-        return self.x-12 - server.background.window_left, self.y-13, self.x +12 - server.background.window_left, self.y+13
+        return self.x-12 , self.y-13, self.x +12, self.y+13
 
     def do(self):
         pass
@@ -103,7 +103,7 @@ class Fire:
 
     def draw(self):
         if self.state==0:
-            self.image.clip_draw( 1 + int(self.frame)*1, 4, 12, 13, self.x - server.background.window_left, self.y, 24, 26)
+            self.image.clip_draw( 1 + int(self.frame)*1, 4, 12, 13, self.x, self.y, 24, 26)
         if self.state==1:
             game_world.remove_object(self)
         

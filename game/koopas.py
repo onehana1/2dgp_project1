@@ -72,6 +72,8 @@ class Koopas:
 
         for koopas in server.koopass:  
 
+
+
             if collision.collide_floor(server.boy, koopas): #밟 처치
                 server.boy.y += 35
                 koopas.state = 1
