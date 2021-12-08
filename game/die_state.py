@@ -13,22 +13,31 @@ import server
 import main_state
 import main_stage_2
 import world_build_state
+import gameover_state
 
 
 
 
 
-name = "next_state"
+
+name = "die_state"
 
 next = None
 font = None
+font2 = None
+
 
 def enter():
     global next
     global font
+    global font2
+    server.mario_life -= 1
+
+
 
     next = load_image('black.png')
     font = load_font('supermariobros.ttf', 60)
+    font2 = load_font('supermariobros.ttf', 30)
     hide_cursor()
     hide_lattice()
 
@@ -37,6 +46,9 @@ def exit():
     del next
     global font
     del font
+    global font2
+    del font2
+
 
 def pause():
     pass
@@ -64,8 +76,19 @@ def handle_events():
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             game_framework.change_state(world_build_state)
         elif event.type == SDL_KEYDOWN and event.key == SDLK_n:
-            game_framework.change_state(main_stage_2)
-            
+            if server.stage == 1:
+                game_framework.change_state(main_stage_2)
+                server.mario_state = 1
+                
+                print("다시 보스")
+
+            if server.stage == 0:
+                game_world.clear()
+                game_framework.change_state(main_state)
+                server.mario_state = 1
+                print("다시 메인1")
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_r:
+            game_framework.change_state(world_build_state)
 
 
 
@@ -77,8 +100,9 @@ def update():
 def draw():
     clear_canvas()
     next.draw(get_canvas_width()//2, get_canvas_height()//2)
+    font2.draw(get_canvas_width()//2 - 300, get_canvas_height()//2 + 100, 'DIE..', (255, 0, 0))
+    font2.draw(get_canvas_width()//2, get_canvas_height()//2 + 100, 'PRESS N TO RESTART', (255, 0, 0))
 
-    font.draw(get_canvas_width()//2 - 300, get_canvas_height()//2 + 100, 'NEXT STAGE..', (255, 255, 255))
     font.draw(get_canvas_width()//2 - 300, get_canvas_height()//2 - 0, 'life :  %3.0f' % server.mario_life, (255, 0, 0))
     font.draw(get_canvas_width()//2 - 300, get_canvas_height()//2 - 100, 'Coin :  %3.0f' % server.coin, (255, 255, 0))
     font.draw(get_canvas_width()//2 - 300, get_canvas_height()//2 - 200, 'Score : %3.0f' % server.score, (255, 255, 255))

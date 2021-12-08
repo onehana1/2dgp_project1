@@ -338,25 +338,27 @@ class DieState:
 
     def enter(boy, event):
         # server.mario_state = 4
-        if event == UP_DOWN:
-            server.mario_state = 1
+        # if event == UP_DOWN:
+        #     server.mario_state = 1
+        server.mario_state = -1
+        # boy.life = 0
 
     def exit(boy, event):
+        boy.die_timer < 0
+        print("die 끝")
         pass
 
 
     def do(boy):
         boy.frame = (boy.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 3
         boy.y -= boy.velocity * game_framework.frame_time
+        
 
     def draw(boy):
         boy.image.clip_draw(386, 155, 19, 21, boy.x, boy.y+100, 38, 42)
-        boy.image3.clip_draw(0,0,512,301,800,300,1600,600)
+        # boy.image3.clip_draw(0,0,512,301,800,300,1600,600)
 
         
-
-
-
 
 
 class SleepState:
@@ -441,6 +443,7 @@ class Boy:
         self.stopping = False
 
         self.state = 0
+        self.die_timer = 2
 
         self.go = 1
 
@@ -464,7 +467,7 @@ class Boy:
 
     def fire_ball(self):
         if self.attact == True and server.mario_state == 2:
-            print("어택!")
+            # print("어택!")
             fire = Fire()
             game_world.add_object(fire, 1)
 
@@ -490,7 +493,7 @@ class Boy:
         if server.mario_state==2:
             return cx-15, cy, cx + 15, cy+70
 
-        if server.mario_state==4:
+        if server.mario_state== -1:
             return cx, cy, cx , cy
 
 
@@ -572,9 +575,6 @@ class Boy:
 
 
 
-
-
-
     def add_event(self, event):
         self.event_que.insert(0, event)
 
@@ -603,8 +603,21 @@ class Boy:
         self.jump_mon()
         self.jump()
 
-        # if server.mario_state == 4:
-        #     self.cur_state = DieState
+        if server.mario_state == -1:
+            self.cur_state = DieState
+            self.die_timer -= game_framework.frame_time
+
+        if self.y <= -10:
+            self.cur_state = DieState
+            self.die_timer -= game_framework.frame_time
+
+        if self.die_timer <0 :
+            self.die_timer = 2
+            server.mario_die = True
+
+            # server.mario_life -= 1
+            # print(self.cur_state)
+            # print(server.mario_life)
 
 
         # if(self.y < 0):

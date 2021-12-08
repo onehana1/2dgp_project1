@@ -21,26 +21,26 @@ FRAMES_PER_ACTION = 1
 
 
 
-class Fire:
+class Boss_Fire:
     image = None
     def __init__(self):
-        if Fire.image == None:
-            Fire.image = load_image('fireball.png')
+        if Boss_Fire.image == None:
+            Boss_Fire.image = load_image('boss_fire.png')
         
-        self.x, self.y, self.dir = server.boy.x, server.boy.y + 40, server.boy.dir
+        self.x, self.y, self.dir = server.boss.x, server.boss.y + 40, server.boss.dir
         global cam
 
         self.velocity = 0
         self.jump_timer = 0
         self.frame = 0
-        self.timer = 1
+        self.timer = 3
 
         self.state = 0
       
 
 
     def crush_box(self):
-        return self.x-12 , self.y-13, self.x +12, self.y+13
+        return self.x-14 , self.y-6, self.x +15, self.y+7
 
     def do(self):
         pass
@@ -51,26 +51,31 @@ class Fire:
         
         if(self.timer <= 0):
             self.state = 1
-            self.timer = 1
+            self.timer = 3
 
         self.velocity = RUN_SPEED_PPS
         if self.dir==1:
             self.x +=  self.velocity * game_framework.frame_time
-            print(" +! : ",self.velocity)
+            # print(" +! : ",self.velocity)
 
-        if self.dir== -1:
+        elif self.dir== 0:
             self.x -=  self.velocity * game_framework.frame_time
+            
             print(" -! : ",self.velocity)
 
         if self.y < 50 :
             game_world.remove_object(self)
 
 
-        if collision.collide(self, server.boss):
-            server.boss.life -= 1
-            server.boss.inv = True
+        if collision.collide(self, server.boy):
+            if server.boy.inv == False:
+                server.mario_state -= 1
+                server.boy.x +=  -server.boy.dir * 35
+                server.boy.y += 35
+            server.boy.inv = True
+            
             game_world.remove_object(self)
-            print("불 어택")
+            print("보스 어택")
 
 
 
@@ -80,7 +85,7 @@ class Fire:
 
     def draw(self):
         if self.state==0:
-            self.image.clip_draw( 1 + int(self.frame)*1, 4, 12, 13, self.x, self.y, 24, 26)
+            self.image.clip_draw( 1 + int(self.frame)*1, 3, 31, 13, self.x, self.y, 62, 26)
         if self.state==1:
             game_world.remove_object(self)
         

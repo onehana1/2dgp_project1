@@ -8,6 +8,8 @@ import game_framework
 import game_world
 import server
 import world_build_state
+import die_state
+import gameover_state
 
 from sky import Sky
 
@@ -19,6 +21,8 @@ from stage2_ground1 import S2_Ground1
 
 
 
+
+
 name = "MainState2"
 
 
@@ -26,6 +30,8 @@ name = "MainState2"
 
 
 def enter():
+    server.stage = 1
+
     server.boy = Boy()
     game_world.add_object(server.boy, 1)
 
@@ -85,6 +91,14 @@ def handle_events():
 def update(): 
     for game_object in game_world.all_objects():
         game_object.update()
+
+    if server.mario_die ==True and server.mario_life > 0:
+        game_framework.change_state(die_state)
+        server.mario_die = False
+
+    elif server.mario_life == 0:
+        game_framework.change_state(gameover_state)
+
 
     pass
 

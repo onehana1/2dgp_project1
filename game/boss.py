@@ -6,6 +6,7 @@ import random
 
 import server
 import collision
+from boss_fire import Boss_Fire
 
 from BehaviorTree import BehaviorTree, SelectorNode, SequenceNode, LeafNode
 
@@ -59,6 +60,8 @@ class Boss:
         self.jump_timer = 5
         self.jumping_timer = 0
 
+        self.fire_timer = 1
+
         self.jump_v = 0
 
         self.fall = 1
@@ -79,8 +82,9 @@ class Boss:
 
 
     def wander(self):
+        self.fire_ball()
 
-
+        
         self.speed = RUN_SPEED_PPS
         self.timer -= game_framework.frame_time
         self.jump_timer -= game_framework.frame_time
@@ -104,7 +108,7 @@ class Boss:
             return BehaviorTree.RUNNING
 
     def find_player(self):
-
+        self.fire_ball()
         self.jump_timer -= game_framework.frame_time
         distance = (server.boy.x - self.x)**2 + (server.boy.y - self.y)**2
         if distance < (PIXEL_PER_METER * 20)**2:
@@ -155,6 +159,7 @@ class Boss:
 
 
         if (self.jumping == True and self.fall == 0):
+            
             self.jumping_timer += 1 * game_framework.frame_time
             self.y += self.jump_v * game_framework.frame_time
 
@@ -170,6 +175,14 @@ class Boss:
 
         if self.jumping == False:
             self.fall = True
+
+    def fire_ball(self):
+        self.fire_timer -= game_framework.frame_time
+        if self.fire_timer < 0:
+            self.fire_timer = random.randint(0,2)
+        # print("어택!")
+            fire = Boss_Fire()
+            game_world.add_object(fire, 1)
 
 
 
@@ -238,10 +251,10 @@ class Boss:
                 self.life -= 1
 
             if (self.inv == True) and server.boy.inv == False:
-                print("??")
+                
                 if (self.inv == True):
                     self.life_test += 1
-                    print("테스트 라이프",self.life_test)
+                    # print("테스트 라이프",self.life_test)
 
                     server.boy.inv = True
                     server.boy.x +=  -server.boy.dir * 70
@@ -286,8 +299,11 @@ class Boss:
                         
                         print("2")
 
-                if(server.mario_state==2):server.mario_state = 1
-                elif(server.mario_state==1):server.mario_state = 0
+                    if(server.mario_state==2):server.mario_state = 1
+                    elif(server.mario_state==1):server.mario_state = 0
+                    elif(server.mario_state==0):server.mario_state -= 1
+
+                
 
 
         self.x = clamp(60, self.x, 1550)

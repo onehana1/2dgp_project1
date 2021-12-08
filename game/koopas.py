@@ -104,6 +104,8 @@ class Koopas:
 
                     if(server.mario_state==2):server.mario_state = 1
                     elif(server.mario_state==1):server.mario_state = 0
+                    elif(server.mario_state==0):server.mario_state = -1
+
 
 
             for pype in server.pypes:  

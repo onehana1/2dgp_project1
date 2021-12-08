@@ -9,6 +9,9 @@ import game_world
 import server
 import world_build_state
 import next_stage
+import die_state
+import gameover_state
+
 
 
 
@@ -65,7 +68,7 @@ name = "MainState"
 
 
 def enter():
-
+    game_world.clear()
     # server.gumbas = [Gumba('1',100,50) for i in range(2)]
     # game_world.add_objects(server.gumbas, 1)
 
@@ -81,6 +84,8 @@ def enter():
         server.gumbas.append(server.df_g)
         
     game_world.add_objects(server.gumbas, 1)
+    for data in monster_data_list:
+        server.df_g = []
 
 ######################거북###########################
     with open('koopa_data.json', 'r') as f:
@@ -92,6 +97,9 @@ def enter():
     
     game_world.add_objects(server.koopass, 1)
 
+    for data in monster_data_list:
+        server.df_k = []
+
 #==========빨거북==========#
     with open('redkoopa_data.json', 'r') as f:
         monster_data_list = json.load(f)
@@ -102,6 +110,9 @@ def enter():
 
     game_world.add_objects(server.redkoopass, 1)
 
+    for data in monster_data_list:
+        server.df_k = []
+
 #==========파이프==========#
     with open('pype_data.json', 'r') as f:
         monster_data_list = json.load(f)
@@ -111,6 +122,8 @@ def enter():
         server.pypes.append(server.df_p)
 
     game_world.add_objects(server.pypes, 1)
+    for data in monster_data_list:
+        server.df_p = []
 
 #==========박스==========#
     with open('box_data.json', 'r') as f:
@@ -122,6 +135,9 @@ def enter():
 
     game_world.add_objects(server.boxs, 1)
 
+    for data in monster_data_list:
+        server.df_b = []
+
 #==========박스2==========#
     with open('box2_data.json', 'r') as f:
         monster_data_list = json.load(f)
@@ -131,6 +147,9 @@ def enter():
         server.boxs2.append(server.df_b2)
 
     game_world.add_objects(server.boxs2, 1)
+
+    for data in monster_data_list:
+        server.df_b2 = []
 
 #==========박스3==========#
     with open('box3_data.json', 'r') as f:
@@ -142,6 +161,9 @@ def enter():
 
     game_world.add_objects(server.boxs3, 1)
 
+    for data in monster_data_list:
+        server.df_b3 = []
+
 #==========블록==========#
     with open('block_data.json', 'r') as f:
         monster_data_list = json.load(f)
@@ -151,6 +173,9 @@ def enter():
         server.blocks.append(server.df_block)
 
     game_world.add_objects(server.blocks, 1)
+
+    for data in monster_data_list:
+        server.df_block = []
     
 
 #######################템m##########################
@@ -162,6 +187,9 @@ def enter():
         server.mushrooms.append(server.df_m)
 
     game_world.add_objects(server.mushrooms, 1)
+
+    for data in monster_data_list:
+        server.df_m = []
 
     # server.mushrooms = Mushroom('1',100,50)
     # game_world.add_object(server.mushroom, 1)
@@ -175,6 +203,9 @@ def enter():
 
     game_world.add_objects(server.flowers, 1)
 
+    for data in monster_data_list:
+        server.df_f = []
+
 #==========템s==========#
     with open('box3_data.json', 'r') as f:
         monster_data_list = json.load(f)
@@ -185,12 +216,9 @@ def enter():
 
     game_world.add_objects(server.stars, 1)
 
-        
-    #server.flower = Flower('1',100,50)
-    #game_world.add_object(server.flower, 1)
+    for data in monster_data_list:
+        server.df_s = []
 
-    # server.coin = Coin('1',100,50)
-    # game_world.add_object(server.coin, 1)
 
 
     server.boy = Boy()
@@ -210,10 +238,6 @@ def enter():
 
     server.stage1_ground1 = S1_Ground1()
     game_world.add_object(server.stage1_ground1, 1)
-
-
-
-
 
     server.stage1_ground2 = S1_Ground2(2406,0)
     game_world.add_object(server.stage1_ground2, 1)
@@ -270,6 +294,13 @@ def handle_events():
 def update():
     for game_object in game_world.all_objects():
         game_object.update()
+
+    if server.mario_die ==True and server.mario_life > 0:
+        game_framework.change_state(die_state)
+        server.mario_die = False
+
+    elif server.mario_life == 0:
+        game_framework.change_state(gameover_state)
 
     if server.stage == 1:
         game_framework.change_state(next_stage)

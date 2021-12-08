@@ -3,8 +3,12 @@
 
 stage = 0
 
-mario_state = 0
+mario_life = 3
+
+mario_state = 2
 mario_star = 0
+mario_die = False
+
 
 
 boy = None

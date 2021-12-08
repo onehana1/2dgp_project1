@@ -251,11 +251,14 @@ class RunState:
 class DieState:
 
     def enter(boy, event):
-        boy.state = 4
-        if event == UP_DOWN:
-            boy.state = 1
+        server.mario_state = -1
+        # boy.state = 4
+        # if event == UP_DOWN:
+        #     boy.state = 1
 
     def exit(boy, event):
+        boy.die_timer < 0
+        print("die 끝")
         pass
 
 
@@ -265,7 +268,7 @@ class DieState:
 
     def draw(boy):
         boy.image.clip_draw(386, 155, 19, 21, boy.x, boy.y+100, 38, 42)
-        boy.image3.clip_draw(0,0,512,301,800,300,1600,600)
+        # boy.image3.clip_draw(0,0,512,301,800,300,1600,600)
 
         
 
@@ -348,12 +351,15 @@ class Boy:
         self.jump_v = 0
         self.stopping = False
 
-        self.state = 0
+        self.state = 2 #############################################################
 
         self.go = 1
 
         self.inv = False #무적상태
         self.inv_timer = 0 #무적상태 time
+
+        self.die_timer = 2
+
 
 
     # def camera(self):
@@ -372,7 +378,7 @@ class Boy:
 
     def fire_ball(self):
         if self.attact == True and server.mario_state == 2:
-            print("어택!")
+            # print("어택!")
             fire = Fire()
             game_world.add_object(fire, 1)
 
@@ -391,7 +397,7 @@ class Boy:
         if server.mario_state==2:
             return cx-15, cy, cx + 15, cy+70
 
-        if server.mario_state==4:
+        if server.mario_state==-1:
             return cx, cy, cx , cy
 
 
@@ -503,12 +509,27 @@ class Boy:
         if collision.collide_floor(self, server.stage2_ground1):
             self.fall = 0
 
-        if self.state == 4:
-            self.cur_state = DieState
+        # if self.state == 4:
+        #     self.cur_state = DieState
 
 
         # if(self.y < 0):
         #     self.state=4
+
+        if server.mario_state == -1:
+            self.cur_state = DieState
+            self.die_timer -= game_framework.frame_time
+
+        if self.y <= -10:
+            self.cur_state = DieState
+            self.die_timer -= game_framework.frame_time
+
+        if self.die_timer <0 :
+            self.die_timer = 2
+            
+            server.mario_die = True
+
+
         
         self.x = clamp(50, self.x, 1550)
 
