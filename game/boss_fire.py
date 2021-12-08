@@ -61,7 +61,7 @@ class Boss_Fire:
         elif self.dir== 0:
             self.x -=  self.velocity * game_framework.frame_time
             
-            print(" -! : ",self.velocity)
+            # print(" -! : ",self.velocity)
 
         if self.y < 50 :
             game_world.remove_object(self)
@@ -75,7 +75,7 @@ class Boss_Fire:
             server.boy.inv = True
             
             game_world.remove_object(self)
-            print("보스 어택")
+            print("보스가 어택")
 
 
 

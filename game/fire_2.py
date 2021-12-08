@@ -56,11 +56,11 @@ class Fire:
         self.velocity = RUN_SPEED_PPS
         if self.dir==1:
             self.x +=  self.velocity * game_framework.frame_time
-            print(" +! : ",self.velocity)
+            # print(" +! : ",self.velocity)
 
         if self.dir== -1:
             self.x -=  self.velocity * game_framework.frame_time
-            print(" -! : ",self.velocity)
+            # print(" -! : ",self.velocity)
 
         if self.y < 50 :
             game_world.remove_object(self)
@@ -70,7 +70,8 @@ class Fire:
             server.boss.life -= 1
             server.boss.inv = True
             game_world.remove_object(self)
-            print("불 어택")
+            server.boy.kick_sound.play()
+            print("마리오불 어택")
 
 
 

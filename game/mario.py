@@ -128,43 +128,58 @@ class IdleState:
         if server.mario_star == 0:
             if server.mario_state == 0:
                 if boy.dir == 1:
-                    if boy.fall == 0:
+                    if boy.fall == 0 and boy.jumping == False:
                         boy.image.clip_draw(202, 171, 30, 18, cx, cy,60,35)
+                    elif boy.jumping == True:
+                        boy.image.clip_draw(356, 171, 30, 18, cx, cy,60,35)
                     else:
                         boy.image.clip_draw(352, 103, 30, 35, cx, cy,60,35)    
                 else:
-                    if boy.fall == 0:
+                    if boy.fall == 0 and boy.jumping == False:
                         boy.image.clip_draw(173, 171, 30, 18, cx, cy,60,35)
+                    elif boy.jumping == True:
+                        boy.image.clip_draw(26, 171, 30, 18, cx, cy,60,35)
                     else:
                         boy.image.clip_draw(22, 103, 30, 35, cx, cy,60,35)
 
             if server.mario_state == 1:
                 if boy.dir == 1:
-                    if boy.fall == 0:
+                    if boy.fall == 0 and boy.jumping == False:
                         boy.image.clip_draw(202, 103, 30, 35, cx, cy + 35,60,70)
+                    elif boy.jumping == True:
+                        boy.image.clip_draw(356, 103, 30, 35, cx, cy,60,70)
                     else:
                         boy.image.clip_draw(352, 103, 30, 35, cx, cy + 35,60,70)   
                 else:
-                    if boy.fall == 0:
+                    if boy.fall == 0 and boy.jumping == False:
                         boy.image.clip_draw(173, 103, 30, 35, cx, cy + 35,60,70)
+                    elif boy.jumping == True:
+                        boy.image.clip_draw(26, 103, 30, 35, cx, cy,60,70)
                     else:
                         boy.image.clip_draw(22, 103, 30, 35, cx, cy + 35,60,70)
 
             if server.mario_state == 2:
                 if boy.dir == 1:
-                    if boy.fall == 0:
+                    if boy.fall == 0 and boy.jumping == False:
                             if boy.attact==True:
                                 boy.image.clip_draw(310, 33, 21, 35, cx, cy+ 35,42,70)
                             else:
                                 boy.image.clip_draw(202, 32,  25, 37, cx, cy + 35,50,70)
+
+                    elif boy.jumping == True:
+                        boy.image.clip_draw(358, 32, 30, 35, cx, cy + 35,50,70)
                     else:
                         boy.image.clip_draw(358, 32, 25, 37, cx, cy + 35,50,70)
                 else:
-                    if boy.fall == 0:
+                    if boy.fall == 0 and boy.jumping == False:
                         if boy.attact==True:
                             boy.image.clip_draw(74, 33, 23, 35, cx, cy+ 35,46,70)
                         else: 
                             boy.image.clip_draw(173, 32,  25, 37, cx, cy + 35,50,70)
+
+                    elif boy.jumping == True:
+                        boy.image.clip_draw(20, 32, 30, 35, cx, cy + 35,50,70)
+
                     else:
                         boy.image.clip_draw(24, 32, 25, 37, cx, cy + 35,50,70)
         else:
@@ -554,6 +569,9 @@ class Boy:
         self.star_sound = load_wav('sound/star.wav')
         self.star_sound.set_volume(32)
 
+        self.gameover_sound = load_wav('sound/gameover.wav')
+        self.gameover_sound.set_volume(32)
+
 
 
 
@@ -607,7 +625,8 @@ class Boy:
 
         self.inv = False #무적상태
         self.inv_timer = 0 #무적상태 time
-
+        
+        self.time = 100
 
     # def camera(self):
     
@@ -750,6 +769,8 @@ class Boy:
         self.event_que.insert(0, event)
 
     def update(self):
+        self.time += game_framework.frame_time
+
         self.cur_state.do(self)
 
         if server.mario_star == 0:
@@ -895,9 +916,10 @@ class Boy:
         self.cur_state.draw(self)
         # debug_print('Velocity :' + str(self.velocity) + '  Dir:' + str(self.dir) + '  State:' + str(self.cur_state))
         # draw_rectangle(*self.crush_box())
-        self.font.draw(1300, 550, 'Time: %3.0f' % (300 -get_time()), (255, 255, 255))
-        self.font.draw(700, 550, 'Score: %3.0f' % server.score, (0, 0, 0))
-        self.font.draw(100, 550, 'Coin: %3.0f' % server.coin, (255, 255, 0))
+        self.font.draw(1300, 560, 'Time: %3.0f' % (server.time - self.time), (255, 255, 255))
+        self.font.draw(700, 560, 'Score: %3.0f' % server.score, (0, 0, 0))
+        self.font.draw(100, 500, 'Life: %3.0f' % server.mario_life, (255, 0, 0))
+        self.font.draw(100, 560, 'Coin: %3.0f' % server.coin, (255, 255, 0))
 
 
         cx, cy = self.x - server.background.window_left, self.y - server.background.window_bottom

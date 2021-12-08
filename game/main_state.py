@@ -68,6 +68,7 @@ name = "MainState"
 
 
 def enter():
+    
     for koopas in server.koopass:  
         server.koopass.remove(koopas)
         game_world.remove_object(koopas)

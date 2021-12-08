@@ -18,7 +18,7 @@ import world_build_state
 
 
 
-name = "gameover_state"
+name = "clear_state"
 
 next = None
 font = None
@@ -29,8 +29,7 @@ def enter():
     global next
     global font
     global font2
-
-    server.boy.gameover_sound.play()
+    
 
 
     next = load_image('black.png')
@@ -73,24 +72,14 @@ def handle_events():
         if event.type == SDL_QUIT:
             game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
+            server.stage2_ground1.bgm.stop()
             game_framework.change_state(world_build_state)
+            
         elif event.type == SDL_KEYDOWN and event.key == SDLK_n:
-            if server.stage == 1:
-                game_framework.change_state(main_stage_2)
-                print("g다시 보스")
-                server.mario_life = 3
+            server.stage2_ground1.bgm.stop()
+            game_framework.change_state(world_build_state)
 
 
-
-            if server.stage == 0:
-                game_framework.change_state(main_state)
-                print("g다시 메인1")
-                server.mario_life = 3
-
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_r:
-            game_framework.change_state(main_state)
-            print("g강제 메인1")
-            server.mario_life = 3
 
 
 
@@ -105,9 +94,10 @@ def update():
 def draw():
     clear_canvas()
     next.draw(get_canvas_width()//2, get_canvas_height()//2)
-    font2.draw(get_canvas_width()//2 - 400, get_canvas_height()//2 + 100, 'GAME OVER..', (255, 0, 0))
-    font2.draw(get_canvas_width()//2, get_canvas_height()//2 + 100, 'PRESS N TO RESTART', (255, 0, 0))
+    font2.draw(get_canvas_width()//2 - 400, get_canvas_height()//2 + 100, 'GAME CLEAR!', (255, 255, 255))
+    font2.draw(get_canvas_width()//2, get_canvas_height()//2 + 100, 'PRESS N TO MAIN', (255, 0, 0))
 
+    font.draw(get_canvas_width()//2 - 300, get_canvas_height()//2 - 0, 'life :  %3.0f' % server.mario_life, (255, 0, 0))
     font.draw(get_canvas_width()//2 - 300, get_canvas_height()//2 - 100, 'Coin :  %3.0f' % server.coin, (255, 255, 0))
     font.draw(get_canvas_width()//2 - 300, get_canvas_height()//2 - 200, 'Score : %3.0f' % server.score, (255, 255, 255))
 

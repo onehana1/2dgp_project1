@@ -81,6 +81,16 @@ class IdleState:
         if event == UP_DOWN:
 
             # boy.jump_v += JUMP_SPEED_PPS * boy.jump_timer
+            if  boy.jumping == True:
+                boy.one = 0
+            else:
+                boy.one =1
+
+            if  boy.jumping == True:
+                boy.two = 0
+            else:
+                boy.two =1
+
             boy.jumping = True
 
         if event == UP_UP:
@@ -181,6 +191,16 @@ class RunState:
     def exit(boy, event):
         if event == UP_DOWN:
             #boy.jump_v += JUMP_SPEED_PPS
+            if  boy.jumping == True:
+                boy.one = 0
+            else:
+                boy.one =1
+
+            if  boy.jumping == True:
+                boy.two = 0
+            else:
+                boy.two =1
+
             boy.jumping =True
 
         if event == UP_UP:
@@ -317,10 +337,39 @@ class Boy:
         self.image3 = load_image('gameover.png')
 
 
+        self.jump_small_sound = load_wav('sound/jump_small.wav')
+        self.jump_small_sound.set_volume(32)
+
+        self.jump_super_sound = load_wav('sound/jump_super.wav')
+        self.jump_super_sound.set_volume(32)
+
+        self.die_sound = load_wav('sound/mariodie.wav')
+        self.die_sound.set_volume(32)
+
+        self.kick_sound = load_wav('sound/kick.wav')
+        self.kick_sound.set_volume(32)
+
+        self.dump_sound = load_wav('sound/bump.wav')
+        self.dump_sound.set_volume(32)
+
+        self.fireball_sound = load_wav('sound/fireball.wav')
+        self.fireball_sound.set_volume(32)
+
+        self.clear_sound = load_wav('sound/clear.wav')
+        self.clear_sound.set_volume(32)
+
+
+
+
+
         self.font = load_font('ENCR10B.TTF', 30)
 
         self.score = 0
         self.coin = 0
+
+        self.one = 1
+        self.two = 1
+
 
 
         
@@ -380,6 +429,7 @@ class Boy:
         if self.attact == True and server.mario_state == 2:
             # print("어택!")
             fire = Fire()
+            server.boy.fireball_sound.play()
             game_world.add_object(fire, 1)
 
 
@@ -419,7 +469,16 @@ class Boy:
             # print("jumpv",self.jump_v)
             # print(self.jump_timer)
             
+            if server.mario_state==0 and self.one == 1:
+                self.jump_small_sound.play(1)
+                print(self.one)
 
+            self.one -= game_framework.frame_time
+
+            if server.mario_state > 0 and self.two == 1:
+                self.jump_super_sound.play(1)
+
+            self.two -= game_framework.frame_time
 
    
 
@@ -526,6 +585,7 @@ class Boy:
 
         if self.die_timer <0 :
             self.die_timer = 2
+            self.die_sound.play(1)
             
             server.mario_die = True
 

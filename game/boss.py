@@ -69,10 +69,14 @@ class Boss:
         self.inv = False
         self.inv_timer = 2
 
+        self.clear_timer = 1
+
+
+
 
 
         self.state = 0
-        self.life = 5
+        self.life = 3
 
 
         self.life_test = 0
@@ -245,6 +249,8 @@ class Boss:
             
             server.boy.x +=  -server.boy.dir * 70
 
+            server.boy.kick_sound.play()
+
             server.boy.jumping_mon = True
 
             if self.inv ==False:
@@ -254,24 +260,37 @@ class Boss:
                 
                 if (self.inv == True):
                     self.life_test += 1
-                    # print("테스트 라이프",self.life_test)
 
                     server.boy.inv = True
                     server.boy.x +=  -server.boy.dir * 70
                     server.boy.y += 70
+                    server.boy.dump_sound.play()
                     if(server.mario_state==2):server.mario_state = 1
                     elif(server.mario_state==1):server.mario_state = 0
 
             self.inv = True
-            #print(self.life)
+            print("라이프",self.life)
             
 
 
             if self.life == 0 :
                 game_world.remove_object(self)
                 print("보스 처치")
+                server.stage2_ground1.bgm.stop()
+                server.boy.clear_sound.play(1)
+                server.score += 10000
+                server.clear = True
 
-                server.score += 5000
+
+                
+                # self.clear_timer -= game_framework.frame_time
+
+
+        # if self.clear_timer <= 0:
+        #     server.clear = True
+        #     self.clear_timer = 1
+        #     print("끝!!")
+
 
           
         # #화날때 밟으면 아파용
@@ -296,6 +315,7 @@ class Boss:
                         server.boy.y += 35
                         server.boy.jumping_mon = True
                         server.boy.inv = True
+                        server.boy.dump_sound.play()
                         
                         print("2")
 

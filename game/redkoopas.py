@@ -121,7 +121,7 @@ class redKoopas:
         else:
             self.image2.clip_draw(85 - 31*int(self.frame), 5, 31, 24, self.x- server.boy.x, self.y,60,70)
 
-        redKoopas.font.draw(self.x - 30- server.boy.x, self.y + 50, self.count, (255, 255, 0))
+        # redKoopas.font.draw(self.x - 30- server.boy.x, self.y + 50, self.count, (255, 255, 0))
 
         # draw_rectangle(*self.crush_box())
 

@@ -26,6 +26,9 @@ def enter():
     hide_lattice()
     server.stage = 0
 
+
+
+
 def exit():
     global menu
     del menu
@@ -64,6 +67,9 @@ def handle_events():
             game_framework.change_state(main_state)
 
 def update():
+    if server.mario_state ==1:
+        server.stage2_ground1.bgm.stop()
+    server.mario_state = 0
     pass
 
 

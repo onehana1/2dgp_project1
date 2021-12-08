@@ -115,9 +115,9 @@ class Gumba:
                             
                             print("2")
 
-                    if(server.mario_state==2):server.mario_state = 1
-                    elif(server.mario_state==1):server.mario_state = 0
-                    elif(server.mario_state==0):server.mario_state = -1
+                        if(server.mario_state==2):server.mario_state = 1
+                        elif(server.mario_state==1):server.mario_state = 0
+                        elif(server.mario_state==0):server.mario_state = -1
 
 
 
@@ -149,9 +149,9 @@ class Gumba:
         if self.state==1:
             self.image.clip_composite_draw( 44, 2, 20, 18, 3.141592/2,'', self.x- server.boy.x, self.y, 40, 36)
 
-        Gumba.font.draw(self.x - 30 - server.boy.x, self.y + 50, self.count, (255, 255, 0))
+        # Gumba.font.draw(self.x - 30 - server.boy.x, self.y + 50, self.count, (255, 255, 0))
 
-        draw_rectangle(*self.crush_box())
+        # draw_rectangle(*self.crush_box())
 
 
 

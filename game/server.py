@@ -1,7 +1,9 @@
 # 서버 만들고
 # 충돌처리 py만들기
 
+time = 300
 stage = 0
+clear = False
 
 mario_life = 3
 

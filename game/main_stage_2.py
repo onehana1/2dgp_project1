@@ -10,6 +10,8 @@ import server
 import world_build_state
 import die_state
 import gameover_state
+import clear_state
+
 
 from sky import Sky
 
@@ -30,7 +32,13 @@ name = "MainState2"
 
 
 def enter():
-    server.stage = 1
+    game_world.remove_object(server.boy)
+    game_world.remove_object(server.boss)
+    game_world.remove_object(server.sky)
+    game_world.remove_object(server.stage2_ground1)
+
+    
+
 
     server.boy = Boy()
     game_world.add_object(server.boy, 1)
@@ -44,7 +52,8 @@ def enter():
     server.stage2_ground1 = S2_Ground1()
     game_world.add_object(server.stage2_ground1, 0)
 
-
+    server.stage = 1
+    server.mario_state = 2
 
 
  
@@ -55,6 +64,10 @@ def enter():
 
 
 def exit():
+    game_world.remove_object(server.boy)
+    game_world.remove_object(server.boss)
+    game_world.remove_object(server.sky)
+    game_world.remove_object(server.stage2_ground1)
     game_world.clear()
     for game_object in game_world.all_objects():
         game_world.remove_object()
@@ -98,6 +111,16 @@ def update():
 
     elif server.mario_life == 0:
         game_framework.change_state(gameover_state)
+
+    if server.clear == True:
+        print("보내줘")
+        server.stage2_ground1.bgm.stop()
+        game_framework.change_state(clear_state)
+
+
+
+
+
 
 
     pass
