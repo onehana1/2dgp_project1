@@ -76,6 +76,7 @@ class redKoopas:
 
                 server.redkoopass.remove(redkoopas)
                 game_world.remove_object(redkoopas)
+                server.boy.kick_sound.play()
                 print("1")
                 server.score += 500
 
@@ -84,6 +85,7 @@ class redKoopas:
                 if server.mario_star == 1:
                     server.redkoopass.remove(redkoopas)
                     game_world.remove_object(redkoopas)
+                    server.boy.kick_sound.play()
                     print("1")
                     server.score += 500
                 if server.mario_star == 0:
@@ -94,6 +96,7 @@ class redKoopas:
                             server.boy.y += 35
                             server.boy.jumping_mon = True
                             server.boy.inv = True
+                            server.boy.dump_sound.play()
                             
                             print("2")
 
@@ -120,6 +123,6 @@ class redKoopas:
 
         redKoopas.font.draw(self.x - 30- server.boy.x, self.y + 50, self.count, (255, 255, 0))
 
-        draw_rectangle(*self.crush_box())
+        # draw_rectangle(*self.crush_box())
 
 

@@ -73,6 +73,7 @@ class Fire:
                 server.koopass.remove(koopas)
                 game_world.remove_object(koopas)
                 game_world.remove_object(self)
+                server.boy.kick_sound.play()
                 print("불로처치")
                 server.score += 500
 
@@ -82,6 +83,7 @@ class Fire:
                 server.redkoopass.remove(redkoopas)
                 game_world.remove_object(redkoopas)
                 game_world.remove_object(self)
+                server.boy.kick_sound.play()
                 print("불로처치")
                 server.score += 500
 
@@ -91,6 +93,7 @@ class Fire:
                 server.gumbas.remove(gumba)
                 game_world.remove_object(gumba)
                 game_world.remove_object(self)
+                server.boy.kick_sound.play()
                 print("불로처치")
                 server.score += 500
 
@@ -112,4 +115,4 @@ class Fire:
 
 
 
-        draw_rectangle(*self.crush_box())
+        # draw_rectangle(*self.crush_box())

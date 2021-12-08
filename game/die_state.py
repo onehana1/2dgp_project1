@@ -35,6 +35,8 @@ def enter():
 
 
 
+
+
     next = load_image('black.png')
     font = load_font('supermariobros.ttf', 60)
     font2 = load_font('supermariobros.ttf', 30)
@@ -48,6 +50,7 @@ def exit():
     del font
     global font2
     del font2
+    
 
 
 def pause():
@@ -78,14 +81,13 @@ def handle_events():
         elif event.type == SDL_KEYDOWN and event.key == SDLK_n:
             if server.stage == 1:
                 game_framework.change_state(main_stage_2)
-                server.mario_state = 1
+                server.mario_state = 0
                 
                 print("다시 보스")
 
             if server.stage == 0:
-                game_world.clear()
                 game_framework.change_state(main_state)
-                server.mario_state = 1
+                server.mario_state = 0
                 print("다시 메인1")
         elif event.type == SDL_KEYDOWN and event.key == SDLK_r:
             game_framework.change_state(world_build_state)
@@ -93,6 +95,8 @@ def handle_events():
 
 
 def update():
+    if server.stage ==0:
+        server.background.bgm.stop()
     pass
 
 

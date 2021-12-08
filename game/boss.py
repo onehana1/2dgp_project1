@@ -336,7 +336,7 @@ class Boss:
 
         # Boss.font.draw(self.x - 30 - server.boy.x, self.y + 50, (255, 255, 0))
 
-        draw_rectangle(*self.crush_box())
+        # draw_rectangle(*self.crush_box())
 
 
 

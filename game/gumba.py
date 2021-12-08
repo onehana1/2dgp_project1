@@ -89,6 +89,7 @@ class Gumba:
 
                 server.gumbas.remove(gumba)
                 game_world.remove_object(gumba)
+                server.boy.kick_sound.play()
                 print("1")
                 server.score += 500
 
@@ -98,6 +99,7 @@ class Gumba:
                 if server.mario_star == 1:
                     server.gumbas.remove(gumba)
                     game_world.remove_object(gumba)
+                    server.boy.kick_sound.play()
                     print("1")
                     server.score += 500
 
@@ -109,6 +111,7 @@ class Gumba:
                             server.boy.y += 35
                             server.boy.jumping_mon = True
                             server.boy.inv = True
+                            server.boy.dump_sound.play()
                             
                             print("2")
 

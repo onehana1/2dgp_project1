@@ -94,6 +94,8 @@ def handle_events():
 
 
 def update():
+    if server.stage ==0:
+        server.background.bgm.stop()
     pass
 
 

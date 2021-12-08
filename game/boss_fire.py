@@ -94,4 +94,4 @@ class Boss_Fire:
 
 
 
-        draw_rectangle(*self.crush_box())
+        # draw_rectangle(*self.crush_box())

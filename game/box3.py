@@ -53,7 +53,10 @@ class Box3:
 
             if collision.collide_head(server.boy, box3):
                 print("박스 open")
+                if box3.state != 1:
+                    server.boy.stomb_sound.play() 
                 box3.state = 1
+                
                 server.boy.fall = 1
         
 
@@ -66,9 +69,9 @@ class Box3:
         else:
             self.image2.clip_draw(2, 78, 18, 18, self.x- server.boy.x, self.y,36,36)
 
-        Box3.font.draw(self.x - 30 - server.boy.x, self.y + 50, self.count, (255, 255, 0))
+        # Box3.font.draw(self.x - 30 - server.boy.x, self.y + 50, self.count, (255, 255, 0))
 
-        draw_rectangle(*self.crush_box())
+        # draw_rectangle(*self.crush_box())
 
 
 

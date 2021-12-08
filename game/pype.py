@@ -57,9 +57,9 @@ class Pype:
 
         self.image.clip_draw_to_origin(0, 0, 74, 82, self.x- server.boy.x, self.y,148,164)
 
-        Pype.font.draw(self.x - 30 - server.boy.x, self.y + 50, self.count, (255, 255, 0))
+        # Pype.font.draw(self.x - 30 - server.boy.x, self.y + 50, self.count, (255, 255, 0))
 
-        draw_rectangle(*self.crush_box())
+        # draw_rectangle(*self.crush_box())
 
 
 

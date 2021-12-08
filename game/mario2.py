@@ -553,14 +553,14 @@ class Boy:
     def draw(self):
         self.cur_state.draw(self)
         debug_print('Velocity :' + str(self.velocity) + '  Dir:' + str(self.dir) + '  State:' + str(self.cur_state))
-        draw_rectangle(*self.crush_box())
+        # draw_rectangle(*self.crush_box())
         self.font.draw(1300, 550, 'Time: %3.0f' % (300 -get_time()), (255, 255, 255))
         self.font.draw(700, 550, 'Score: %3.0f' % server.score, (0, 255, 0))
         self.font.draw(100, 550, 'Coin: %3.0f' % server.coin, (255, 255, 0))
 
 
         cx, cy = self.x - 0, self.y - 0
-        self.font.draw(cx - 40, cy + 40, '(%d, %d)' % (self.x, self.y), (255, 255, 0))
+        # self.font.draw(cx - 40, cy + 40, '(%d, %d)' % (self.x, self.y), (255, 255, 0))
         
 
 

@@ -53,12 +53,13 @@ class Block:
 
                 server.blocks.remove(block)
                 game_world.remove_object(block)
+                server.boy.coin_sound.play()
 
         pass
 
     def draw(self): 
         self.image.clip_draw(2, 96, 18, 18, self.x- server.boy.x, self.y,36,36)
-        draw_rectangle(*self.crush_box())
+        # draw_rectangle(*self.crush_box())
 
 
 

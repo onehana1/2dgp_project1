@@ -11,10 +11,20 @@ class S2_Ground1:
 
         self.width = 2206
         self.height = 60
+        self.bgm = load_music('sound/mario2.mp3')
+        self.bgm.set_volume(50)
+        self.bgm.repeat_play()
+
 
 
 
     def update(self):        
+        if server.mario_state == -1 or server.stage != 1:
+            self.bgm.stop()
+            print("ss")
+        else:
+            self.bgm.resume()
+
 
         # self.window_left = clamp(0, int(server.boy.x) - server.background.canvas_width // 2, server.background.w - server.background.canvas_width)
         # self.window_bottom = clamp(0, int(server.boy.y) - server.background.canvas_height // 2, server.background.h - server.background.canvas_height)

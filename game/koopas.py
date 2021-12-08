@@ -78,9 +78,9 @@ class Koopas:
                 server.boy.y += 35
                 koopas.state = 1
                 server.boy.jumping_mon = True
-
                 server.koopass.remove(koopas)
                 game_world.remove_object(koopas)
+                server.boy.kick_sound.play()
                 print("1")
                 server.score += 500
 
@@ -89,6 +89,7 @@ class Koopas:
                 if server.mario_star == 1:
                     server.koopass.remove(koopas)
                     game_world.remove_object(koopas)
+                    server.boy.kick_sound.play()
                     print("1")
                     server.score += 500
                 if server.mario_star == 0:
@@ -99,7 +100,7 @@ class Koopas:
                             server.boy.y += 35
                             server.boy.jumping_mon = True
                             server.boy.inv = True
-                            
+                            server.boy.dump_sound.play()
                             print("2")
 
                     if(server.mario_state==2):server.mario_state = 1

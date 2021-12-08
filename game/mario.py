@@ -84,6 +84,16 @@ class IdleState:
         if event == UP_DOWN:
 
             # boy.jump_v += JUMP_SPEED_PPS * boy.jump_timer
+            if  boy.jumping == True:
+                boy.one = 0
+            else:
+                boy.one =1
+
+            if  boy.jumping == True:
+                boy.two = 0
+            else:
+                boy.two =1
+
             boy.jumping = True
 
         if event == UP_UP:
@@ -227,11 +237,23 @@ class RunState:
             if boy.go == 1:
                 boy.velocity += RUN_SPEED_PPS
 
+                
+
         boy.dir = clamp(-1, boy.velocity, 1)
 
     def exit(boy, event):
         if event == UP_DOWN:
             #boy.jump_v += JUMP_SPEED_PPS
+            if  boy.jumping == True:
+                boy.one = 0
+            else:
+                boy.one =1
+
+            if  boy.jumping == True:
+                boy.two = 0
+            else:
+                boy.two =1
+                
             boy.jumping =True
 
         if event == UP_UP:
@@ -365,9 +387,59 @@ class CrouchState:
     def do(boy):
         boy.frame = (boy.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 3
         
+        
 
     def draw(boy):
-        boy.image.clip_draw(386, 155, 19, 21, boy.x, boy.y+100, 38, 42)
+        cx, cy = boy.x - server.background.window_left, boy.y - server.background.window_bottom
+
+        if server.mario_star == 0:
+            if server.mario_state == 0:
+                if boy.dir == 1:
+                    boy.image.clip_draw(387, 107, 20, 26, cx, cy,40,35)
+
+                else:
+                    boy.image.clip_draw(0, 107, 20, 26, cx, cy,40,35)
+
+
+            if server.mario_state==1:
+                if boy.dir == 1:
+                    boy.image.clip_draw(387, 107, 20, 26, cx, cy,40,52)
+
+                else:
+                    boy.image.clip_draw(0, 107, 20, 26, cx, cy,40,52)
+
+            if server.mario_state== 2:
+                if server.mario_state==1:
+                    if boy.dir == 1:
+                        boy.image.clip_draw(387, 37, 20, 26, cx, cy,40,52)
+
+                    else:
+                        boy.image.clip_draw(0, 37, 20, 26, cx, cy,40,52)
+
+        if server.mario_star == 1:
+            if server.mario_state == 0:
+                if boy.dir == 1:
+                    boy.image_star.clip_draw(387, 107, 20, 26, cx, cy,40,35)
+
+                else:
+                    boy.image_star.clip_draw(0, 107, 20, 26, cx, cy,40,35)
+
+
+            if server.mario_state==1:
+                if boy.dir == 1:
+                    boy.image_star.clip_draw(387, 107, 20, 26, cx, cy,40,52)
+
+                else:
+                    boy.image_star.clip_draw(0, 107, 20, 26, cx, cy,40,52)
+
+            if server.mario_state== 2:
+                if server.mario_state==1:
+                    if boy.dir == 1:
+                        boy.image_star.clip_draw(387, 37, 20, 26, cx, cy,40,52)
+
+                    else:
+                        boy.image_star.clip_draw(0, 37, 20, 26, cx, cy,40,52)
+
 
         
 
@@ -378,11 +450,13 @@ class DieState:
         # if event == UP_DOWN:
         #     server.mario_state = 1
         server.mario_state = -1
+        # boy.die_sound.play(1)
         # boy.life = 0
 
     def exit(boy, event):
         boy.die_timer < 0
         print("die 끝")
+        
         pass
 
 
@@ -448,12 +522,47 @@ class Boy:
         self.image = load_image('mario_sheet.png')
         self.image2 = load_image('mario_sheet_80.png')
         self.image3 = load_image('gameover.png')
-
         self.image_star = load_image('mario_sheet_star.png')
+
+        self.jump_small_sound = load_wav('sound/jump_small.wav')
+        self.jump_small_sound.set_volume(32)
+
+        self.jump_super_sound = load_wav('sound/jump_super.wav')
+        self.jump_super_sound.set_volume(32)
+
+        self.die_sound = load_wav('sound/mariodie.wav')
+        self.die_sound.set_volume(32)
+
+        self.dump_sound = load_wav('sound/bump.wav')
+        self.dump_sound.set_volume(32)
+
+        self.kick_sound = load_wav('sound/kick.wav')
+        self.kick_sound.set_volume(32)
+
+        self.coin_sound = load_wav('sound/coin.wav')
+        self.coin_sound.set_volume(16)
+
+        self.stomb_sound = load_wav('sound/stomp.wav')
+        self.stomb_sound.set_volume(32)
+
+        self.fireball_sound = load_wav('sound/fireball.wav')
+        self.fireball_sound.set_volume(32)
+
+        self.powerup_sound = load_wav('sound/powerup.wav')
+        self.powerup_sound.set_volume(32)
+
+        self.star_sound = load_wav('sound/star.wav')
+        self.star_sound.set_volume(32)
+
+
+
+
 
 
 
         self.font = load_font('supermariobros.ttf', 30)
+        self.one = 1
+        self.two = 1
 
         self.score = 0
         self.coin = 0
@@ -561,8 +670,21 @@ class Boy:
             self.jump_timer += 1 * game_framework.frame_time
             #self.y += 100
             self.y += self.jump_v * game_framework.frame_time
+
+
             # print("jumpv",self.jump_v)
             # print(self.jump_timer)
+
+            if server.mario_state==0 and self.one == 1:
+                self.jump_small_sound.play(1)
+                print(self.one)
+
+            self.one -= game_framework.frame_time
+
+            if server.mario_state > 0 and self.two == 1:
+                self.jump_super_sound.play(1)
+
+            self.two -= game_framework.frame_time
             
 
 
@@ -630,6 +752,10 @@ class Boy:
     def update(self):
         self.cur_state.do(self)
 
+        if server.mario_star == 0:
+            server.boy.star_sound.set_volume(0) 
+        if server.mario_star == 1:
+            server.boy.star_sound.set_volume(64)
 
         if server.mario_star ==True:
             self.star_timer -= game_framework.frame_time
@@ -658,10 +784,13 @@ class Boy:
 
         if self.y <= -10:
             self.cur_state = DieState
+            
             self.die_timer -= game_framework.frame_time
+            
 
         if self.die_timer <0 :
             self.die_timer = 2
+            self.die_sound.play(1)
             server.mario_die = True
 
             # server.mario_life -= 1
@@ -764,15 +893,15 @@ class Boy:
 
     def draw(self):
         self.cur_state.draw(self)
-        debug_print('Velocity :' + str(self.velocity) + '  Dir:' + str(self.dir) + '  State:' + str(self.cur_state))
-        draw_rectangle(*self.crush_box())
+        # debug_print('Velocity :' + str(self.velocity) + '  Dir:' + str(self.dir) + '  State:' + str(self.cur_state))
+        # draw_rectangle(*self.crush_box())
         self.font.draw(1300, 550, 'Time: %3.0f' % (300 -get_time()), (255, 255, 255))
         self.font.draw(700, 550, 'Score: %3.0f' % server.score, (0, 0, 0))
         self.font.draw(100, 550, 'Coin: %3.0f' % server.coin, (255, 255, 0))
 
 
         cx, cy = self.x - server.background.window_left, self.y - server.background.window_bottom
-        self.font.draw(cx - 40, cy + 40, '(%d, %d)' % (self.x, self.y), (255, 255, 0))
+        # self.font.draw(cx - 40, cy + 40, '(%d, %d)' % (self.x, self.y), (255, 255, 0))
         
 
 

@@ -54,7 +54,7 @@ class Door:
 
     def draw(self): 
         self.image.clip_draw_to_origin(0, 0, self.w, self.h, self.x- server.boy.x, self.y,self.w * 2,self.h * 2)
-        draw_rectangle(*self.crush_box())
+        # draw_rectangle(*self.crush_box())
 
 
 

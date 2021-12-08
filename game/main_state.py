@@ -303,7 +303,7 @@ def enter():
     game_world.add_object(server.background, 0)
 
 
-    server.door = Door(1000,36)  # 5950
+    server.door = Door(5950,36) 
     game_world.add_object(server.door, 1)
 
 

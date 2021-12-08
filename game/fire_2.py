@@ -89,4 +89,4 @@ class Fire:
 
 
 
-        draw_rectangle(*self.crush_box())
+        # draw_rectangle(*self.crush_box())

@@ -121,6 +121,7 @@ class Mushroom:
                         print("변신!!")
                         server.mushrooms.remove(mushroom)
                         game_world.remove_object(mushroom)
+                        server.boy.powerup_sound.play()
 
                         if(server.mario_state == 0):
                             server.mario_state = 1
@@ -138,7 +139,7 @@ class Mushroom:
             self.image.clip_draw(21, 60, 21, 19, self.x- server.boy.x, self.y,42,38)
 
 
-        draw_rectangle(*self.crush_box())
+        # draw_rectangle(*self.crush_box())
 
 
 class Flower:
@@ -199,8 +200,9 @@ class Flower:
                         print("꽃 변신!!")
                         server.flowers.remove(flower)
                         game_world.remove_object(flower)
+                        server.boy.powerup_sound.play()
 
-                        if(server.mario_state == 0):
+                        if(server.mario_state == 0) or (server.mario_state == 1):
                             server.mario_state = 2
 
 
@@ -218,7 +220,7 @@ class Flower:
         if self.state >= 1:
             self.image.clip_draw(2 + 19*int(self.frame), 40, 19, 20, self.x- server.boy.x, self.y,38,40)
 
-        draw_rectangle(*self.crush_box())
+        # draw_rectangle(*self.crush_box())
 
 
 class Star:
@@ -262,7 +264,7 @@ class Star:
                         star.y += 36
                         
                     if star.state >= 10:
-                        print("꽃 나와라")
+                        print("별 나와라")
                         server.stars.remove(star)
                         game_world.remove_object(star)
 
@@ -276,12 +278,14 @@ class Star:
                         star.y += 36
                         
                     if star.state >= 1:
-                        print("꽃 변신!!")
+                        print("ㅂㅕㄹ 변신!!")
                         server.stars.remove(star)
                         game_world.remove_object(star)
 
                         if(server.mario_star == 0):
                             server.mario_star = 1
+                            server.boy.star_sound.play()
+            
 
 
 
@@ -298,7 +302,7 @@ class Star:
         if self.state >= 1:
             self.image.clip_draw(2 + 19*int(self.frame), 0, 19, 20, self.x- server.boy.x, self.y,38,40)
 
-        draw_rectangle(*self.crush_box())
+        # draw_rectangle(*self.crush_box())
 
 class Coin:
     font = None
@@ -336,4 +340,4 @@ class Coin:
             self.image.clip_draw(1, 32, 12, 16, self.x- server.boy.x, self.y,24,32)
             
 
-        draw_rectangle(*self.crush_box())
+        # draw_rectangle(*self.crush_box())
